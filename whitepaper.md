@@ -143,7 +143,11 @@ to securely transmit a message to others using the same software. Here,
    key should allow the attacker to only decrypt the single message the
    session key was used for, not any previous or subsequent messages
    (for which different session keys were used). This is essentially a
-   way to mitigate damages when a key is lost or cracked.
+   way to mitigate damages when a key is lost or cracked.^[Note that
+   Digital Spring is primarily concerned with secure *transmission*, not
+   *storage*. This means that forward secrecy doesn't imply any
+   assurance as to whether or how long a plaintext message or its
+   session key is stored on the recipient's computer.]
 3. Anonymity towards a 3rd party: Any party *not participating in a
    conversation* is unable to find out who is talking to whom. Note that
    this is not the same as a recipient not knowing who sent a message.

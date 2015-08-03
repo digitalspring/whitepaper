@@ -135,11 +135,15 @@ to securely transmit a message to others using the same software. Here,
 1. Encryption: The message is encrypted such that only someone in
    possession of the decryption key (i.e. the intended recipient) is
    able to read it.
-2. Forward secrecy: The message is encrypted using an (ephemeral)
-   session key such that a 3rd party getting hold of one such key is
-   unable to decrypt all previous messages of a conversation (that were
-   encrypted with different keys). This is essentially a way to mitigate
-   damages when a key is lost or cracked.
+2. Forward secrecy: Each message is encrypted using an (ephemeral)
+   session key derived from a long-term key in such a way that a 3rd
+   party getting hold of the long-term key at some point in the future
+   is unable to decrypt any messages of the conversation that were sent
+   prior to the time of compromise. Additionally, comprise of a session
+   key should allow the attacker to only decrypt the single message the
+   session key was used for, not any previous or subsequent messages
+   (for which different session keys were used). This is essentially a
+   way to mitigate damages when a key is lost or cracked.
 3. Anonymity towards a 3rd party: Any party *not participating in a
    conversation* is unable to find out who is talking to whom. Note that
    this is not the same as a recipient not knowing who sent a message.

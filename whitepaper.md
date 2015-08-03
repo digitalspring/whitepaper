@@ -303,16 +303,16 @@ participants.
 
 Obviously, the peers involved in this process (i.e. all the recipients
 and the sender) necessarily have to know each other. It therefore makes
-sense to establish the notion of a *multicast group* – a list of
-recipients that the sender addresses under a common name and shares data
-with and who all help each other achieve the common goal: Receiving the
-data. In this sense, a multicast group is also the fundamental entity a
-user can employ to finetune his privacy settings: If he wishes to share
-some data with a selected group of people, he sets up a multicast group
-consisting of the desired recipients and sends the data to this group.
-If some of the recipients must not know each other, i.e. if they must
-not know that they're all receiving the data in question, multiple
-groups have to be created.
+sense to establish the notion of a *multicast group* – a persistent list
+of recipients that the sender addresses under a common name and shares
+data with and who all help each other achieve the common goal: Receiving
+the data. In this sense, a multicast group is also the fundamental
+entity a user can employ to finetune his privacy settings: If he wishes
+to share some data with a selected group of people, he sets up a
+multicast group consisting of the desired recipients and sends the data
+to this group. If some of the recipients must not know each other, i.e.
+if they must not know that they're all receiving the data in question,
+multiple groups have to be created.
 
 An important point concerns the type of data to be sent to the group and
 its consequences for the way in which the distribution needs to happen.

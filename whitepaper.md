@@ -1,42 +1,32 @@
 ---
 title: 'Digital Spring: Technical Whitepaper'
 author: Simon Hirscher
-date: First Draft (July 30, 2015)
+date: Work in progress (present version from July 30, 2015)
 abstract: |
-  Digital Spring is an attempt to solve one of the most crucial problems
-  of the Snowden era: It is an open-source technology for secure and
-  privacy-aware communication and data exchange over the internet.
-  Digital Spring differs from conventional communication channels in a
-  number of important ways:
 
-  First, communication is direct in the sense that if Alice wants to talk
-  to Bob, Alice's device directly connects to Bob's device, thereby
-  cutting out the middleman. Hence, users are no longer required to pay
-  for a service with their private data, nor are they any longer subject
-  to the (often arbitrary) changes of their provider's terms of service
-  and privacy regulations.
-
-  Second, Digital Spring allows for data exchange between hundreds of
-  people at once and provides ways to easily synchronize data between them
-  – no matter what this data actually is. People nowadays use Facebook and
-  WhatsApp for messaging, email for longer texts, Twitter for status
-  updates, Skype for video conferencing and DropBox for file sharing. A
-  common platform for secure data exchange that people can trust, however,
-  would provide them with a unified experience that they feel comfortable
-  with, without the annoyance of ads and with the added total control over
-  their data.
-
-  Finally, in today's fast-paced world, reliable and secure communication
-  together with synchronization between multiple devices is crucial to
-  many businesses' work. It is also at the heart of many software
-  companies' products. A general-purpose platform that solves the issue of
-  secure communication once and for all would relieve companies from the
-  need to reinvent the wheel and would foster new and innovative products.
-
-  While Digital Spring as a technology needs to stay free and open-source in
-  order for users to be able to trust it, it is here that we see a way of
-  monetization: By developing extensions on top of the platform for
-  business clients and providing support.
+  Digital Spring is a software library that solves one of the crucial
+  problems of the Snowden era: Private and secure data transfer, be it
+  private text messages or public status updates, file sharing or device
+  synchronization. Nowadays, if Alice wants to send a message to Bob,
+  she will use some middleman (e.g. Facebook, Dropbox, an email
+  provider) to deliver the message. However, in this way, the middleman
+  will also get to the see the message's content and metadata (who is
+  talking to whom) and analyze it for his own (e.g. marketing) purposes
+  and can hand it over to intelligence agencies. Digital Spring solves
+  this issue and eliminates the middleman by establishing a direct
+  connection between sender and recipient. The ensuing peer-to-peer
+  (p2p) network thereby replaces the server-client model predominant
+  today. Data transferred over this connection is encrypted end-to-end
+  and, in the prototype, metadata obfuscation is achieved through the
+  federated Tor network although another mechanism making use of the
+  decentralized p2p topology might get implemented for the final
+  version. Building upon this, a publish-subscribe paradigm is combined
+  with a custom multicast algorithm, which is tailored to the use case
+  of private communication, to allow for reliable and scalable 1-to-n
+  data transmissions. Further care is taken to enable offline messaging,
+  i.e. to make sure sender and recipient need not be offline at the same
+  time. Finally, ideas for future work involving n-to-n conversations
+  and a distributed key-value storage are presented.
 
 bibliography: bibliography.bib
 csl: harvard-imperial-college-london.csl

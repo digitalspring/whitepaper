@@ -45,7 +45,7 @@ Introduction
 > able to see before, but [also] allows us to run experiments that
 > millions of users are exposed to.
 >
-> (Cameron Marlow, Head of Data Science Team of Facebook, 2012)
+> -- *Cameron Marlow, Head of Data Science Team of Facebook, 2012*
 
 The revelations by former government agent Edward J. Snowden have shown
 that there is no shortage of problems when it comes to government
@@ -148,11 +148,12 @@ to securely transmit a message to others using the same software. Here,
    long-term goal and we will focus on pseudonymity first.]
 5. Authenticity: The recipient of a message can be sure it was the
    sender who sent the message.
-6. Repudiation: Despite of knowing for sure, the recipient technically
-   cannot *prove* to another party than it was the sender who sent the
-   message. Note that this point will become obsolete if the number of
-   recipients is large and all recipients testify in court that they
-   believe a certain person to be the sender of a message.
+6. Repudiation: The previous item notwithstanding and similar to spoken
+   conversations, the recipient technically cannot *prove* to another
+   party that it was the sender who sent the message.^[Note that this
+   point might become obsolete if the number of recipients is large and
+   all recipients testify in court that they believe a certain person to
+   be the sender of a message.]
 
 A software providing these features must necessarily be open source, as
 only then will the user be able to fully trust it.
@@ -168,8 +169,8 @@ Current State of Communication Systems
 -->
 
 
-The Vision
-==========
+Architecture
+============
 
 The software we envision is made up of several layers, building upon
 each other:
@@ -280,9 +281,11 @@ routing.
 Multicast layer
 ---------------
 
+### Introduction
+
 Being able to build upon the network layer which takes care of secure
 1-to-1 connections between peers that are online at the same time, we
-can then focus on enabling general 1-to-n communication, i.e. sharing
+can then focus on enabling reliable 1-to-n communication, i.e. sharing
 data with a whole group of peers some of whom might or might not be
 online at the time of initial transmission.
 
@@ -340,6 +343,7 @@ is how group membership is verified. How do peers of the group
 
 ### TODO Multicast algorithm
 
+#### Introduction
 One crucial point of the multicast layer is how the data distribution
 among the members of the group is done exactly. We refer to this
 procedure as the *multicast algorithm*. While a number of research
@@ -354,7 +358,7 @@ protocol.) Furthermore, the network traffic to maintain a multicast
 group over time needs to be close to zero as a single peer potentially
 is a member in thousands of multicast groups at the same time, depending
 on his and other peers' privacy settings. In particular, it is not
-feasible for multicast groups to maintain continuous TCP connections
+feasible for a multicast group to maintain continuous TCP connections
 between its members. Rather, the connections have to be set up if data
 needs to be sent and be closed thereafter. In this sense, the multicast
 group is an offline concept that persists even when members are not
@@ -366,13 +370,13 @@ Following the above considerations, our approach separates between two
 phases:
 
 #### The idle phase:
-In this phase there're usually no connections
-between the group's members, However, members persistently store a
-number N of other members of the group, referred to as their
-"neighbors". (The neighbor relationship is a symmetric one, so if A is a
-neighbor of B then B is also a neighbor of A.) This list of neighbors
-may change when new members join the group or leave it. Only in this
-case connections between the members need to be established.
+In this phase there're usually no connections between the group's
+members, However, members persistently store a number N of other members
+of the group, referred to as their "neighbors". (The neighbor
+relationship is a symmetric one, so if A is a neighbor of B then B is
+also a neighbor of A.) This list of neighbors may change when new
+members join the group or leave it. Only in this case connections
+between the members need to be established.
 
 #### The transmission phase:
 If the owner of the group (the sender) wishes to share data (a

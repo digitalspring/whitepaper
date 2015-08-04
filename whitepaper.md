@@ -44,6 +44,9 @@ toc-depth: 3
 Introduction
 ============
 
+Status quo
+----------
+
 > [For the first time] we have a microscope that not only lets us
 > examine social behavior at a very fine level that we've never been
 > able to see before, but [also] allows us to run experiments that
@@ -130,7 +133,7 @@ content and metadata of a message for a 3rd party tapping the cable.
 
 
 The goal
-========
+--------
 
 The end goal of Digital Spring is thus a software which allows the user
 to securely transmit a message to others using the same software. Here,

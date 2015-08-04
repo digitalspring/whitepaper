@@ -219,8 +219,16 @@ Current State of Communication Systems
 Architecture
 ============
 
-The software we envision is made up of several layers, building upon
-each other:
+Introduction
+------------
+
+The software we envision is made up of several layers which build upon
+each other and which are presented in the subsequent sections. It is
+attempted to present the reasoning behind design decisions in the order
+in which the corresponding questions naturally appear instead of
+following a more formal approach where the results and decisions are
+presented first and are justified later.
+
 
 Network layer
 -------------

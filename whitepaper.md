@@ -22,11 +22,15 @@ abstract: |
   decentralized p2p topology might get implemented for the final
   version. Building upon this, a publish-subscribe paradigm is combined
   with a custom multicast algorithm, which is tailored to the use case
-  of private communication, to allow for reliable and scalable 1-to-n
-  data transmissions. Further care is taken to enable offline messaging,
-  i.e. to make sure sender and recipient need not be offline at the same
-  time. Finally, ideas for future work involving n-to-n conversations
-  and a distributed key-value storage are presented.
+  of private communication, to allow for reliable and scalable 1-to-$n$
+  data transmissions. While $n$ could theoretically be chosen
+  arbitrarily high, in practice certain security promises aren't
+  feasible for large $n$ and, in fact, don't provide significantly more
+  privacy in these cases anyway, as is discussed in the text. Further
+  care is taken to enable offline messaging, i.e. to make sure sender
+  and recipient need not be online at the same time. Finally, ideas for
+  future work involving $n$-to-$n$ conversations and a distributed
+  key-value storage are presented.
 
 bibliography: bibliography.bib
 csl: harvard-imperial-college-london.csl
@@ -132,40 +136,72 @@ The end goal of Digital Spring is thus a software which allows the user
 to securely transmit a message to others using the same software. Here,
 "security" refers to:
 
-1. Encryption: The message is encrypted such that only someone in
+1. Confidentiality: The message is encrypted such that only someone in
    possession of the decryption key (i.e. the intended recipient) is
    able to read it.
 2. Forward secrecy: Each message is encrypted using an (ephemeral)
    session key derived from a long-term key in such a way that a 3rd
    party getting hold of the long-term key at some point in the future
    is unable to decrypt any messages of the conversation that were sent
-   prior to the time of compromise. Additionally, comprise of a session
-   key should allow the attacker to only decrypt the single message the
-   session key was used for, not any previous or subsequent messages
-   (for which different session keys were used). This is essentially a
-   way to mitigate damages when a key is lost or cracked.^[Note that
-   Digital Spring is primarily concerned with secure *transmission*, not
-   *storage*. This means that forward secrecy doesn't imply any
-   assurance as to whether or how long a plaintext message or its
-   session key is stored on the recipient's computer.]
+   prior to the time of compromise. Additionally, compromise of a
+   session key should allow the attacker to only decrypt the single
+   message the session key was used for, not any previous or subsequent
+   messages (for which different session keys were used). This is
+   essentially a way to mitigate damages when a key is lost or
+   cracked.^[Note that Digital Spring is primarily concerned with secure
+   *transmission*, not *storage*. This means that forward secrecy of the
+   transmission protocol doesn't imply any assurance as to whether or
+   how long a plaintext message is stored on the recipient's computer.
+   Also see the discussion on the moderncrypto.org [messaging] mailing
+   list:
+   https://moderncrypto.org/mail-archive/messaging/2014/001025.html.]
 3. Anonymity towards a 3rd party: Any party *not participating in a
    conversation* is unable to find out who is talking to whom. Note that
    this is not the same as a recipient not knowing who sent a message.
-4. Anonymity towards the recipient of a message: It should be possible
-   for a sender to distribute messages anonymously. ^[This is a
-   long-term goal and we will focus on pseudonymity first.]
+4. (Anonymity towards the recipient of a message: It should be possible
+   for a sender to distribute messages anonymously.)^[This is a
+   long-term goal and we will focus on pseudonymity first, where the
+   pseudonym is simply the sender's public key.]
 5. Authenticity: The recipient of a message can be sure it was the
    sender who sent the message.
-6. Repudiation: The previous item notwithstanding and similar to spoken
-   conversations, the recipient technically cannot *prove* to another
-   party that it was the sender who sent the message.^[Note that this
-   point might become obsolete if the number of recipients is large and
-   all recipients testify in court that they believe a certain person to
-   be the sender of a message.]
+6. Deniability: The previous item notwithstanding and similar to oral
+   communication, the recipient technically cannot *prove* to another
+   party that it was the sender who sent the message. The sender can
+   therefore deny authorship of the message.^[Note that deniability
+   technically does not prove that a sender did *not* send a message, it
+   merely removes one way (namely digital signatures) to prove (with
+   very high certainty) that he *did*. Thus, this technical feature
+   becomes obsolete in court if there is other reason to believe he
+   authored the message, e.g. if the number of recipients is large and
+   all recipients testify independently and convincingly that they
+   believe a certain person to be the sender of a message.]
 
-A software providing these features must necessarily be open source, as
-only then will the user be able to fully trust it.
+A software providing security features like these must necessarily be
+open source, as only then will the user be able to fully trust it.
 
+Finally, while the above list mainly deals with best-possible
+*technical* security, real-world privacy requirements must also be taken
+into account. In particular, notice that a sender's notion of privacy
+and confidentiality changes depending on the number of people receiving
+his message (compare e.g. a private message to a status message to all
+friends on Facebook) and on whether he selected those recipients himself
+(e.g. for a private message) or whether it was the recipients who
+selected him, i.e. who decided to subscribe to him or the communication
+channel he is using (e.g. a blog, an online forum).
+
+Put differently, in situations where the senders does not *hand-select*
+a *small* number of recipients, he certainly expects confidentiality and
+especially forward secrecy to a much lesser extent while
+deniability[^deniability_note] and anonymity might remain equally
+relevant or become even more important, especially in the light of
+whistleblowing.
+
+As mentioned, Digital Spring is primarily concerned with private
+communication, thus with data transfer among small to middle-sized
+groups (up to a few thousand people). Although its principal
+architecture was designed in a way to scale to very large groups just as
+well if certain security features are (sensibly) given up on, this paper
+and the reasoning presented herein focus on the primary goal.
 
 <!--
 Current State of Communication Systems

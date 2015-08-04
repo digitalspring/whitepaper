@@ -167,14 +167,14 @@ to securely transmit a message to others using the same software. Here,
 6. Deniability: The previous item notwithstanding and similar to oral
    communication, the recipient technically cannot *prove* to another
    party that it was the sender who sent the message. The sender can
-   therefore deny authorship of the message.^[Note that deniability
-   technically does not prove that a sender did *not* send a message, it
-   merely removes one way (namely digital signatures) to prove (with
-   very high certainty) that he *did*. Thus, this technical feature
-   becomes obsolete in court if there is other reason to believe he
-   authored the message, e.g. if the number of recipients is large and
-   all recipients testify independently and convincingly that they
-   believe a certain person to be the sender of a message.]
+   therefore deny authorship of the message.^[Note that deniability does
+   not prove that a sender did *not* send a message, it merely removes
+   one way (namely digital signatures) to prove (with very high
+   certainty) that he *did*. Thus, this technical feature becomes
+   obsolete in court if there is other reason to believe he authored the
+   message, e.g. if the number of recipients is large and all recipients
+   testify independently and convincingly that they believe a certain
+   person to be the sender of a message.]
 
 A software providing security features like these must necessarily be
 open source, as only then will the user be able to fully trust it.

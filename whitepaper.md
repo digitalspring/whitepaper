@@ -6,7 +6,7 @@ abstract: |
 
   Digital Spring is a software library that solves one of the crucial
   problems of the Snowden era: Private and secure data transfer, be it
-  private text messages or public status updates, file sharing or device
+  private text messages or status updates, file sharing or device
   synchronization. Nowadays, if Alice wants to send a message to Bob,
   she will use some middleman (e.g. Facebook, Dropbox, an email
   provider) to deliver the message. However, in this way, the middleman

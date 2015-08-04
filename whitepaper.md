@@ -182,29 +182,72 @@ to securely transmit a message to others using the same software. Here,
 A software providing security features like these must necessarily be
 open source, as only then will the user be able to fully trust it.
 
-Finally, while the above list mainly deals with best-possible
-*technical* security, real-world privacy requirements must also be taken
-into account. In particular, notice that a sender's notion of privacy
-and confidentiality changes depending on the number of people receiving
-his message (compare e.g. a private message to a status message to all
-friends on Facebook) and on whether he selected those recipients himself
-(e.g. for a private message) or whether it was the recipients who
-selected him, i.e. who decided to subscribe to him or the communication
-channel he is using (e.g. a blog, an online forum).
+While the above list mainly deals with best-possible *technical*
+security, real-world privacy requirements (guaranteeing that people
+actually *feel* safe) must also be taken into account. In particular,
+notice that a sender's notion of privacy and confidentiality changes
+depending on the number of people receiving his message (compare e.g. a
+private message to a status message sent to all friends on Facebook) and
+on whether he selected those recipients himself (e.g. for a private
+message) or whether it was the recipients who selected him, i.e. who
+decided to subscribe to him or the communication channel he is using
+(e.g. a blog, an online forum).
 
 Put differently, in situations where the senders does not *hand-select*
 a *small* number of recipients, he certainly expects confidentiality and
-especially forward secrecy to a much lesser extent while
-deniability[^deniability_note] and anonymity might remain equally
-relevant or become even more important, especially in the light of
-whistleblowing.
+especially forward secrecy to hold to a much lesser extent while
+deniability and anonymity might remain equally relevant or become even
+more important, especially in the light of whistleblowing. In turn, if a
+recipient is one among millions of others and therefore likely doesn't
+know the sender personally, authenticity of a message might not play as
+much of a role, either, as his life is affected only little in either
+case. In essence, this situation is comparable to the media quoting an
+anonymous source or a person of public interest who might then, however,
+deny what he was quoted with saying. Hence, without further proof,
+people will always take media reports with a grain of salt and are
+certainly used to that, nowadays. On the other hand, today, a status
+message on a popular and verified Twitter account is almost as good as a
+written and signed statement: People will have a hard time believing it
+wasn't the owner of the Twitter account who created the message.^[Unless
+there's good evidence that his account was hacked. He might also claim
+his press spokesman or agent played a prank on him.] Therefore, apart
+from confidentiality requirements decreasing with a growing number of
+recipients, it seems there is a basic trade-off to be made between
+authenticity and deniability with respect to a large group of
+recipients: Unless there is a signature (or a audio / video tape) to
+convince the audience of the authenticity of a message, the sender will
+have a hard time proving his authorship to all recipients (in turn, he
+will be able to deny it very easily). The crucial reason for this is
+that, as he doesn't meet all recipients personally, the proof of
+authenticity must be something that can be passed along with the message
+from one recipient to the other and cannot be forged. Such a proof,
+however, would then fundamentally be at odds with deniability as the
+latter relies exactly on the fact that the proof could have been forged.
+Only in private communication, e.g. oral conversations or hand-written
+letters, immediate proof of authorship is (more or less automatically)
+provided to all participants and it's only in personal conversations
+where this proof, namely personal presence, is also ephemeral such that
+it stills allows for deniability.^[In this sense, the (authenticated)
+Diffie-Hellman key exchange, which is used to provide authenticity and
+deniability at the same time, is the digital equivalent of a secret
+real-life meet-up.] This insight is central to many of the security
+considerations discussed in this paper.
 
-As mentioned, Digital Spring is primarily concerned with private
-communication, thus with data transfer among small to middle-sized
-groups (up to a few thousand people). Although its principal
+Digital Spring is primarily concerned with private communication, thus
+with data transfer among small to middle-sized groups, up to a few
+thousand people. Drawing on the previous examples, this could be
+restated as follows: Digital Spring is a digital medium that tries to
+mimic oral communication as far as possible. Although its principal
 architecture was designed in a way to scale to very large groups just as
-well if certain security features are (sensibly) given up on, this paper
-and the reasoning presented herein focus on the primary goal.
+well – if certain security promises are given up where it makes
+sense^[As demonstrated, it is impossible to fulfill authenticity *and*
+deniability for large audiences at the same time, let alone high
+confidentiality. As for the remaining cases of large audiences with
+*either* authenticity *or* deniability and even some mixed forms (where
+a group of journalists attending a press conference cannot prove the
+authenticity of a quote to their readers although they heard it loud and
+clearly), the technology presented here covers these very naturally.] –,
+the present paper focusses on the primary goal.
 
 <!--
 Current State of Communication Systems

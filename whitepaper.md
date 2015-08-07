@@ -237,7 +237,7 @@ Digital Spring is primarily concerned with private communication, thus
 with data transfer among small to middle-sized groups, up to a few
 thousand people. Drawing on the previous examples, this could be
 restated as follows: Digital Spring is a digital medium that tries to
-mimic oral communication as far as possible. Although its principal
+mimic personal conversations as far as possible. Although its principal
 architecture was designed in a way to scale to very large groups just as
 well – if certain security promises are given up where it makes
 sense^[As demonstrated, it is impossible to fulfill authenticity *and*

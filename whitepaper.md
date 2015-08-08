@@ -461,6 +461,7 @@ TODO Group membership
 ---------------------
 
 ### Introduction
+
 One question that arises immediately when talking about multicast groups
 is how group membership is verified and how members of the group find
 and identify each other. While keeping a complete list of all members on
@@ -497,6 +498,7 @@ A.
 
 
 ### Adjusting the member list, rekeying
+
 If a new recipient is to be **added** to the group, the sender will
 provide the new recipient via unicast with the shared secret as well as
 a list of members he can contact to establish a neighbor relationship
@@ -553,6 +555,7 @@ that is what the multicast layer aims to reflect.
 
 
 ### Access control
+
 Despite being closely related, access to messages needs to be separated
 from the concept of membership. To see this, consider the following
 examples:
@@ -578,6 +581,7 @@ TODO Multicast algorithm
 ------------------------
 
 ### Introduction
+
 One crucial point of the multicast layer is how the data distribution
 among the members of the group is done exactly. We refer to this
 procedure as the *multicast algorithm*. While a number of research
@@ -603,7 +607,9 @@ aforementioned papers and forces us to follow a different, new approach.
 Following the above considerations, our approach separates between two
 phases:
 
-### The idle phase:
+
+### The idle phase
+
 In this phase there're usually no connections between the group's
 members, However, as mentioned, members persistently store a number $N$
 of other members of the group, referred to as their "neighbors". This
@@ -611,7 +617,9 @@ list of neighbors may change when new members join the group or leave
 it. Only in this case connections between the members need to be
 established during the idle phase.
 
-### The transmission phase:
+
+### The transmission phase
+
 If the owner of the group (the sender) wishes to share data (a
 *message*) with its other members, he will *activate* the group, that is
 announce to his own N neighbors that a transmission is going to take

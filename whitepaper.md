@@ -261,14 +261,11 @@ Current State of Communication Systems
 -->
 
 
-Architecture
-============
-
-Introduction
-------------
+Outline
+-------
 
 The software we envision is made up of several layers which build upon
-each other and which are presented in the subsequent sections. It is
+each other and which are presented in the subsequent chapters. It is
 attempted to present the reasoning behind design decisions in the order
 in which the corresponding questions naturally appear instead of
 following a more formal approach where the results and decisions are
@@ -276,9 +273,11 @@ presented first and are justified later.
 
 
 Network layer
--------------
+=============
 
-### Goal
+Goal
+----
+
 Digital Spring's technological foundation is a peer-to-peer (p2p)
 network. Here, "p2p" refers to the fact that peers communicate directly
 over the internet without requiring the usage of a middleman / a central
@@ -288,7 +287,10 @@ peers. By "secure" we mean that the connection fulfills the requirements
 of the previous chapter for the data being transferred on the network
 level from one peer to the other.
 
-### How peers are identified
+
+How peers are identified
+------------------------
+
 On the internet, devices are usually identified by their (ephemeral) IP
 addresses. However, a long-running p2p network such as ours has to
 introduce a permanent identifier to be able to address the same peer by
@@ -323,7 +325,10 @@ multiplex each connection to a peer in order to allow for multiple
 (virtual) connections at once.
 -->
 
-### Metadata obfuscation & anonymization
+
+Metadata obfuscation & anonymization
+------------------------------------
+
 Direct data transmission between devices on the internet always exposes
 their IP addresses (and, therefore, potentially their identity and
 approximate geo location) to a 3rd party having access to the cables and
@@ -379,9 +384,10 @@ routing.
 
 
 Multicast layer
----------------
+===============
 
-### Introduction
+Introduction
+------------
 
 Being able to build upon the network layer which takes care of secure
 1-to-1 connections between peers that are online at the same time, we
@@ -437,7 +443,8 @@ explain the reasoning behind corresponding design decisions. An overview
 of the protocol is finally given in the last section.
 
 
-### TODO General approach
+TODO General approach
+---------------------
 
 - Data shared with the group is separated into messages, which are
   continuously numbered.
@@ -450,9 +457,10 @@ of the protocol is finally given in the last section.
   identity.
 
 
-### TODO Group membership
+TODO Group membership
+---------------------
 
-#### Introduction
+### Introduction
 One question that arises immediately when talking about multicast groups
 is how group membership is verified and how members of the group find
 and identify each other. While keeping a complete list of all members on
@@ -488,7 +496,7 @@ symmetric one, so if A is a neighbor of B then B is also a neighbor of
 A.
 
 
-#### Adjusting the member list, rekeying
+### Adjusting the member list, rekeying
 If a new recipient is to be **added** to the group, the sender will
 provide the new recipient via unicast with the shared secret as well as
 a list of members he can contact to establish a neighbor relationship
@@ -544,7 +552,7 @@ the sender who needs to decide who he would like to share data with, so
 that is what the multicast layer aims to reflect.
 
 
-#### Access control
+### Access control
 Despite being very similar in nature, access to messages is to be
 separated from the concept of membership. To see this, consider the
 following examples:
@@ -566,9 +574,10 @@ at the time of transmission of the message (or later received the secret
 from the sender to access the group's history as in the above example).
 
 
-### TODO Multicast algorithm
+TODO Multicast algorithm
+------------------------
 
-#### Introduction
+### Introduction
 One crucial point of the multicast layer is how the data distribution
 among the members of the group is done exactly. We refer to this
 procedure as the *multicast algorithm*. While a number of research
@@ -594,7 +603,7 @@ aforementioned papers and forces us to follow a different, new approach.
 Following the above considerations, our approach separates between two
 phases:
 
-#### The idle phase:
+### The idle phase:
 In this phase there're usually no connections between the group's
 members, However, as mentioned, members persistently store a number $N$
 of other members of the group, referred to as their "neighbors". This
@@ -602,7 +611,7 @@ list of neighbors may change when new members join the group or leave
 it. Only in this case connections between the members need to be
 established during the idle phase.
 
-#### The transmission phase:
+### The transmission phase:
 If the owner of the group (the sender) wishes to share data (a
 *message*) with its other members, he will *activate* the group, that is
 announce to his own N neighbors that a transmission is going to take
@@ -635,7 +644,8 @@ reliable and also comparably fast, though further research needs to be
 done.
 
 
-### TODO On pub/sub
+TODO On pub/sub
+---------------
 
 The communication model employed here follows a pattern commonly
 referred to as *publish/subscribe* (pub/sub) – in contrast to a polling-
@@ -645,9 +655,11 @@ while the latter requires the recipient to continuously poll the sender
 for whether there is new content available.
 
 
-### Offline messages & mailboxes {#offline}
+Offline messages & mailboxes {#offline}
+---------------------------------------
 
-#### The core issue.
+### The core issue
+
 The question arrises what a group member does if he missed a message due
 to him having been offline at the time of transmission. One can rephrase
 this question in terms of a real-life example that makes the answer both
@@ -759,7 +771,8 @@ transmission. (Which makes sense as it's in his own best interest to
 have his message delivered reliably.)
 
 
-#### On leaking metadata.
+### On leaking metadata
+
 Adding a mailbox to the multicast group and having it participate in the
 transmission process means that, in a naive approach, metadata such as
 the group's behavior and its list of members is leaked to the provider
@@ -794,7 +807,8 @@ social graph thus might be well advised to avoid measures for offline
 messaging in the first place.
 
 
-#### Notifying the offline member. {#notifications}
+### Notifying the offline member. {#notifications}
+
 So far, it has remained unclear how the offline member is notified of
 the missed message in the first place when he gets back online.
 Considering the fact he might be a member of thousands of multicast
@@ -890,11 +904,12 @@ Concluding, the most promising way seems to be a combination of options
 that the recipient gets notified.
 
 
-### Security
+Security
+--------
 
-#### TODO Authenticity vs. deniability
+### TODO Authenticity vs. deniability
 
-##### Authenticity of the sender towards members of the group:
+#### Authenticity of the sender towards members of the group:
 
 On a network level: Achieved through a session key derived from the
 peer's public keys by means of a Diffie-Hellman key exchange.
@@ -913,10 +928,7 @@ ensures that a member will receive the signing key even if he's
 offline.)
 
 
-
-
-
-#### Forward secrecy
+### Forward secrecy
 
 Towards a 3rd party tapping the cable: Already covered by the
 Diffie-Hellman key exchange on the network level.
@@ -928,7 +940,8 @@ hold of a session key this won't give him access to past session keys
 (and, thus, past messages). We call this *backward-secure*.
 
 
-### Limitations regarding large and / or public audiences
+Limitations regarding large and / or public audiences
+-----------------------------------------------------
 
 Obviously, the concept of membership employed here is only suitable for
 use cases in which the sender knows the exact recipients beforehand.
@@ -978,7 +991,8 @@ the sender won't assume any special security anymore.
  -->
 
 
-### Protocol overview & summary
+Protocol overview & summary
+---------------------------
 
 Group parameters (immutable):
 
@@ -1015,7 +1029,7 @@ state):
 
 
 BMulticast: Multicast with backup peers
----------------------------------------
+=======================================
 <!-- "backed-up multicast" -->
 
 ### Limitations regarding large and / or public audiences
@@ -1025,11 +1039,11 @@ not expected as much as with private and small groups, anyway.
 
 
 n2n layer
----------
+=========
 
 
 Persistent state layer
-----------------------
+======================
 
 
 

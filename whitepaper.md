@@ -604,8 +604,8 @@ connected with each other (or when they are offline). This requirement
 alone is incompatible with almost all approaches presented in the
 aforementioned papers and forces us to follow a different, new approach.
 
-Following the above considerations, our approach separates between two
-phases:
+Following the above considerations, Digital Spring's approach separates
+between two phases:
 
 
 ### The idle phase
@@ -632,20 +632,20 @@ might come online / go offline all the time, the graph needs to be
 maintained continuously until the end of the transmission upon which he
 will be teared down.
 
-For the exact distribution graph we choose a simple and quite flexible
-model where each member tries to stay connected with D other members
+For the exact distribution graph a simple and quite flexible model is
+chosen where each member tries to stay connected with $D$ other members
 throughout the transmission phase. As mentioned above, the starting
-point for those D members are the N neighbors he stored and tried to
+point for those $D$ members are the $N$ neighbors he stored and tried to
 activate. Upon receiving a chunk of data (a *fragment* of the message),
-he will notify all D connected peers and, afterwards, send the fragment
-to all those peers that request it (i.e. those that haven't received the
-fragment from another peer, yet). He will, however, prioritize these
-transmissions depending on network latencies and, in doing this,
-strongly suppress any additional transmissions if the total number of
-transmissions exceeds a certain threshold which is based upon his
-available load and bandwidth. (For the prototype, we do not continously
-optimize these priorities but set them just once in the beginning by
-looking at the times the activation signals come in.)
+he will notify all $D$ connected peers and, afterwards, send the
+fragment to all those peers that request it (i.e. those that haven't
+received the fragment from another peer, yet). He will, however,
+prioritize these transmissions depending on network latencies and, in
+doing this, strongly suppress any additional transmissions if the total
+number of transmissions exceeds a certain threshold which is based upon
+his available load and bandwidth. (For the prototype, we do not
+continously optimize these priorities but set them just once in the
+beginning by looking at the times the activation signals come in.)
 
 In first numerical simulations, our algorithm turned out to be quite
 reliable and also comparably fast, though further research needs to be

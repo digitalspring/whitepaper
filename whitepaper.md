@@ -941,9 +941,10 @@ which are not defined by their list of members but rather a common topic
 of interest, i.e. channels to which recipients can subscribe at their
 own discretion, such as online forums and blogs. There, the sender
 doesn't know the exact audience when sending his message and doesn't
-decide on each recipient individually. However, as noted earlier, his
-notion of privacy will then also be different and he won't expect
-authenticity and deniability at the same time.
+decide on each recipient individually. However, as noted earlier, as the
+number of recipients will generally also be larger, his notion of
+privacy will also be different and he won't expect authenticity and
+deniability at the same time.
 
 Hence, to allow for large audiences, pairwise authentication could:
 
@@ -958,12 +959,15 @@ channel (together with a list of existing members that can be contacted
 to establish neighbor relationships) or set it to some default value
 such as "0000" such that everybody is able to participate in the group.
 On top of that, the sender might also allow the members to forward all
-messages to anyone they like. While either authenticity or deniability
-of the messages would again be lost (because the sender won't
+messages to anyone they like (for instance as part of a separate
+multicast group). While either authenticity or deniability of the
+messages would again be lost (because the sender will either not
 authenticate with those 3rd parties individually or will sign the group
-key / ID with his own public key), this would effectively allow
-recipients to stay anonymous towards the sender because they hide behind
-another peer.
+key / ID with his own public key representing his identity), this would
+effectively allow recipients to stay anonymous towards the sender by
+hiding behind another peer. A disadvantage of this approach is clearly
+that the peer forwarding the data will represent a single point of
+failure.
 
 <!-- If the number of recipients gets very large, one can savely assume that
 it is not the sender anymore who decided on each recipient individually.

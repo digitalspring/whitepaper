@@ -926,7 +926,7 @@ hold of a session key this won't give him access to past session keys
 (and, thus, past messages). We call this *backward-secure*.
 
 
-### Limitations regarding public and semi-public audiences
+### Limitations regarding large and / or public audiences
 
 Obviously, the concept of membership employed here is only suitable for
 use cases in which the sender knows the exact recipients beforehand.
@@ -1014,6 +1014,11 @@ state):
 
 Backed up multicast
 -------------------
+
+### Limitations regarding large and / or public audiences
+
+Forward secrecy / ratcheting not feasible anymore but confidentiality is
+not expected as much as with private and small groups, anyway.
 
 
 n2n layer

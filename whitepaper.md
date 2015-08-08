@@ -452,13 +452,25 @@ TODO General approach
   part of a key pair that the sender uses to sign each message. As
   mentioned in the previous chapter, peers are identified by their
   public keys on the p2p layer. The group's public key is then *another*
-  peer ID of the same (physical) peer that is the sender. That is, the
-  sender might have some public key known to his friends that is his
-  identity.
+  peer ID under which the same (physical) peer that is the sender can be
+  reached. That is, the sender will have some general public key known
+  to his friends and representing his identity and separate keys for
+  each multicast group he creates.
 
 
-TODO Group membership
----------------------
+### TODO On pub/sub
+
+The communication model employed here follows a pattern commonly
+referred to as *publish/subscribe* (pub/sub) – in contrast to a polling-
+or query- based system. With the former, the receiving party subscribes
+to a communication channel and is automatically notified of new content
+while the latter requires the recipient to continuously poll the sender
+for whether there is new content available.
+
+
+
+Group membership
+----------------
 
 ### Introduction
 
@@ -650,17 +662,6 @@ beginning by looking at the times the activation signals come in.)
 In first numerical simulations, our algorithm turned out to be quite
 reliable and also comparably fast, though further research needs to be
 done.
-
-
-TODO On pub/sub
----------------
-
-The communication model employed here follows a pattern commonly
-referred to as *publish/subscribe* (pub/sub) – in contrast to a polling-
-or query- based system. With the former, the receiving party subscribes
-to a communication channel and is automatically notified of new content
-while the latter requires the recipient to continuously poll the sender
-for whether there is new content available.
 
 
 Offline messages & mailboxes {#offline}

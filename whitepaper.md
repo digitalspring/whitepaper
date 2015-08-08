@@ -1012,8 +1012,9 @@ state):
 
 
 
-Backed up multicast
--------------------
+BMulticast: Multicast with backup peers
+---------------------------------------
+<!-- "backed-up multicast" -->
 
 ### Limitations regarding large and / or public audiences
 

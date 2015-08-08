@@ -553,9 +553,9 @@ that is what the multicast layer aims to reflect.
 
 
 ### Access control
-Despite being very similar in nature, access to messages is to be
-separated from the concept of membership. To see this, consider the
-following examples:
+Despite being closely related, access to messages needs to be separated
+from the concept of membership. To see this, consider the following
+examples:
 
 - A member of the group is offline when a new message is transmitted.
   Immediately after the transmission, he is removed from the group.

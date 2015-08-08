@@ -321,7 +321,7 @@ multiplex each connection to a peer in order to allow for multiple
 (virtual) connections at once.
 -->
 
-### On metadata obfuscation & anonymization
+### Metadata obfuscation & anonymization
 Direct data transmission between devices on the internet always exposes
 their IP addresses (and, therefore, potentially their identity and
 approximate geo location) to a 3rd party having access to the cables and
@@ -388,7 +388,7 @@ data with a whole group of peers some of whom might or might not be
 online at the time of initial transmission.
 
 Naively, it would certainly be possible to send the data in question to
-each of the n recipients separately. However, this approach clearly does
+each of the $n$ recipients separately. However, this approach clearly does
 not scale well when considering hundreds or even thousands of recipients
 (consider e.g. a Twitter or Wikileaks use case) as the sender's internet
 link would need to stem n times the original amount of data. For this
@@ -414,29 +414,199 @@ multiple groups have to be created.
 
 An important point concerns the type of data to be sent to the group and
 its consequences for the way in which the distribution needs to happen.
-For text messages and files / documents, it's obviously important that
-all data be received by the desired recipients with absolute confidence,
-i.e. that the transmission is *reliable*. Meanwhile, small to
-middle-sized delays in the transmission are not of particular trouble.
-In contrast, for live broadcasting of audio and video it is crucial for
-latencies to be minimized while single frames of a video can certainly
-be dropped without causing a major deterioration in quality (rather,
-frame dropping serves to *maintain* the live quality of the
-transmission) – hence, reliability of transmission is not a top
-priority. At the same time, a live audio or video broadcast is usually
-of temporary nature while a peer might decide to continuously share text
+For text messages and files / documents, it's obviously critical that
+all data will be received by the desired recipients with absolute
+confidence, i.e. that the transmission is *reliable*. Meanwhile, delays
+in the transmission of up to the order of seconds are not of particular
+trouble. In contrast, for live broadcasting of audio and video it is
+crucial for latencies to be minimized while single frames of a video can
+certainly be dropped without causing a major deterioration in quality
+(in fact, frame dropping serves to *maintain* the live quality of the
+transmission). Hence, reliability of transmission is not a top priority.
+At the same time, a live audio or video broadcast is usually of
+temporary nature while a peer might decide to continuously share text
 and documents with a multicast group over years. These fundamental
 differences suggest that both cases must be treated in different ways.
 For concreteness, we will focus on the reliable text messaging / file
 sharing use case in the following.
 
+The next sections discuss different aspects of the multicast layer and
+explain the reasoning behind corresponding design decisions. An overview
+of the protocol is finally given in the last section.
+
+
+### TODO General approach
+
+- Data shared with the group is separated into messages, which are
+  continuously numbered.
+- The group is identified in terms of a group ID which is the public
+  part of a key pair that the sender uses to sign each message. As
+  mentioned in the previous chapter, peers are identified by their
+  public keys on the p2p layer. The group's public key is then *another*
+  peer ID of the same (physical) peer that is the sender. That is, the
+  sender might have some public key known to his friends that is his
+  identity.
+
 
 ### TODO Group membership
 
-Through symmetric keys.
-
+#### Introduction
 One question that arises immediately when talking about multicast groups
-is how group membership is verified. How do peers of the group
+is how group membership is verified and how members of the group find
+and identify each other. While keeping a complete list of all members on
+each member's or even only the sender's computer is certainly possible,
+this approach doesn't scale well. For this reason and because it
+provides additional benefits discussed later, a different approach is
+used: The sender defines a shared secret and distributes it to all
+members upon creation of the group.^[The question arises how designated
+members will ever know that they are members in the first place if they
+are offline at the time of creation. This is discussed [further
+below](#notifications).] Members of the group are then able to verify
+each other's membership – without revealing the secret to each other –
+by using the [socialist millionaire
+protocol](https://en.wikipedia.org/wiki/Socialist_millionaire). Put
+differently, a member of the group is *defined* to be a peer who is in
+possession of the secret. Obviously, this does not prevent a malicious
+member to share the secret (let alone any data sent to the group) with
+another peer who was not selected to be a member of the group but, as
+outlined in the introduction, Digital Spring is concerned with cases
+where the sender selects the group's members by hand and neither aims
+nor is able to prevent social engineering attacks.
+
+While a shared secret allows membership verification, it does not solve
+the issue of how a member finds other members for the purpose of data
+distribution (see section [Multicast algorithm]). For this reason, each
+member will additionally store a subset of the full member list,
+referred to as the member's *neighbors*. The number $N$ of such
+neighbors stored at every peer must be chosen sufficiently high to
+guarantee that the graph consisting of all members that are online at
+one instant in time, with edges being drawn between them if they are
+neighbors, is always connected. Also, the neighbor relationship is a
+symmetric one, so if A is a neighbor of B then B is also a neighbor of
+A.
+
+
+#### Adjusting the member list, rekeying
+If a new recipient is to be **added** to the group, the sender will
+provide the new recipient via unicast with the shared secret as well as
+a list of members he can contact to establish a neighbor relationship
+with them.^[For cases when the new recipient is offline at the time of
+adding, see the section on [offline messaging](#offline) below.]
+Depending on the use case (see the next section on access control), i.e.
+on whether the new member is supposed to have access to earlier messages
+/ data (the *history* of the group), the sender can either choose to
+keep the secret or change it. In the latter case, he will announce the
+new secret to all members in a message before adding the new recipient.
+
+<!-- - History not accessible: Change keys when new members are added or
+  existing ones are removed.
+- History accessible: Don't change keys when new members are added but
+  still change them when existing ones leave. (As possession of the key
+  is what makes up membership in the first place.)
+ -->
+
+If the sender wants to **remove** a recipient from the list of members
+he will send a message to the group (except the member to be removed),
+announcing the member to be removed and a new shared secret. All members
+receiving the message will then remove the member in question from their
+list of neighbors and will not forward the announcement to him, either.
+The reason the member to be removed must not receive the announcement is
+that informing him of his removal would leak personal information to him
+in the sense of "The sender doesn't want to share any data with you
+anymore.". Since this is critical only in some cases^[Consider Alice who
+defriends Bob on Facebook or wants to hide her future status updates
+from him because they have been out of touch for a long time but Alice
+doesn't want Bob to be notified because this would be a rather harsh
+statement. In contrast to this, on the IRC, it is common for a user to
+be notified when he gets kicked.], an upper layer or an application
+using the multicast framework might still decide to implement notifying
+the removed member.
+
+Obviously, the solution presented here will lead to problems if many
+recipients are removed at once. Not only might the corresponding message
+be large (as each recipient is listed in terms of his public key or its
+hash) but some of the remaining members might also end up with an empty
+list of neighbors. In fact, they might not even receive the message
+announcing the removal in the first place if all their neighbors are to
+be removed and, thus, don't receive – let alone pass on – the message
+either. For this reason, only a certain fraction $R$ of the number $N$
+of neighbors to be stored with each member may be removed with a single
+announcement such that the distribution of the message still works and
+there's time for the graph of neighbors to be repaired.
+
+Finally, formally joining and leaving a group at a member's request is
+left for upper layers of the software to implement. There are many
+possible scenarios (open groups, groups one can apply for,
+invitation-only groups, closed groups et cetera) but, ultimately, it is
+the sender who needs to decide who he would like to share data with, so
+that is what the multicast layer aims to reflect.
+
+
+#### Access control
+Despite being very similar in nature, access to messages is to be
+separated from the concept of membership. To see this, consider the
+following examples:
+
+- A member of the group is offline when a new message is transmitted.
+  Immediately after the transmission, he is removed from the group.
+  Later, when he comes back online, he wants to request the message he
+  missed (and should have received) despite not being a member anymore.
+- The sender adds a new peer to the group and wants to give him access
+  to earlier messages (the *history* of the group).
+
+For this reason, the current group secret is included in the header of
+each new message in order make sure the message is linked to this
+specific iteration of the group. Upon receiving a request from any peer
+for a specific message, a member of the group will then verify that this
+peer is in possession of the corresponding secret (again by using the
+socialist millionaire protocol), i.e. that he was a member of the group
+at the time of transmission of the message (or later received the secret
+from the sender to access the group's history as in the above example).
+
+
+#### Limitations regarding public and semi-public audiences
+Obviously, the concept of membership employed here is only suitable for
+use cases in which the sender knows the exact recipients beforehand.
+Namely, he needs to:
+
+- specify each recipient manually
+- authenticate to each recipient individually to allow for authenticity
+  and deniability of his messages at the same time,
+
+This is different from public or semi-public communication channels
+which are not defined by their list of members but rather a common topic
+of interest, i.e. channels to which recipients can subscribe at their
+own discretion, such as online forums and blogs. There, the sender
+doesn't know the exact audience when sending his message and doesn't
+decide on each recipient individually. However, as noted earlier, his
+notion of privacy will then also be different and he won't expect
+authenticity and deniability at the same time.
+
+Hence, to allow for large audiences, pairwise authentication could:
+
+- be dropped to allow for deniability but no authenticity, or
+- be replaced by signing the group's public key with the sender's peer
+  ID as a first message to the group such there's authenticity but no
+  deniability.
+
+Furthermore, if the sender does not want to specify all recipients
+manually he might simply publish the group secret through a different
+channel (together with a list of existing members that can be contacted
+to establish neighbor relationships) or set it to some default value
+such as "0000" such that everybody is able to participate in the group.
+On top of that, the sender might also allow the members to forward all
+messages to anyone they like. While either authenticity or deniability
+of the messages would again be lost (because the sender won't
+authenticate with those 3rd parties individually or will sign the group
+key / ID with his own public key), this would effectively allow
+recipients to stay anonymous towards the sender because they hide behind
+another peer.
+
+<!-- If the number of recipients gets very large, one can savely assume that
+it is not the sender anymore who decided on each recipient individually.
+In this situation, the notion of privacy thus changes significantly and
+the sender won't assume any special security anymore.
+ -->
 
 
 ### TODO Multicast algorithm
@@ -469,12 +639,11 @@ phases:
 
 #### The idle phase:
 In this phase there're usually no connections between the group's
-members, However, members persistently store a number N of other members
-of the group, referred to as their "neighbors". (The neighbor
-relationship is a symmetric one, so if A is a neighbor of B then B is
-also a neighbor of A.) This list of neighbors may change when new
-members join the group or leave it. Only in this case connections
-between the members need to be established.
+members, However, as mentioned, members persistently store a number $N$
+of other members of the group, referred to as their "neighbors". This
+list of neighbors may change when new members join the group or leave
+it. Only in this case connections between the members need to be
+established during the idle phase.
 
 #### The transmission phase:
 If the owner of the group (the sender) wishes to share data (a
@@ -519,7 +688,7 @@ while the latter requires the recipient to continuously poll the sender
 for whether there is new content available.
 
 
-### Offline messages & mailboxes
+### Offline messages & mailboxes {#offline}
 
 #### The core issue.
 The question arrises what a group member does if he missed a message due
@@ -668,7 +837,7 @@ social graph thus might be well advised to avoid measures for offline
 messaging in the first place.
 
 
-#### On notifying the offline member.
+#### Notifying the offline member. {#notifications}
 So far, it has remained unclear how the offline member is notified of
 the missed message in the first place when he gets back online.
 Considering the fact he might be a member of thousands of multicast
@@ -762,6 +931,86 @@ need to be explored further:
 Concluding, the most promising way seems to be a combination of options
 4 and 5 because it is in both the sender's and the recipient's interest
 that the recipient gets notified.
+
+
+### Security
+
+#### TODO Authenticity vs. deniability
+
+##### Authenticity of the sender towards members of the group:
+
+On a network level: Achieved through a session key derived from the
+peer's public keys by means of a Diffie-Hellman key exchange.
+
+On the multicast level: As members forward messages to other members, a
+means to verify a message's authenticity (i.e. that it was indeed send
+by the owner of the group) must be provided which does not lead to
+non-repudiation and does not rely on the DH key exchange being done on
+the network level / the level of direct connections. Signing the message
+with the sender's / group's public key provides authenticity but no
+deniability.
+
+=> Derive a signing key that is not multicast but sent to each member
+individually upon creation of the group. (Again, offline messaging
+ensures that a member will receive the signing key even if he's
+offline.)
+
+
+
+
+
+#### Forward secrecy
+
+Towards a 3rd party tapping the cable: Already covered by the
+Diffie-Hellman key exchange on the network level.
+
+Towards a mailbox provider: Achieved through changing ("ratcheting") the
+session key for each new message. Deriving the session key from a
+previous one using a one-way function achieves that if an attacker gets
+hold of a session key this won't give him access to past session keys
+(and, thus, past messages). We call this *backward-secure*.
+
+
+
+
+### Protocol overview & summary
+
+Group parameters (immutable):
+
+- Group ID: The public part of the signing key pair that is used to
+  verify a message's authenticity.
+- N: The number of neighbors
+- Time to live (TTL): The minmum time for which each member must keep a
+  message in storage.
+- Topic: An arbitrary bytestring. Can be used to associate multiple
+  multicast groups with each other on an upper level (e.g. to implement
+  n-to-n communication) or to declare the application that handles this
+  multicast group.
+
+
+Group state (mutable):
+
+- Current group secret: The shared secret associated with the current
+  iteration of the group's member list. Used by a member to verify
+  another member's group membership. Every message's ciphertext is
+  prepended with a hash of the shared secret valid at the time of
+  transmission to specify the iteration of the group that is allowed to
+  receive the message.
+- Last message sent: The (integer) ID of the last message sent to the
+  group.
+
+
+Data stored with each member (apart from the group's parameters and
+state):
+
+- Neighbors: A list of $N$ members of the group.
+- Messages: The messages (including headers and signature) that have not
+  exceeded the TTL.
+
+
+
+Backed up multicast
+-------------------
 
 
 n2n layer

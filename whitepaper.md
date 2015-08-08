@@ -34,7 +34,9 @@ abstract: |
 
 bibliography: bibliography.bib
 csl: harvard-imperial-college-london.csl
-documentclass: report
+documentclass: book
+header-includes:
+  - \input{abstract.tex}
 links-as-notes: true
 toc: true
 toc-depth: 3

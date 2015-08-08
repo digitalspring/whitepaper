@@ -4,6 +4,7 @@ pandoc whitepaper.md \
 -t latex --latex-engine=xelatex \
 \
 --filter pandoc-citeproc \
+--chapters \
 \
 -s -o whitepaper.pdf
 

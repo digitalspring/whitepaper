@@ -564,51 +564,6 @@ at the time of transmission of the message (or later received the secret
 from the sender to access the group's history as in the above example).
 
 
-#### Limitations regarding public and semi-public audiences
-Obviously, the concept of membership employed here is only suitable for
-use cases in which the sender knows the exact recipients beforehand.
-Namely, he needs to:
-
-- specify each recipient manually
-- authenticate to each recipient individually to allow for authenticity
-  and deniability of his messages at the same time,
-
-This is different from public or semi-public communication channels
-which are not defined by their list of members but rather a common topic
-of interest, i.e. channels to which recipients can subscribe at their
-own discretion, such as online forums and blogs. There, the sender
-doesn't know the exact audience when sending his message and doesn't
-decide on each recipient individually. However, as noted earlier, his
-notion of privacy will then also be different and he won't expect
-authenticity and deniability at the same time.
-
-Hence, to allow for large audiences, pairwise authentication could:
-
-- be dropped to allow for deniability but no authenticity, or
-- be replaced by signing the group's public key with the sender's peer
-  ID as a first message to the group such there's authenticity but no
-  deniability.
-
-Furthermore, if the sender does not want to specify all recipients
-manually he might simply publish the group secret through a different
-channel (together with a list of existing members that can be contacted
-to establish neighbor relationships) or set it to some default value
-such as "0000" such that everybody is able to participate in the group.
-On top of that, the sender might also allow the members to forward all
-messages to anyone they like. While either authenticity or deniability
-of the messages would again be lost (because the sender won't
-authenticate with those 3rd parties individually or will sign the group
-key / ID with his own public key), this would effectively allow
-recipients to stay anonymous towards the sender because they hide behind
-another peer.
-
-<!-- If the number of recipients gets very large, one can savely assume that
-it is not the sender anymore who decided on each recipient individually.
-In this situation, the notion of privacy thus changes significantly and
-the sender won't assume any special security anymore.
- -->
-
-
 ### TODO Multicast algorithm
 
 #### Introduction
@@ -971,6 +926,50 @@ hold of a session key this won't give him access to past session keys
 (and, thus, past messages). We call this *backward-secure*.
 
 
+### Limitations regarding public and semi-public audiences
+
+Obviously, the concept of membership employed here is only suitable for
+use cases in which the sender knows the exact recipients beforehand.
+Namely, he needs to:
+
+- specify each recipient manually
+- authenticate to each recipient individually to allow for authenticity
+  and deniability of his messages at the same time,
+
+This is different from public or semi-public communication channels
+which are not defined by their list of members but rather a common topic
+of interest, i.e. channels to which recipients can subscribe at their
+own discretion, such as online forums and blogs. There, the sender
+doesn't know the exact audience when sending his message and doesn't
+decide on each recipient individually. However, as noted earlier, his
+notion of privacy will then also be different and he won't expect
+authenticity and deniability at the same time.
+
+Hence, to allow for large audiences, pairwise authentication could:
+
+- be dropped to allow for deniability but no authenticity, or
+- be replaced by signing the group's public key with the sender's peer
+  ID as a first message to the group such there's authenticity but no
+  deniability.
+
+Furthermore, if the sender does not want to specify all recipients
+manually he might simply publish the group secret through a different
+channel (together with a list of existing members that can be contacted
+to establish neighbor relationships) or set it to some default value
+such as "0000" such that everybody is able to participate in the group.
+On top of that, the sender might also allow the members to forward all
+messages to anyone they like. While either authenticity or deniability
+of the messages would again be lost (because the sender won't
+authenticate with those 3rd parties individually or will sign the group
+key / ID with his own public key), this would effectively allow
+recipients to stay anonymous towards the sender because they hide behind
+another peer.
+
+<!-- If the number of recipients gets very large, one can savely assume that
+it is not the sender anymore who decided on each recipient individually.
+In this situation, the notion of privacy thus changes significantly and
+the sender won't assume any special security anymore.
+ -->
 
 
 ### Protocol overview & summary

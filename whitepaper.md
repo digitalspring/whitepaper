@@ -926,13 +926,14 @@ same time since the usual approach of an authenticated Diffie-Hellman
 key exchange to agree on a shared secret is limited to only two parties.
 The reason for this is that a shared secret (and the message
 authentication code (MAC) that would be derived from it) only provides
-authenticity if one party can be sure that the shared secret is only
-known to the other party.^[Compare the introductory remarks on
-authentication and deniability in many-recipients settings and on what
-makes up a proof of authentication that can still be forged.] Therefore,
-a solution providing authenticity and deniability in a multicast
-environment must necessarily resort to pairwise authentication which is
-a challenge, considering a possibly large number of recipients.
+authenticity if one party can be sure that this secret is only known to
+the other party.^[Compare the introductory remarks on authentication and
+deniability in many-recipients settings and on what, for a legitimate
+recipient, makes up a proof of authenticity that could have still been
+forged from the point of a 3rd party.] Therefore, a solution providing
+authenticity and deniability in a multicast environment must necessarily
+resort to pairwise authentication which is a challenge, considering a
+possibly large number of recipients.
 
 As was mentioned earlier, a multicast group is identified by a public
 key whose corresponding private key is in the hands of the sender. At

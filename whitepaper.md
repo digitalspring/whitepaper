@@ -916,9 +916,7 @@ that the recipient gets notified.
 Security
 --------
 
-### TODO Authenticity vs. deniability
-
-#### Authenticity of the sender towards members of the group:
+### Authenticity and deniability
 
 Multicasting, i.e. the fact that recipients pass on a message to one
 other, makes it difficult to provide authenticity and deniability at the
@@ -946,11 +944,11 @@ However, as a peer will in general be the sender in a multitude of
 multicast groups, he will have and be known under several corresponding
 public keys. While it might make sense for him to define a separate key
 pair as the pair which defines his "true" identity and which he uses to
-sign all his group keys (using an authenticated Diffie-Hellman key
-exchange so it's deniable) such that all his groups' members can be sure
-it is "him", he certainly doesn't have to. It is therefore up to him to
-reveal the true identity behind each of his pseudonyms that are the
-group keys.
+sign all his group keys (using pairwise authenticated Diffie-Hellman key
+exchanges so it's deniable) such that all his groups' members can be
+sure it is "him", he certainly doesn't have to. It is therefore up to
+him to reveal the true identity behind each of his pseudonyms that are
+the group keys.
 
 Now, in order for a member to be able to verify the authenticity of a
 message sent to the group, the member must simply make sure that the
@@ -966,43 +964,66 @@ DHT. But this is certainly no proof as anybody could create a key pair
 and link it to a false IP. On top of that, onion routing might add
 another layer of obfuscation here.]
 
-One argument against the presented authentication mechanism is that the
-sender will use the *same* key to sign *all* messages sent to the group.
-Hence, if a single message included some piece of information that is
-known to be only accessible to him as a person, it would already provide
-convincing proof that he also authored all other messages signed with
-the same key and he would have difficulties denying this. One way to
-resolve this would be to have the sender announce a separate *signing
-key pair*, which is used to sign the messages, to each member of the
-group individually^[Again, an authenticated Diffie-Hellman key exchange
-would be used to make this announcement deniable.] and change it every
-$x$ messages.^[Additionally, he might publish expired signing key pairs
-to the group so anyone could then forge previous signatures but this
-would prevent member Alice from retrieving an *authenticated* message
-from the member Bob later on, e.g. if Alice was offline at the time of
-transmission.] Therefore, at most $x$ messages could be associated with
-the same author. The cost of this, however, would be $n$ Diffie-Hellman
-key exchanges every $x$ messages where $n$ is the number of members of
-the group. It might not be feasible in a setting where a large fraction
-members is offline all the time.
+Alternatively, i.e. instead of using asymmetric cryptography and one
+single key pair whose public part is known to all recipients to sign the
+message, it would also be possible to agree on a separate shared secret
+with each recipient individually and then include one corresponding MAC
+for each recipient with the message to be multicasted.^[See
+https://whispersystems.org/blog/private-groups/ for a more detailed
+explanation.] However, the message's size would then scale with the
+group's size which is why this approach is not considered any further.
 
----
+At first glance, one argument against the authentication mechanism
+presented here is that the sender will use the *same* private key to
+sign *all* messages sent to the group. Hence, if a single message
+included some secret (but not incriminating) piece of information that
+is known to be only accessible to him as a person, it might already
+demonstrate convincingly that he also authored all other (possibly
+incriminating) messages signed with the same key. More precisely, it'd
+suggest (though not prove) that the sender in fact communicated with the
+recipients and it'd provide proof that the party who signed all the
+messages was at one point in possession of the secret piece of
+information as well as the content of all other signed messages. If the
+group consisted of a single (malicious) recipient (or if a sole
+recipient testified against the sender), this would certainly be no
+problem as the recipient could have simply stripped off the sender's
+signature from all received messages (including the one with the secret
+piece of information), generated a new key pair and used it to sign both
+the original messages as well as a fake message he wants the sender to
+be associated with. However, in a multicast environment where all
+recipients receive the same messages and signatures there would be some
+orchestrating needed to distribute forged messages with forged
+signatures and the original messages with forged signatures among all of
+them after the fact, i.e. after the sender sent his secret piece of
+information. Put differently, in order for the sender to be able to
+convincingly deny having sent a message when all recipients are
+testifying against him, it'd have to be conceivable that these
+recipients are collaborating.^[As a matter of fact, a multicast group
+facilitates this as it provides a means for fast 1-to-n data
+distribution from one malicious peer to all his collaborators.] This is
+no different from a real-life scenario, though, in which several
+witnesses testify against a suspect, whether rightfully or not, and
+Digital Spring cannot provide a defense against this. In fact, this is
+completely independent from the authorization scheme employed, because
+even an unsigned forged message would require collaboration (or
+extensive hacking) to be found on all recipient's devices. Thus, a
+signature does not provide any *additional* proof in a many-recipients
+scenario, anyway.
 
-On a network level: Achieved through a session key derived from the
-peer's public keys by means of a Diffie-Hellman key exchange.
-
-On the multicast level: As members forward messages to other members, a
-means to verify a message's authenticity (i.e. that it was indeed send
-by the owner of the group) must be provided which does not lead to
-non-repudiation and does not rely on the DH key exchange being done on
-the network level / the level of direct connections. Signing the message
-with the sender's / group's public key provides authenticity but no
-deniability.
-
-=> Derive a signing key that is not multicast but sent to each member
-individually upon creation of the group. (Again, offline messaging
-ensures that a member will receive the signing key even if he's
-offline.)
+<!-- One way to mitigate this risk even further would be to have the
+sender announce a separate *signing key pair*, which is used to sign the
+messages, to each member of the group individually^[Again, pairwise
+authenticated Diffie-Hellman key exchanges would be used to make this
+announcement deniable.] and change it every $x$ messages.^[Additionally,
+he might publish expired signing key pairs to the group so anyone could
+then forge previous signatures but this would prevent member Alice from
+retrieving an *authenticated* message from the member Bob later on, e.g.
+if Alice was offline at the time of transmission.] Therefore, at most
+$x$ messages could be associated with the same author. The cost of this,
+however, would be $n$ Diffie-Hellman key exchanges every $x$ messages,
+where $n$ is the number of members of the group, so it might not be
+feasible in settings with a large number of recipients or where a large
+fraction of members is offline all the time. -->
 
 
 ### Forward secrecy

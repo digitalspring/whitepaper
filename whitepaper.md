@@ -1185,7 +1185,7 @@ BMulticast: Multicast with backup peers
 =======================================
 <!-- "backed-up multicast" -->
 
-### Limitations regarding large and / or public audiences
+### Limitations regarding large audiences
 
 Forward secrecy / ratcheting not feasible anymore but confidentiality is
 not expected as much as with private and small groups, anyway.

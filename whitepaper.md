@@ -958,6 +958,15 @@ that the recipient gets notified.
 Security
 --------
 
+### Confidentiality
+
+Confidentiality on the application level is achieved by sending /
+forwarding the plaintext message only to legitimate recipients which are
+identified through a shared secret. Meanwhile, on the physical network
+level, all data is encrypted when being passed from one peer to another
+which provides confidentiality towards an attacker tapping the cables.
+
+
 ### Authenticity and deniability
 
 Multicasting, i.e. the fact that recipients pass on a message to one

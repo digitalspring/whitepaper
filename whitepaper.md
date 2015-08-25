@@ -639,7 +639,7 @@ list of neighbors may change when new members join the group or leave
 it. In this case, connections between the members do need to be
 established during the idle phase. Another such case is when members
 request an earlier message from other members of the group, see [offline
-message](offline).
+messaging](#offline).
 
 
 ### The transmission phase

@@ -1086,11 +1086,7 @@ fraction of members is offline all the time. -->
 Towards a 3rd party tapping the cable: Already covered by the
 Diffie-Hellman key exchange on the network level.
 
-Towards a mailbox provider: Achieved through changing ("ratcheting") the
-session key for each new message. Deriving the session key from a
-previous one using a one-way function achieves that if an attacker gets
-hold of a session key this won't give him access to past session keys
-(and, thus, past messages). We call this *backward-secure*.
+
 
 
 Limitations regarding large audiences
@@ -1185,7 +1181,21 @@ BMulticast: Multicast with backup peers
 =======================================
 <!-- "backed-up multicast" -->
 
-### Limitations regarding large audiences
+Security
+--------
+
+### Forward secrecy
+
+Towards a mailbox provider: Achieved through changing ("ratcheting") the
+session key for each new message. Deriving the session key from a
+previous one using a one-way function achieves that if an attacker gets
+hold of a session key this won't give him access to past session keys
+(and, thus, past messages). We call this *backward-secure*.
+
+
+
+Limitations regarding large audiences
+-------------------------------------
 
 Forward secrecy / ratcheting not feasible anymore but confidentiality is
 not expected as much as with private and small groups, anyway.

@@ -416,16 +416,17 @@ the data. In this sense, a multicast group is also the fundamental
 entity a user can employ to finetune his privacy settings: If he wishes
 to share some data with a selected group of people, he sets up a
 multicast group consisting of the desired recipients and sends the data
-to this group. If some of the recipients must not know each other, i.e.
-if they must not know that they're all receiving the data in question,
-multiple groups have to be created.
+to this group. If any of the recipients must not know each other, i.e.
+if they must not know that they're all receiving the data in question or
+that the receiver is in touch with all of them, multiple groups have to
+be created.
 
 An important point concerns the type of data to be sent to the group and
 its consequences for the way in which the distribution needs to happen.
-For text messages and files / documents, it's obviously critical that
-all data will be received by the desired recipients with absolute
-confidence, i.e. that the transmission is *reliable*. Meanwhile, delays
-in the transmission of up to the order of seconds are not of particular
+For text messages and files, it's obviously critical that all data will
+be received by the desired recipients with absolute confidence, i.e.
+that the transmission is *reliable*. Meanwhile, delays in the
+transmission of up to the order of seconds are not of particular
 trouble. In contrast, for live broadcasting of audio and video it is
 crucial for latencies to be minimized while single frames of a video can
 certainly be dropped without causing a major deterioration in quality
@@ -446,7 +447,7 @@ of the protocol is finally given in the last section.
 TODO General approach
 ---------------------
 
-- Data shared with the group is separated into messages, which are
+- Data shared with the group is separated into *messages*, which are
   continuously numbered.
 - The group is identified in terms of a group ID which is the public
   part of a key pair that the sender uses to sign each message. As
@@ -474,19 +475,18 @@ Group membership
 
 ### Introduction
 
-One question that arises immediately when talking about multicast groups
-is how group membership is verified and how members of the group find
-and identify each other. While keeping a complete list of all members on
-each member's or even only the sender's computer is certainly possible,
-this approach doesn't scale well. For this reason and because it
-provides additional benefits discussed later, a different approach is
-used: The sender defines a shared secret and distributes it to all
-members upon creation of the group.^[The question arises how designated
-members will ever know that they are members in the first place if they
-are offline at the time of creation. This is discussed [further
-below](#notifications).] Members of the group are then able to verify
-each other's membership – without revealing the secret to each other –
-by using the [socialist millionaire
+So far it has remained unclear how group membership is verified and how
+members of the group find and identify each other. While keeping a
+complete list of all members on each member's or even only the sender's
+computer is certainly possible, this approach doesn't scale well. For
+this reason and because it provides additional benefits discussed later,
+a different approach is used: The sender defines a shared secret and
+distributes it to all members upon creation of the group.^[The question
+of how designated members will ever know that they are members in the
+first place if they are offline at the time of creation is discussed
+[further below](#notifications).] Members of the group are then able to
+verify each other's membership – without revealing the secret to each
+other – by using the [socialist millionaire
 protocol](https://en.wikipedia.org/wiki/Socialist_millionaire). Put
 differently, a member of the group is *defined* to be a peer who is in
 possession of the secret. Obviously, this does not prevent a malicious
@@ -540,11 +540,10 @@ in the sense of "The sender doesn't want to share any data with you
 anymore.". Since this is critical only in some cases^[Consider Alice who
 defriends Bob on Facebook or wants to hide her future status updates
 from him because they have been out of touch for a long time but Alice
-doesn't want Bob to be notified because this would be a rather harsh
-statement. In contrast to this, on the IRC, it is common for a user to
-be notified when he gets kicked.], an upper layer or an application
-using the multicast framework might still decide to implement notifying
-the removed member.
+doesn't want Bob to be notified of this. In contrast to this, on the
+IRC, it is common for a user to be notified when he gets kicked.], an
+upper layer or an application using the multicast framework might still
+decide to implement notifying the removed member.
 
 Obviously, the solution presented here will lead to problems if many
 recipients are removed at once. Not only might the corresponding message

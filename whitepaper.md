@@ -499,14 +499,25 @@ nor is able to prevent social engineering attacks.
 While a shared secret allows membership verification, it does not solve
 the issue of how a member finds other members for the purpose of data
 distribution (see section [Multicast algorithm]). For this reason, each
-member will additionally store a subset of the full member list,
-referred to as the member's *neighbors*. The number $N$ of such
-neighbors stored at every peer must be chosen sufficiently high to
-guarantee that the graph consisting of all members that are online at
-one instant in time, with edges being drawn between them if they are
-neighbors, is always connected. Also, the neighbor relationship is a
-symmetric one, so if A is a neighbor of B then B is also a neighbor of
-A.
+member – including the sender – will store a subset of the full member
+list, referred to as the member's *neighbors*.^[The neighbor
+relationship is symmetric, so if A is a neighbor of B then B is also a
+neighbor of A.]
+
+The number $N$ of such neighbors stored at every peer must be chosen
+sufficiently high to guarantee that the graph consisting of all members
+that are online at one instant in time, with edges being drawn between
+them if they are neighbors, is always connected. This serves to ensure
+that whenever help of the rest of the group is needed, e.g. when a
+message is being distributed or requested in hindsight, the *whole*
+group is leveraged. Put into more concrete terms, this prevents that
+some part of the group does not receive a new message because it's not
+connected to the sender or any member connected to him. While a
+situation like this can never be ruled out (think, for instance, of the
+infamous IRC net splits), a high $N$ will reduce its likelihood. Digital
+Spring also choses the neighbors randomly such that no additional
+structuring reduces the chances of connectedness and the entropy for the
+neighborship graph, given $N$, is at a maximum.
 
 
 ### Adjusting the member list, rekeying

@@ -634,42 +634,74 @@ between two phases:
 
 In this phase there're usually no connections between the group's
 members, However, as mentioned, members persistently store a number $N$
-of other members of the group, referred to as their "neighbors". This
+of other members of the group, referred to as their *neighbors*. This
 list of neighbors may change when new members join the group or leave
-it. Only in this case connections between the members need to be
-established during the idle phase.
+it. In this case, connections between the members do need to be
+established during the idle phase. Another such case is when members
+request an earlier message from other members of the group, see [offline
+message](offline).
 
 
 ### The transmission phase
 
-If the owner of the group (the sender) wishes to share data (a
-*message*) with its other members, he will *activate* the group, that is
-announce to his own N neighbors that a transmission is going to take
-place, who in turn will then notify their neighbors – provided they are
-online. In this way, the paths the activation message takes provide a
+If the owner of the group (the sender) wishes to share a message with
+its other members, he will *activate* the group, that is announce to his
+own $N$ neighbors that a transmission is going to take place, who in
+turn will then notify their other $N-1$ neighbors – provided they are
+online. In this way, the paths the activation signal takes provide a
 good starting point for the *distribution graph* – and are actually used
-as such – that determines who is going to forward data to whom and only
-consists of those members that are currently online. Hence, as users
-might come online / go offline all the time, the graph needs to be
-maintained continuously until the end of the transmission upon which he
+as such – that determines who is going to forward the message to whom
+and only consists of those members that are currently online. Hence, as
+users might come online / go offline all the time, the graph needs to be
+maintained continuously until the end of the transmission upon which it
 will be teared down.
 
+<!-- TODO: Specify exactly how graph maintenance works. -->
+
 For the exact distribution graph a simple and quite flexible model is
-chosen where each member tries to stay connected with $D$ other members
+chosen where member Bob tries to stay connected with $D$ other members
 throughout the transmission phase. As mentioned above, the starting
 point for those $D$ members are the $N$ neighbors he stored and tried to
-activate. Upon receiving a chunk of data (a *fragment* of the message),
-he will notify all $D$ connected peers and, afterwards, send the
-fragment to all those peers that request it (i.e. those that haven't
-received the fragment from another peer, yet). He will, however,
-prioritize these transmissions depending on network latencies and, in
-doing this, strongly suppress any additional transmissions if the total
-number of transmissions exceeds a certain threshold which is based upon
-his available load and bandwidth. (For the prototype, we do not
-continously optimize these priorities but set them just once in the
-beginning by looking at the times the activation signals come in.)
+activate (or was activated by). Upon receiving a chunk of data (a
+*fragment* of the message) from one such member, Bob will notify all his
+other $D-1$ connected peers and, afterwards, send the fragment to all
+those peers that request it (i.e. those that haven't received the
+fragment from another peer yet). This ensures that no peer receives a
+fragment more than once. (Obviously, the fragment's size must be chosen
+sufficiently large such that it's much cheaper to send a notification
+than send the fragment right away.)
 
-In first numerical simulations, our algorithm turned out to be quite
+As his transmission capabilities are likely limited, Bob will prioritize
+these transmissions depending on network latencies and his available
+load and bandwidth.^[For the prototype, we do not adjust these
+priorities continuously but set them once in the beginning by looking at
+the times the activation signals come in.] More specifically, he will
+strongly suppress any additional transmissions if the total number of
+transmissions exceeds a certain threshold. That is, while each of the
+$D-1$ peers would eventually receive the fragment from him after waiting
+long enough, Bob will single out a number of peers he will supply with
+incoming fragments preferably. He will also announce to each of the $D$
+peers their respective priority such that they can optimize their
+position in the distribution graph accordingly. Hence, while $D$ might
+be a comparatively high number, the number of peers Bob will actually
+send the fragment to will in practice be much lower because most of the
+$D-1$ peers will receive the fragment from somewhere else in the
+meantime. This serves three purposes:
+
+1) All (online) members of the group are at least notified of a new
+   message, so they can always request it later on if anything goes
+   wrong during transmission.
+2) Bob can choose how much bandwidth he wants to allocate to the group.
+   However, if he chooses it too low and doesn't serve his peers well,
+   his priority with these peers will drop, too.
+3) Despite prioritization, there is no strict upper bound on the number
+   of peers Bob forwards a fragment to. If member Alice is assigned a
+   low priority by all other members (e.g. because their individual
+   network connections to Alice are bad), she will still receive the
+   fragment eventually. Members with better internet links are just
+   given priority.
+
+In first numerical simulations, this algorithm turned out to be quite
 reliable and also comparably fast, though further research needs to be
 done.
 

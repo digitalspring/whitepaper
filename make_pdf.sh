@@ -9,8 +9,8 @@ pandoc whitepaper.md \
 --filter pandoc-citeproc \
 --chapters \
 \
---variable gitcommit "$gitcommit"
---variable gitdate "$gitdate"
+--variable gitcommit="$gitcommit" \
+--variable gitdate="$gitdate" \
 \
 -s -o whitepaper.pdf
 

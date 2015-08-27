@@ -1081,12 +1081,102 @@ feasible in settings with a large number of recipients or where a large
 fraction of members is offline all the time. -->
 
 
-### Forward secrecy
+### Forward and future secrecy
 
-Towards a 3rd party tapping the cable: Already covered by the
-Diffie-Hellman key exchange on the network level.
+Forward secrecy towards a 3rd party tapping the cable is already covered
+on the network level by using ephemeral (Diffie-Hellman) keys:
+Compromise of a single such key does not lead to a compromise of other
+transmissions between the same parties – whether past or future.
+
+The architecture of the multicast layer presented here gives rise to
+another attack vector, however: Namely, in case an attacker gets hold of
+the group secret and thereby becomes a member of the group (by
+definition), he will have access to any messages, future or past, sent
+to the iteration of the group associated with the secret. He will also
+receive any new group secrets and will thus retain membership status
+indefinitely until he is explicitly removed from the group by the
+sender.^[See the section on [group membership](Group membership). It is
+very unlikely, though, that the sender will remove the attacker as long
+as the attacker does not enlist as a neighbor of the sender and the
+sender thus does not even realize there is an attacker in the first
+place.] Following an article by [Whisper
+Systems](https://whispersystems.org/blog/advanced-ratcheting/), the
+property of *not* being able to access future plaintext messages
+indefinitely in case of a single compromised key, i.e. the property that
+the system will heal itself at some point, is called *future secrecy*.
 
 
+#### Forward secrecy
+
+Clearly, the reason that past messages are accessible at all comes down
+to the crucial need of keeping previous messages available to allow for
+offline messaging. To mitigate the risk of an attack, the group secret
+could be changed frequently, e.g. after $x$ messages or after a defined
+time interval has passed. This could either be done in the way member
+list changes are announced^[Again, see the section on [group
+membership](Group membership).], i.e. manually via a multicast message,
+or by rolling (*ratcheting*) the group secret forward automatically in a
+predefined fashion (i.e. by applying a key-derivation function (KDF) to
+the previous key) or by sending the new secret to each legitimate member
+individually just like upon group bootstrapping. While the latter
+approach requires $O(M)$ effort by the sender, it also the only option
+among the three which guarantees future secrecy at the same time.
+
+Disregarding the possibility of frequently changing the group secret for
+a moment, the fact that knowledge of the shared group secret alone is
+enough to access messages can otherwise only be avoided by having the
+sender state explicitly who is a legitimate member. More specifically,
+the sender can either periodically announce the list of members to the
+group as a multicast message or issue some signed and personalized proof
+of membership to each member separately (i.e. via unicast).^[Such a
+proof would, for instance, consist of signing a message containing the
+group ID / public key, the group secret and the member's ID / public key
+with the group's private key.] Both options provide future secrecy as
+well but while the first option scales with $O(M)$ with regard to link
+stress and needed storage on each member's device ($M$ being the number
+of members), handing out individual proof of membership via unicast puts
+the $O(M)$ burden solely on the sender. This is also superior to the
+option discussed in the previous paragraph (namely, frequently changing
+the group secret and announcing it via unicast) as the proofs of
+membership need to be send only when the member list actually changes
+and not as a measure of precaution every $x$ messages or $d$ days.
+
+
+#### Future secrecy
+
+<!-- TODO Discuss this in more detail, come to a conclusion! -->
+
+Options to reduce the risk associated with future access include:
+
+- Have the sender periodically^[I.e. every $x$ messages or after a
+  certain time interval has passed.] issue a new group secret which is
+  sent to the legitimate members individually (i.e. via unicast).
+- Have the sender periodically issue a new group secret and send it
+  together with the complete member list as a message to the group
+  (excluding the attacker, such that he will not receive the new
+  secret). That way, members can check their list of neighbors and
+  remove any attackers. This would require the sender to store the
+  complete member list, though, and would also lead to potentially large
+  messages.
+
+
+#### Device compromise
+
+Another point which has not been discussed so far concerns the
+compromise of a member's device. Due to the offline messaging
+capabilities, this will give the attacker not only access to the current
+group secret and a proof of membership but also to any previous messages
+the member stored so that other members could request it later. This can
+be solved by putting another^[Apart from transport-level encryption]
+layer of encryption in place: Namely, the sender could encrypt every
+message's payload with a separate key which he also sends to the
+members. Members could then safely store a previous message indefinitely
+by simply throwing away the associated encryption key. That way, they
+(or an attacker compromising their device) would not be able to decrypt
+the message themselves anymore but any other member who requests it and
+possesses the key would. This approach is indeed used in the multicast
+layer with backup peers which is discussed in the [next
+chapter](#bmulticast).
 
 
 Limitations regarding large audiences
@@ -1177,8 +1267,8 @@ state):
 
 
 
-BMulticast: Multicast with backup peers
-=======================================
+BMulticast: Multicast with backup peers {#bmulticast}
+=====================================================
 <!-- "backed-up multicast" -->
 
 Security

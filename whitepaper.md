@@ -480,29 +480,44 @@ members of the group find and identify each other. While keeping a
 complete list of all members on each member's or even only the sender's
 computer is certainly possible, this approach doesn't scale well. For
 this reason and because it provides additional benefits discussed later,
-a different approach is used: The sender defines a shared secret and
-distributes it to all members upon creation of the group.^[The question
-of how designated members will ever know that they are members in the
-first place if they are offline at the time of creation is discussed
-[further below](#notifications).] Members of the group are then able to
-verify each other's membership – without revealing the secret to each
-other – by using the [socialist millionaire
-protocol](https://en.wikipedia.org/wiki/Socialist_millionaire). Put
-differently, a member of the group is *defined* to be a peer who is in
-possession of the secret. Obviously, this does not prevent a malicious
-member to share the secret (let alone any data sent to the group) with
-another peer who was not selected to be a member of the group but, as
-outlined in the introduction, Digital Spring is concerned with cases
-where the sender selects the group's members by hand and neither aims
-nor is able to prevent social engineering attacks.
+a different approach is used:
 
-While a shared secret allows membership verification, it does not solve
-the issue of how a member finds other members for the purpose of data
-distribution (see section [Multicast algorithm]). For this reason, each
-member – including the sender – will store a subset of the full member
-list, referred to as the member's *neighbors*.^[The neighbor
-relationship is symmetric, so if A is a neighbor of B then B is also a
-neighbor of A.]
+The sender issues a personalized *proof of membership* to each
+member^[The question of how designated members will receive the proof of
+membership, let alone know that they are members in the first place if
+they are offline at the time of being added to the group is discussed
+[further below](#notifications).], consisting of the group's ID (public
+key), the member's ID (public key) and a shared group secret, all signed
+with the sender's private key to prevent forgery. The group secret
+represents the current iteration of the member list and should not be
+leaked to a 3rd party. It will change as members join and leave the
+group, as discussed below, which is why a proof of membership is always
+valid only for a specific group iteration / secret.^[The terms *group
+secret* and *group iteration* will be used interchangeably in the
+following, depending on the context.]
+
+Two members of the group are then able to verify each other's membership
+in the following way: First, the members make sure that the other party
+is in possession of the group secret – without actually revealing the
+secret to each other – by using the [socialist millionaire
+protocol](https://en.wikipedia.org/wiki/Socialist_millionaire). Then, if
+successful, they exchange their proofs of membership and verify the
+signature that comes with the proof. If the signature is legit they
+established that both of them are members of the group. In this way, a
+member of the group is *defined* to be a peer who is in possession of a
+valid proof of membership (which includes the associated group secret).
+
+The reason a proof of membership is introduced in addition to a group
+secret is that, in this way, a compromise of the group secret alone will
+not give the attacker access to the group or its messages.
+
+While a shared secret and a proof of membership allow membership
+verification, they do not solve the issue of how a member finds other
+members for the purpose of data distribution (see section [Multicast
+algorithm]). For this reason, each member – including the sender – will
+store a subset of the full member list, referred to as the member's
+*neighbors*.^[The neighbor relationship is symmetric, so if A is a
+neighbor of B then B is also a neighbor of A.]
 
 The number $N$ of such neighbors stored at every peer must be chosen
 sufficiently high to guarantee that the graph consisting of all members

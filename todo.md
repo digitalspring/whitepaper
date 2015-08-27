@@ -2,6 +2,8 @@ Todo
 ====
 
 - Introduce proof of membership in the section on group membership
+- Discuss limitations with regard to large groups that are caused by
+  using personalized proofs of membership
 - Distinguish between mailboxes (for a specific recipient) and backup
   peers (for a specific multicast group / sender) and their security
   implications.

@@ -7,3 +7,4 @@ Todo
 - Go into detail about security aspects
 - Summarize protocol
 - Explain Pub/Sub
+- NAT circumvention: Through hole punching, rendezvous point / middleman

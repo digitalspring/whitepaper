@@ -383,6 +383,11 @@ multiplex each connection to a peer in order to allow for multiple
 -->
 
 
+TODO Establishing a connection
+------------------------------
+
+
+
 Metadata obfuscation & anonymization
 ------------------------------------
 

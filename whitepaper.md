@@ -1185,19 +1185,20 @@ Obviously, the concept of membership employed here is only suitable for
 use cases in which the sender knows the exact recipients beforehand.
 Namely, he needs to:
 
-- specify each recipient manually
+- specify each recipient manually and
 - authenticate to each recipient individually to allow for authenticity
-  and deniability of his messages at the same time,
+  and deniability of his messages at the same time.
 
 This is different from public or semi-public communication channels
-which are not defined by their list of members but rather a common topic
-of interest, i.e. channels to which recipients can subscribe at their
-own discretion, such as online forums and blogs. There, the sender
-doesn't know the exact audience when sending his message and doesn't
-decide on each recipient individually. However, as noted earlier, as the
-number of recipients will generally also be larger, his notion of
-privacy will also be different and he won't expect authenticity and
-deniability at the same time.
+which are not defined by their list of members but rather in terms of a
+common topic of interest, i.e. channels to which recipients can
+subscribe at their own discretion, such as online forums and blogs.^[At
+the same time, these are also the communication channels whose audiences
+will generally be the largest.] There, the sender doesn't know the exact
+audience when sending his message and doesn't decide on each recipient
+individually. However, as noted earlier, his notion of privacy will also
+be different and he won't expect authenticity and deniability at the
+same time.
 
 Hence, to allow for large audiences, pairwise authentication could:
 

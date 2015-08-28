@@ -311,23 +311,23 @@ network. ^[This already has significant impacts on every possible user
 interface: Users connecting with each other for the first time must be
 in possession of each other's public key. In addition, "logging in" with
 an identity means restoring the key pair from a backup.] In this way,
-the network layer must also be able to translate a peer's public key
-back into the IP address (or any other reachable network address –
-depending on the underlying transport). This is done by means of a
-distributed hash table (DHT). ^[For a promising approach in our scenario
-of secure communication, see @R5N, for a whole p2p network layer
-building upon the latter see @CADET.] In short, a distributed hash table
-is a database containing key-value pairs which is distributed among all
-peers such that each peer stores only a small part of the database.
-Various algorithms exist to then allow a peer to find and access any
-entry in the database, even if it is stored with another, previously
-unknown peer in the network. Usually, this is achieved by introducing a
-metric on the common space of peer IDs^[These are not the identifiers
-mentioned earlier, as will be explained in the next section.] and keys
-and have a peer store a routing table that contains other peers close or
-far away from him in this metric. Then, to find a key and retrieve its
-associated value the request is routed to the peer whose ID is closest
-to the key and who is responsible for storing the value.
+the software must also be able to translate a peer's public key back
+into the IP address (or any other reachable network address – depending
+on the underlying transport). This is done by means of a distributed
+hash table (DHT). ^[For a promising approach in our scenario of secure
+communication, see @R5N, for a whole p2p network layer building upon the
+latter see @CADET.] In short, a distributed hash table is a database
+containing key-value pairs which is distributed among all peers such
+that each peer stores only a small part of the database. Various
+algorithms exist to then allow a peer to find and access any entry in
+the database, even if it is stored with another, previously unknown peer
+in the network. Usually, this is achieved by introducing a metric on the
+common space of peer IDs^[These are not the identifiers mentioned
+earlier, as will be explained in the next section.] and keys and have a
+peer store a routing table that contains other peers close or far away
+from him in this metric. Then, to find a key and retrieve its associated
+value the request is routed to the peer whose ID is closest to the key
+and who is responsible for storing the value.
 
 
 How peers are identified
@@ -362,24 +362,22 @@ Security
 
 
 
-Network layer
+Unicast layer
 =============
 
-<!-- TODO Rename this layer to "unicast layer" -->
+Outline
+-------
 
-Goal
-----
-
-The network layer is responsible for setting up the p2p network, i.e.
-creating secure network connections between participating peers. By
-"secure" we mean that the connection fulfills the requirements of the
-previous chapter for the data being transferred on the network level
-from one peer to the other.
+The unicast layer is responsible for setting up secure 1-to-1
+connections between peers that can then be used by upper layers. By
+"secure" we mean that the connection fulfills the outlined security
+requirements of the for the data being transferred on the physical
+network level from one peer to the other.
 
 <!--
 On a more technical level, since payload transmission (e.g. sending of
 text messages or files) is done by upper layers and several of such
-transmissions might happen at the same time, the network layer must also
+transmissions might happen at the same time, the unicast layer must also
 multiplex each connection to a peer in order to allow for multiple
 (virtual) connections at once.
 -->
@@ -448,7 +446,7 @@ Multicast layer
 Introduction
 ------------
 
-Being able to build upon the network layer which takes care of secure
+Being able to build upon the unicast layer which takes care of secure
 1-to-1 connections between peers that are online at the same time, we
 can then focus on enabling reliable 1-to-n communication, i.e. sharing
 data with a whole group of peers some of whom might or might not be

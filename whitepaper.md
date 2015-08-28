@@ -706,6 +706,49 @@ reliable and also comparably fast, though further research needs to be
 done.
 
 
+### Incentives
+
+As peer-to-peer systems distribute load and resource use among multiple
+peers, they are generally susceptible to resource exploitation where one
+or multiple peers do not follow the protocol properly and don't provide
+their resources to other peers. In a multicast setting this could, for
+instance, consist of receiving a message from a peer, but not forwarding
+a message to other peers. For this reason, members need to be
+incentivized to participate in the group.
+
+One way to achieve this in the present multicast algorithm is the
+following: Consider Alice who forwards a fragment to Bob,^[As outlined
+above, Alice will actually notify Bob of the fragment whereupon Bob will
+request it from her if he hasn't received it from another member, yet.
+We disregard these details in the following and simply refer to the
+procedure as "forwarding".] who in turn forwards it to Carl. As Alice
+sets the priority with which Bob gets fragments from her, she is also
+the one to punish him if he doesn't follow the group protocol by not
+forwarding the fragment himself. To achieve this, after successfully
+transmitting a fragment to Carl, the latter will provide Bob with a
+*proof of transmission* which states the group ID, message ID, fragment
+ID as well as Bob's ID and is signed by their respective private key.
+Bob can then send the proof to Alice to demonstrate he actively provided
+resources to the group. Alice can then raise or lower his priority
+accordingly (e.g. depending on how many proofs he provides). As she
+might not know, though, whether Carl is really a member of the group
+(Carl and Alice might not be neighbors), she might contact him to make
+sure. (A better solution in this regard is the *proof of membership*
+approach which is outlined in the section on [forward and future
+secrecy]: Bob could then simply append Carl's proof of membership to the
+proof of transmission he sends to Alice such that Alice wouldn't have to
+contact Carl herself.)
+
+Clearly, whether Bob is able to acquire any proofs of transmission
+doesn't only depend on his willingness to forward fragments but also on
+whether other members request the fragment from him in the first place.
+If Bob's internet link is slower than his neighbors' links, his
+neighbors might get the fragment before Bob is even able to offer it to
+them. In this case, his priority with Alice will rightly decrease and
+reflect his bad connection such that members who can provide better
+resources in turn get the chance to rise in the hierarchy.
+
+
 Offline messages & mailboxes {#offline}
 ---------------------------------------
 

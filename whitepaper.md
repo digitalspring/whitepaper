@@ -604,8 +604,8 @@ at the time of transmission of the message (or later received the secret
 from the sender to access the group's history as in the above example).
 
 
-TODO Multicast algorithm
-------------------------
+Multicast algorithm
+-------------------
 
 ### Introduction
 

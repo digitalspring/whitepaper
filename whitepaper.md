@@ -624,10 +624,11 @@ needs to be sent and be closed thereafter. In this sense, the multicast
 group is an offline concept that persists even when members are not
 connected with each other (or when they are offline). This requirement
 alone is incompatible with almost all approaches presented in the
-aforementioned papers and forces us to follow a different, new approach.
-
-Following the above considerations, Digital Spring's approach separates
-between two phases:
+aforementioned papers and forces us to follow a different, new approach,
+in which the actual transmission phase is distinguished from an idle
+phase. (One could also call this a hybrid approach since for each phase
+there is a graph being maintained. In this sense, two multicast groups
+with different properties are combined.)
 
 
 ### The idle phase

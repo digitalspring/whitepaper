@@ -1,7 +1,10 @@
 ---
 title: 'Digital Spring: Technical Whitepaper'
 author: Simon Hirscher
-date: Work in progress (present version from July 30, 2015)
+date: |
+  Work in progress
+  (version {$gitcommit} from {$gitdate})
+
 abstract: |
 
   Digital Spring is a software library that solves one of the crucial

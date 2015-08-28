@@ -1,8 +1,11 @@
 #!/bin/sh
-gitcommit=$(git rev-parse HEAD)
-gitdate=$(git show -s --format=%ci)
+gitcommit=$(git rev-parse HEAD | cut -c -6)
+gitdate=$(git show -s --format=%cD)
 
-pandoc whitepaper.md \
+cat whitepaper.md \
+| sed -e 's/{$gitcommit}'"/$gitcommit/" \
+| sed -e 's/{$gitdate}'"/$gitdate/" \
+| pandoc \
 -f markdown \
 -t latex --latex-engine=xelatex \
 \

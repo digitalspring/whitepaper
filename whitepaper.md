@@ -52,12 +52,14 @@ Introduction
 Status quo
 ----------
 
-> [For the first time] we have a microscope that not only lets us
-> examine social behavior at a very fine level that we've never been
-> able to see before, but [also] allows us to run experiments that
-> millions of users are exposed to.
+> For the first time, we have a microscope that not only lets us examine
+> social behavior at a very fine level that we've never been able to see
+> before but allows us to run experiments that millions of users are
+> exposed to.
 >
-> -- *Cameron Marlow, Head of Data Science Team of Facebook, 2012*
+> -- *Cameron Marlow, Head of Data Science Team of Facebook,
+>    2012*^[Source: @facebook-experiments, recited in
+>    @engadget-on-facebook.]
 
 The revelations by former government agent Edward J. Snowden have shown
 that there is no shortage of problems when it comes to government

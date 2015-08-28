@@ -277,20 +277,57 @@ formal approach where the results and decisions are presented first and
 are justified later.
 
 
-Network layer
-=============
+Distributed Hash Table (DHT) layer
+==================================
 
 Goal
 ----
 
-Digital Spring's technological foundation is a peer-to-peer (p2p)
-network. Here, "p2p" refers to the fact that peers communicate directly
-over the internet without requiring the usage of a middleman / a central
-platform. The network layer is responsible for setting up the p2p
-network, i.e. creating secure network connections between participating
-peers. By "secure" we mean that the connection fulfills the requirements
-of the previous chapter for the data being transferred on the network
-level from one peer to the other.
+Digital Spring's technological foundation is a structured peer-to-peer
+(p2p) network. Here, "p2p" refers to the fact that peers communicate
+directly over the internet without requiring the usage of a middleman /
+a central platform. "structured" means that peers do not connected with
+arbitrary other peers but follow a certain geometry as well as employ
+routing to distribute data efficiently.
+
+The DHT layer is responsible for allocating and finding resources in the
+p2p network. A distributed hash table is a key-value store that is
+distributed among peers of the network. To find a key and retrieve its
+associated value the request is routed to the peer whose ID is, in some
+sense, closest to key^[Both keys and peer IDs live in the same
+namespace.] and who is responsible for storing the value.
+
+
+Bootstrapping
+-------------
+
+
+DHT algorithm
+-------------
+
+
+Key features
+------------
+
+
+Security
+--------
+
+
+
+Network layer
+=============
+
+<!-- TODO Rename this layer to "unicast layer" -->
+
+Goal
+----
+
+The network layer is responsible for setting up the p2p network, i.e.
+creating secure network connections between participating peers. By
+"secure" we mean that the connection fulfills the requirements of the
+previous chapter for the data being transferred on the network level
+from one peer to the other.
 
 
 How peers are identified

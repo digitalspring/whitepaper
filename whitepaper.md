@@ -657,8 +657,8 @@ turn will then notify their other $N-1$ neighbors – provided they are
 online. In this way, the paths the activation signal takes provide a
 good starting point for the *distribution graph* – and are actually used
 as such – that determines who is going to forward the message to whom
-and only consists of those members that are currently online. Hence, as
-users might come online / go offline all the time, the graph needs to be
+and only consists of those members that are currently online. As users
+might come online / go offline all the time, the graph needs to be
 maintained continuously until the end of the transmission upon which it
 will be teared down.
 

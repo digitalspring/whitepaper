@@ -280,22 +280,69 @@ are justified later.
 Distributed Hash Table (DHT) layer
 ==================================
 
-Goal
-----
+Outline
+-------
 
 Digital Spring's technological foundation is a structured peer-to-peer
 (p2p) network. Here, "p2p" refers to the fact that peers communicate
 directly over the internet without requiring the usage of a middleman /
 a central platform. "structured" means that peers do not connected with
 arbitrary other peers but follow a certain geometry as well as employ
-routing to distribute data efficiently.
+routing to distribute data efficiently. A distributed hash table (DHT)
+is a key-value store that is distributed among the peers of the network.
+It provides the essential tools to find peers and, more generally,
+allocate and find resources on the network.
 
-The DHT layer is responsible for allocating and finding resources in the
-p2p network. A distributed hash table is a key-value store that is
-distributed among peers of the network. To find a key and retrieve its
-associated value the request is routed to the peer whose ID is, in some
-sense, closest to key^[Both keys and peer IDs live in the same
-namespace.] and who is responsible for storing the value.
+
+Introduction
+------------
+
+On the internet, devices are usually identified by their (ephemeral) IP
+addresses. However, a long-running p2p network such as ours has to
+introduce a permanent identifier to be able to address the same peer by
+the same ID even after some time has passed (and he has potentially
+changed his IP address). While identifiers can – a priori – be of
+arbitrary form, our goal of secure transmission (see above) makes it
+inevitable that all peers be identified by their public keys in this
+network. ^[The underlying reason for this being that the authenticity of
+a peer is usually verified by means involving public/private key
+cryptography.] In this sense, a public key *is* a peer's identify in the
+network. ^[This already has significant impacts on every possible user
+interface: Users connecting with each other for the first time must be
+in possession of each other's public key. In addition, "logging in" with
+an identity means restoring the key pair from a backup.] In this way,
+the network layer must also be able to translate a peer's public key
+back into the IP address (or any other reachable network address –
+depending on the underlying transport). This is done by means of a
+distributed hash table (DHT). ^[For a promising approach in our scenario
+of secure communication, see @R5N, for a whole p2p network layer
+building upon the latter see @CADET.] In short, a distributed hash table
+is a database containing key-value pairs which is distributed among all
+peers such that each peer stores only a small part of the database.
+Various algorithms exist to then allow a peer to find and access any
+entry in the database, even if it is stored with another, previously
+unknown peer in the network. Usually, this is achieved by introducing a
+metric on the common space of peer IDs^[These are not the identifiers
+mentioned earlier, as will be explained in the next section.] and keys
+and have a peer store a routing table that contains other peers close or
+far away from him in this metric. Then, to find a key and retrieve its
+associated value the request is routed to the peer whose ID is closest
+to the key and who is responsible for storing the value.
+
+
+How peers are identified
+------------------------
+
+Elaborating on the way peers are identified, it is important to
+distinguish between the ID of a peer on the DHT level and its ID on
+upper layers. The DHT identifier's purpose is to establish an overlay
+geometry among the peers and to enable routing in this geometry. In
+contrast, IDs on upper layers – called user or peer IDs – represent the
+user's preferences with respect to privacy. As will be discussed in
+later chapters, the user might have several user IDs to take different
+identities in different contexts, whereas he will usually have just one
+ID on the DHT level.
+
 
 
 Bootstrapping
@@ -328,36 +375,6 @@ creating secure network connections between participating peers. By
 "secure" we mean that the connection fulfills the requirements of the
 previous chapter for the data being transferred on the network level
 from one peer to the other.
-
-
-How peers are identified
-------------------------
-
-On the internet, devices are usually identified by their (ephemeral) IP
-addresses. However, a long-running p2p network such as ours has to
-introduce a permanent identifier to be able to address the same peer by
-the same ID even after some time has passed (and he has potentially
-changed his IP address). While identifiers can – a priori – be of
-arbitrary form, our goal of secure transmission (see above) makes it
-inevitable that all peers be identified by their public keys in this
-network. ^[The underlying reason for this being that the authenticity of
-a peer is usually verified by means involving public/private key
-cryptography.] In this sense, a public key *is* a peer's identify in the
-network. ^[This already has significant impacts on every possible user
-interface: Users connecting with each other for the first time must be
-in possession of each other's public key. In addition, "logging in" with
-an identity means restoring the key pair from a backup.] In this way,
-the network layer must also be able to translate a peer's public key
-back into the IP address (or any other reachable network address –
-depending on the underlying transport). This is done by means of a
-distributed hash table (DHT). ^[For a promising approach in our scenario
-of secure communication, see @R5N, for a whole p2p network layer
-building upon the latter see @CADET.] In short, a distributed hash table
-is a database containing key-value pairs which is distributed among all
-peers such that each peer stores only a small part of the database.
-Various algorithms exist to then allow a peer to find and access any
-entry in the database, even if it is stored with another, previously
-unknown peer in the network.
 
 <!--
 On a more technical level, since payload transmission (e.g. sending of

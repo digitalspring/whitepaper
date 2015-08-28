@@ -267,12 +267,12 @@ Current State of Communication Systems
 Outline
 -------
 
-The software we envision is made up of several layers which build upon
-each other and which are presented in the subsequent chapters. It is
-attempted to present the reasoning behind design decisions in the order
-in which the corresponding questions naturally appear instead of
-following a more formal approach where the results and decisions are
-presented first and are justified later.
+The proposed software is made up of several layers which build upon each
+other and which are outlined in the subsequent chapters. It is attempted
+to present the reasoning behind design decisions in the order in which
+the corresponding questions naturally appear instead of following a more
+formal approach where the results and decisions are presented first and
+are justified later.
 
 
 Network layer

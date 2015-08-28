@@ -286,12 +286,12 @@ Outline
 Digital Spring's technological foundation is a structured peer-to-peer
 (p2p) network. Here, "p2p" refers to the fact that peers communicate
 directly over the internet without requiring the usage of a middleman /
-a central platform. "structured" means that peers do not connected with
-arbitrary other peers but follow a certain geometry as well as employ
-routing to distribute data efficiently. A distributed hash table (DHT)
-is a key-value store that is distributed among the peers of the network.
-It provides the essential tools to find peers and, more generally,
-allocate and find resources on the network.
+a central platform. "structured" means that peers do not connect to
+arbitrary peers to stabilize the network but follow a certain geometry
+as well as employ routing to distribute data efficiently. A distributed
+hash table (DHT) is a key-value store that is distributed among the
+peers of the network. It provides the essential tools to find peers and,
+more generally, allocate and find resources on the network.
 
 
 Introduction

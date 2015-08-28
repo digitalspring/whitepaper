@@ -470,8 +470,8 @@ for whether there is new content available.
 
 
 
-Group membership
-----------------
+Group membership {#membership}
+------------------------------
 
 ### Introduction
 
@@ -1088,33 +1088,79 @@ on the network level by using ephemeral (Diffie-Hellman) keys:
 Compromise of a single such key does not lead to a compromise of other
 transmissions between the same parties – whether past or future.
 
-On the level of multicast groups, access control to and confidentiality
-of messages is achieved by a shared group secret together with a proof
-of membership. If only possession of the group secret defined who is a
-member, both past and future messages would be compromised if an
-attacker could get hold of the group secret as he would thereby become a
-member. However, with proofs of membership in place, compromise of the
-group secret is not enough for the attacker would additionally need some
-member's private key and his proof of membership. This lowers the risk
-of compromise tremendously.
+The architecture of the multicast layer presented here gives rise to a
+new attack vector, though: Namely, in case an attacker gets hold of the
+group secret and thereby becomes a member of the group (by definition),
+he will have access to any messages, future or past, sent to the
+iteration of the group associated with the secret. He will also receive
+any new group secrets and will thus retain membership status
+indefinitely until he is explicitly removed from the group by the
+sender.^[See the section on [group membership](#membership). It is very
+unlikely, though, that the sender will actually remove the attacker as
+long as the latter does not enlist as a neighbor of the sender and the
+sender thus does not even realize there is an attacker in the first
+place.] In this sense, both forward and future secrecy are broken in the
+current draft.
 
-<!--
-TODO: Uncomment this, as soon as the blog is in place:
+There are several ways around this, e.g. periodically rolling the group
+secret forward by applying a key derivation function to the old key
+material, thereby achieving forward secrecy, or having the sender
+periodically announce a completely new group secret to legitimate
+members individually which ensures both forward and future secrecy. The
+problem with periodically updating the group secret, though, is that it
+is difficult to set the period appropriately, considering that multiple
+multicast groups might heavily differ in terms of how many messages are
+sent to each group per time interval.
 
-^[Indeed, as discussed in the blog post "Why a shared group secret is
-not enough", this was the reason for introducing a proof of membership
-in the first place.]
- -->
+Looking more closely, the issue underlying the mentioned attack vector
+is that the credentials used to authorize as a member are not
+personalized to each member but can be passed on to anyone, including an
+attacker. While this also has great potential when it comes to large
+groups (members can invite other peers to the group by giving the group
+secret to them), small groups are likely better off with more extensive
+security guarantees.
+
+To reach those, as suggested the access credentials need to be
+personalized. For instance, the sender could issue a *proof of
+membership* to each member which would consist of the group's ID, the
+member's ID and the group secret and be signed by the sender. Then, in
+addition to making sure Bob is in possession of the group secret, Alice
+would also verify Bob's proof of membership before granting him access
+to a message. Therefre, apart from the group secret, an attacker would
+also need Bob's proof of membership and private key to gain access,
+making a successful attack much harder. On the other hand, this approach
+would make it impossible for members to invite new members as the sender
+would necessarily have to sign off on every single new member. In
+addition, the sender would also need to issue new proofs of membership
+to all members every time the group secret (i.e. the member list)
+changes which scales as $O(M)$, $M$ being the number of members.
+
+In a combined approach that is going to be incorporated into this
+proposal in the future, the group secret, which is announced with every
+message, will consist of a public key whose private counterpart will be
+used to sign the proofs of membership. This way, the sender is free to
+decide whether to share this private key with the group and thus enable
+its members to invite new members and self-sign their proofs – at the
+cost of giving up forward and future secrecy as outlined above – or to
+keep the key to himself such that he needs to sign off on every new
+member himself.
+
+Clearly, allowing anyone in possession of the necessary credentials to
+join the group, including an attacker, and approving every new member
+personally are mutually exclusive options and there is a tradeoff to be
+made. Instead of fixing the decision in the protocol, the combined
+approach outlined above allows the sender to choose appropriately and
+depending on the use case.
 
 
 <!-- #### Device compromise -->
 
-Obviously, one way for an attacker to still get hold of the group secret
+<!-- Obviously, one way for an attacker to still get hold of the group secret
 and a member's private key and proof of membership would be to
 compromise the respective member's device. While all of these can
 certainly be stored in an encrypted fashion on the device, Digital
 Spring ultimately cannot provide any meaningful security against
-targeted attacks.
+targeted attacks. -->
 
 <!-- Due to the offline messaging capabilities, a device compromise would
 also give the attacker access to any previous messages the member stored

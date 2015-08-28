@@ -1205,7 +1205,10 @@ Hence, to allow for large audiences, pairwise authentication could:
 - be dropped to allow for deniability but no authenticity, or
 - be replaced by signing the group's public key with the sender's peer
   ID as a first message to the group such there's authenticity but no
-  deniability.
+  deniability.^[Alternatively, the sender's peer ID could be used as the
+  group ID directly. To allow the sender to control multiple multicast
+  groups, the group ID could be augmented by some random value, each
+  value representing a different group.]
 
 Furthermore, if the sender does not want to specify all recipients
 manually he might simply publish the group secret through a different

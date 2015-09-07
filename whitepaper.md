@@ -1427,5 +1427,17 @@ Related Work
 ============
 
 
+Acknowledgments
+===============
+
+I would like to thank Carlo von Loesch, Daniel Reusche and Gabor Adam
+Toth for initial ideas involving multicast and the pub/sub approach,
+Sven Peter for hour-long discussions about offline messaging, network
+protocols and the software's architecture (and probably many more things
+I can't remember anymore) and Max Lautsch for a creating a simulation of
+the multicast algorithm, his general support over the past year and
+proof-reading this paper.
+
+
 References
 ==========

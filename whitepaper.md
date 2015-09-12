@@ -305,44 +305,41 @@ changed his IP address). While identifiers can – a priori – be of
 arbitrary form, our goal of secure transmission (see above) makes it
 inevitable that all peers be identified by their public keys in this
 network. ^[The underlying reason for this being that the authenticity of
-a peer is usually verified by means involving public/private key
-cryptography.] In this sense, a public key *is* a peer's identify in the
-network. ^[This already has significant impacts on every possible user
-interface: Users connecting with each other for the first time must be
-in possession of each other's public key. In addition, "logging in" with
-an identity means restoring the key pair from a backup.] In this way,
-the software must also be able to translate a peer's public key back
-into the IP address (or any other reachable network address – depending
-on the underlying transport). This is done by means of a distributed
-hash table (DHT). ^[For a promising approach in our scenario of secure
+a peer is usually verified by public/private key cryptography.] In this
+sense, a public key *is* a peer's identify in the network. ^[This
+already has significant impacts on every possible user interface: Users
+connecting with each other for the first time must be in possession of
+each other's public key. In addition, "logging in" with an identity
+means restoring the key pair from a backup.] In this way, the software
+must also be able to translate a peer's public key back into the IP
+address (or any other reachable network address – depending on the
+underlying transport). This is done by means of a distributed hash table
+(DHT). ^[For a promising approach in our scenario of secure
 communication, see @R5N, for a whole p2p network layer building upon the
 latter see @CADET.] In short, a distributed hash table is a database
-containing key-value pairs which is distributed among all peers such
+containing key-value pairs which are distributed among all peers such
 that each peer stores only a small part of the database. Various
-algorithms exist to then allow a peer to find and access any entry in
+algorithms exist then to allow a peer to find and access any entry in
 the database, even if it is stored with another, previously unknown peer
 in the network. Usually, this is achieved by introducing a metric on the
 common space of peer IDs^[These are not the identifiers mentioned
-earlier, as will be explained in the next section.] and keys and have a
-peer store a routing table that contains other peers close or far away
-from him in this metric. Then, to find a key and retrieve its associated
-value the request is routed to the peer whose ID is closest to the key
-and who is responsible for storing the value.
-
-
-How peers are identified
-------------------------
+earlier, as will be explained below.] and keys and have a peer store a
+routing table that contains other peers close or far away from him in
+this metric. Then, to find a key and retrieve its associated value the
+request is routed to the peer whose ID is closest to the key and who is
+responsible for storing the value.
 
 Elaborating on the way peers are identified, it is important to
-distinguish between the ID of a peer on the DHT level and its ID on
+distinguish between the ID of a peer on the DHT level and his ID on
 upper layers. The DHT identifier's purpose is to establish an overlay
-geometry among the peers and to enable routing in this geometry. In
-contrast, IDs on upper layers – called user or peer IDs – represent the
-user's preferences with respect to privacy. As will be discussed in
-later chapters, the user might have several user IDs to take different
-identities in different contexts, whereas he will usually have just one
-ID on the DHT level.
-
+geometry among the peers and to enable routing in this geometry. It is
+this ID that lies in the same space as DHT keys. In contrast, the IDs on
+upper layers which were discussed in the beginning of this section and
+which we will call *user IDs* represent the user's preferences with
+respect to privacy. As will be discussed in later chapters, the user
+might have several user IDs to take different identities in different
+contexts, whereas he will usually have just one DHT ID, as the latter
+serves a purely technical purpose.
 
 
 Bootstrapping

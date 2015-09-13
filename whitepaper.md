@@ -372,17 +372,227 @@ serves a purely technical purpose.
 Bootstrapping
 -------------
 
+Since a p2p network lacks a central infrastructure participants can
+automatically connect to, a mechanism must be provided to help peers
+find other peers in the network when they connect to the network for the
+very first time or after a temporary loss of connection.
+
+To this end, each peer will store the routing table on disk such that
+he's able to connect to his DHT neighbors again after a loss of
+connection. For cases when the routing information has become stale
+(e.g. because the peer was offline for a long time), i.e. the peers in
+the table aren't reachable under the given IP adresses anymore, or the
+peer connects to the p2p network for the first time, he also stores a
+number of directory servers from which he can then request a list of
+peers.
+
 
 DHT algorithm
 -------------
+
+There are a number of DHT algorithms, including Chord, Tapestry and
+Kademlia [TODO Insert references]. So far, it hasn't been decided which
+algorithm will be used for Digital Spring. This is also due to the
+unique constraints the project faces: Namely, given today's trends, a
+large fraction of peers will be mobile clients that not only have
+limited storage and battery life but also produce a high churn in the
+network as they switch from one mobile network cell and one IP address
+to another. Therefore, further research needs to be done.
 
 
 Key features
 ------------
 
+Independent of the exact DHT algorithm, the DHT layer needs to provide
+several key features which will be important for upper layers and mostly
+deal with security and access control, e.g. read and write protection of
+entries in the DHT and their authenticity, and data structures such as
+queues.
+
+
+### Write protection and authenticity
+
+In p2p networks whose DHTs are used to store content and make it
+available to all peers, e.g. file sharing networks, DHT keys are usually
+hashes of their associated values. In this way, once set, values cannot
+be modified anymore and a peer requesting the value associated with a
+DHT key just needs to compute the hash to make sure the value he
+received is authentic. Put differently, the key cannot be set
+arbitrarily but depends on the value. It must also be ḱnown to every
+peer requesting the entry beforehand.
+
+<!-- However, as Digital Spring follows a publish/subscribe approach rather
+than one that is request-based^[See the chapter on the [multicast
+layer].], it only employs the DHT to find resources (and peers) on the
+network.
+ -->
+
+However, this is incompatible with the requirements imposed upon the DHT
+by upper layers. Namely, a peer must be able to freely choose the key
+but, at the same time, the DHT should still guarantee the authenticity
+of its value.
+
+As discussed before, the peer's identity is encoded in terms of a key
+pair. Hence, the private key can be used to sign DHT values authored by
+the peer and prove their authenticity. To further remove the requirement
+that a key must be known beforehand^[I.e. the key would need to be
+announced by the author of the DHT entry beforehand.], the author can
+(but certainly doesn't have to) choose a generic name for the key to let
+other peers find it easily. However, in order to avoid key collisions if
+several peers choose the same generic key, the public key's hash will be
+prepended to the key. To summarize:
+
+~~~~~~~~~~~~~~~~~~~~~
+key = hash(public key) || (user-chosen key)
+value = signed(user-chosen value)
+~~~~~~~~~~~~~~~~~~~~~
+
+By contract, only the owner of the private key will be allowed to set a
+value for any key starting with his public key's hash. (He will
+therefore be called the *owner of the DHT key* in the following.) In
+case the peer responsible for storing the DHT entry is malicious and
+doesn't follow this convention but lets anyone set a value for a key,
+peers requesting the key will be able to detect the malicious behavior
+due to a wrong signature.
+
+
+### Read protection
+
+Read protection can be accomplished by encrypting an entry's value
+either symmetrically or asymmetrically, depending on the use case.
+
+
+### Queues
+
+As will become clear in later chapters^[See the chapters on unicast and
+multicast.], the DHT layer must provide a mechanism to associate a DHT
+key with a queue data structure such that peers are able to store items
+in the queue and retrieve them. Borrowing from UNIX file permissions,
+there're two use cases to be distinguished:
+
+- *U+W, O+R*: The creator of the queue, i.e. the owner (U) of the DHT
+  entry, writes (+W) items to the queue for others (O) to read (+R). In
+  this way, the queue is basically a 1-to-$n$ distribution mechanism. A
+  peer will use this to make authenticated ephemeral Diffie-Hellman
+  public keys available to other peers beforehand in case he is offline
+  later.^[See https://whispersystems.org/blog/asynchronous-security/ for
+  a more detailed explanation in the slightly different context of
+  asynchronous client-client communication through a server.]
+
+- *U+R, O+W*: All peers (O) are allowed to store items (+W) in the queue
+  which the owner of the queue (O) will retrieve (+R) later. That way,
+  the queue achieves $n$-to-1 message collection. This will later be
+  used to store small (notification) messages for a peer in the DHT, in
+  case he is offline.
+
+In all cases, read protection – if necessary – will be accomplished
+through encryption. Write protection will again be enforced by contract
+and through signatures.
+
+<!-- A distributed queue, just like any other message distribution
+mechanism, usually has to deal with problems with respect to ordering,
+reliability and synchronization. Fortunately, though, in our cases the
+requirements are comparatively low:
+
+- *U+W, O+R*: At-most-once delivery is desirable but not strictly
+  necessary as delivering a prekey / DH public key more than once would
+  simply increase the value of the private key. Ordering not critical.
+- *U+R, O+W*: At-least-once delivery desirable; ordering not important.
+
+Unfortunately, the exact algorithm for storing a queue in the DHT is out
+of the scope of this paper. The reader is referred to [TODO Insert
+reference] for one possible approach.
+
+ -->
+
 
 Security
 --------
+
+### Confidentiality, forward and future secrecy
+
+Confidentiality on the transport level (i.e. between peers participating
+in the DHT) is accomplished by a agreeing on a shared secret through a
+Diffie-Hellman key exchange, from which a session key is then derived
+that is used to encrypt transmitted data. Since the session key is
+ephemeral, i.e. a new key is generated for every new connection and
+connections are generally short-lived, forward and future secrecy are
+also guaranteed in this way.
+
+
+### Authenticity
+
+To prevent man-in-the-middle attacks when to peers connect to each other
+it is also necessary to authenticate the ephemeral Diffie-Hellman public
+keys, that are being exchanged, through static public keys. This poses a
+problem in so far as peers on the DHT level don't know each other
+beforehand as they're only working together to provide the DHT
+functionality. Therefore, another peer's static public key will not be
+known (e.g. from a different communication channel) before establishing
+the first connection to him. However, peers are assigned an ID (which
+must live in a common space with all possible DHT keys) and this can be
+leveraged in the following way: Upon starting the application for the
+first time, a peer generates a key pair and uses the hash of the public
+key as his DHT ID. When two peers establish a connection to each other,
+they can then sign their ephemeral Diffie-Hellman public keys with their
+static public keys and verify each other's identity by computing the
+hash of the other party's public key and comparing it to the DHT ID they
+wanted to connect to.^[Using static, random DHT IDs that do not depend
+on geographical information (e.g. IP addresses) has additional
+advantages: 1. It makes it harder for malicious peers to control a
+significant part of the DHT only by positioning themselves in the
+respective geographical area. 2. At the same time, the network becomes
+more failure-resistant against outages in a some part of the world as
+they won't necessarily result in a loss of DHT entries (assuming
+sufficient replication of DHT entries). 3. Mobile clients, who change
+their IP addresses often, don't change they DHT IDs so can still use
+their previous routing tables after switching cells or recovering from a
+connection loss.] This obviously assumes that DHT IDs are known
+beforehand but this is fulfilled for all DHT operations because peers
+store their neighbors' DHT IDs and IP addresses in their routing
+table.^[Upon bootstrapping, peers receive a list of other peers, i.e.
+pairs of DHT IDs and IP addresses, from a trusted directory server to
+fill their routing table.] For instance, a DHT operation like routing a
+key request usually consists of connecting to a specific peer with a
+certain DHT ID – usually one that is closer to the key in question – and
+forwarding the request to him. In order for a man in the middle to be
+successful, he would thus need to find a hash collision, i.e. come up
+with a key pair whose hash is the exactly the DHT ID in question.
+
+This is not only hardly feasible but also makes little sense as it'd be
+a lot easier for the adversary to simply participate in the network
+himself and position himself in a certain part of the ID space by
+generating a DHT ID that is close through brute force. While he might
+not be able to intercept a specific connection in this way, he doesn't
+need to, anyway: On the DHT level, peers don't send personal information
+intended for a specific (trusted or known) peer but they merely exchange
+routing information and key requests with arbitrary peers that they
+don't necessarily trust in the first place. The challenge therefore
+consists of not giving away any personal information through key
+requests (e.g. who is asking for which key), especially when there's a
+large number of malicious peers.
+
+In this sense, the only purpose of the encryption and authentication
+scheme for individual connections that was discussed earlier was to make
+it difficult for a global eavesdropper, whether passive or active, to
+observe how key requests are being routed through the network. With
+encryption and authentication in place, he is forced to actively
+participate in the network.
+
+
+### Metadata obfuscation and deniability
+
+
+
+
+### Byzantine failure and malicious peers
+
+<!-- As discussed earlier, a likely attack vector would be for an adversary
+to simply participate in the network and -->
+
+
+Failure resistance
+------------------
 
 
 

@@ -42,7 +42,7 @@ header-includes:
   - \input{abstract.tex}
 links-as-notes: true
 toc: true
-toc-depth: 3
+toc-depth: 1
 ---
 
 

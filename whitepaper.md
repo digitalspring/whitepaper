@@ -276,6 +276,33 @@ the corresponding questions naturally appear instead of following a more
 formal approach where the results and decisions are presented first and
 are justified later.
 
+The layers are:
+
+- Distributed Hash Table (DHT) layer: Provide a searchable data
+  structure (namely a key-value store) which is distributed among all
+  peers
+
+- Unicast: Establish 1-to-1 connections between peers that are online
+
+- OfflineUnicast: Send short messages (e.g. notifications) to peers even
+  though they are offline. The messages are stored in the DHT in a queue
+  data structure such that they can be retrieved later by the recipient.
+
+- Multicast: Provide efficient and reliable 1-to-$n$ data distribution
+  from a sender to a group of recipients.
+
+- BMulticast: Multicast with backup peers, i.e. add additional peers to
+  a multicast group that won't be able to read the transmitted messages
+  but will provide additional resources to the group, i.e. they help
+  with message distribution and thus stabilize the group in view of node
+  failures.
+
+
+Current status of this paper
+----------------------------
+
+
+
 
 Distributed Hash Table (DHT) layer
 ==================================

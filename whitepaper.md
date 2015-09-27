@@ -767,14 +767,8 @@ to provide counter measures for the DHT in the future, it is not the
 current focus of this whitepaper.
 
 
-### Byzantine failure and malicious peers
-
-<!-- As discussed earlier, a likely attack vector would be for an adversary
-to simply participate in the network and -->
-
-
-Failure resistance
-------------------
+(Byzantine) Failure resistance
+------------------------------
 
 
 

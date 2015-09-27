@@ -556,7 +556,9 @@ recovering from a connection loss.] The situation is then very similar
 to a client establishing a TLS connection to a server^[Of course, the
 server's certificate (public key) is not verified by means of a
 previously known hash but by following the chain of certificates back to
-a trusted authority.], which is a solved problem.
+a trusted authority.]. As this is a solved problem, protocol details are
+not discussed any further at this point and the protocol will try to
+stay as close to the TLS protocol as possible.
 
 <!--
 <KEY AGREEMENT PROTOCOL PART 1/2> (Hidden because only Chuck Norris

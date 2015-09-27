@@ -820,8 +820,9 @@ of the server or tapping the server itself.) While it might be argued
 that intelligence agencies will certainly not have access to relevant
 cables or routers in every case (especially when sender and recipient
 are geographically close to each other and their data is not crossing
-any central point of the infrastructure), this is certainly not
-something to rely upon and care must be taken to obfuscate the metadata.
+any central point of the internet infrastructure such as a backbone),
+this is certainly not something to rely upon and care must be taken to
+obfuscate the metadata.
 
 Generally, there are two ways here:
 

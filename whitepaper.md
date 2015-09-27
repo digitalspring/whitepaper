@@ -769,9 +769,10 @@ to provide counter measures for the DHT in the future, it is not the
 current focus of this whitepaper.
 
 
-(Byzantine) Failure resistance
-------------------------------
-
+<!--
+TODO (Byzantine) Failure resistance
+-----------------------------------
+ -->
 
 
 Unicast layer

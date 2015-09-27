@@ -782,10 +782,10 @@ Outline
 -------
 
 The unicast layer is responsible for setting up secure 1-to-1
-connections between peers that can then be used by upper layers. By
-"secure" we mean that the connection fulfills the outlined security
-requirements for the data being transferred on the physical network
-level from one peer to the other.
+connections between peers that are online at the same time. By "secure"
+we mean that the connection fulfills the outlined security requirements
+for the data being transferred on the physical network level from one
+peer to the other.
 
 <!--
 On a more technical level, since payload transmission (e.g. sending of

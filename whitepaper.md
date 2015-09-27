@@ -796,9 +796,19 @@ multiplex each connection to a peer in order to allow for multiple
 -->
 
 
-TODO Establishing a connection
-------------------------------
+Establishing a unicast connection
+---------------------------------
 
+Consider Alice who wants to send a message to Bob who is identified by
+his peer ID (public key) $b$. To establish a unicast connection to him,
+Alice will look up the IP address associated with the key $b$ (or some
+hashed version of it) in the DHT. Bob updates this IP address
+periodically as long as he is online. Assuming Alice could find the
+key^[DHT keys aren't stored indefinitely but have a time to live (TTL).]
+and Bob can still be reached under this IP, Alice will then establish a
+direct TCP connection to Bob^[In case Bob is behind a NAT, this is
+obviously more delicate and some kind of NAT hole punching has to be
+used.] and is ready to transmit data to him.
 
 
 Metadata obfuscation & anonymization

@@ -515,75 +515,256 @@ Security
 Confidentiality on the transport level (i.e. between peers participating
 in the DHT) is accomplished by a agreeing on a shared secret through a
 Diffie-Hellman key exchange, from which a session key is then derived
-that is used to encrypt transmitted data. Since the session key is
-ephemeral, i.e. a new key is generated for every new connection and
-connections are generally short-lived, forward and future secrecy are
-also guaranteed in this way.
+that is used to encrypt transmitted data.^[In the following, it is
+assumed that the reader is familiar with how a Diffie-Hellman key
+exchange works.] Since the session key is ephemeral, i.e. a new key is
+generated for every new connection and connections are generally
+short-lived, forward and future secrecy are also guaranteed in this way.
 
 
 ### Authenticity
 
 To prevent man-in-the-middle attacks when to peers connect to each other
 it is also necessary to authenticate the ephemeral Diffie-Hellman public
-keys, that are being exchanged, through static public keys. This poses a
-problem in so far as peers on the DHT level don't know each other
-beforehand as they're only working together to provide the DHT
-functionality. Therefore, another peer's static public key will not be
-known (e.g. from a different communication channel) before establishing
-the first connection to him. However, peers are assigned an ID (which
-must live in a common space with all possible DHT keys) and this can be
-leveraged in the following way: Upon starting the application for the
-first time, a peer generates a key pair and uses the hash of the public
-key as his DHT ID. When two peers establish a connection to each other,
-they can then sign their ephemeral Diffie-Hellman public keys with their
-static public keys and verify each other's identity by computing the
-hash of the other party's public key and comparing it to the DHT ID they
-wanted to connect to.^[Using static, random DHT IDs that do not depend
-on geographical information (e.g. IP addresses) has additional
-advantages: 1. It makes it harder for malicious peers to control a
-significant part of the DHT only by positioning themselves in the
-respective geographical area. 2. At the same time, the network becomes
-more failure-resistant against outages in a some part of the world as
-they won't necessarily result in a loss of DHT entries (assuming
-sufficient replication of DHT entries). 3. Mobile clients, who change
-their IP addresses often, don't change they DHT IDs so can still use
-their previous routing tables after switching cells or recovering from a
-connection loss.] This obviously assumes that DHT IDs are known
-beforehand but this is fulfilled for all DHT operations because peers
-store their neighbors' DHT IDs and IP addresses in their routing
-table.^[Upon bootstrapping, peers receive a list of other peers, i.e.
-pairs of DHT IDs and IP addresses, from a trusted directory server to
-fill their routing table.] For instance, a DHT operation like routing a
-key request usually consists of connecting to a specific peer with a
-certain DHT ID – usually one that is closer to the key in question – and
-forwarding the request to him. In order for a man in the middle to be
-successful, he would thus need to find a hash collision, i.e. come up
-with a key pair whose hash is exactly equal to the DHT ID in question.
+keys, that are being exchanged, through some static public keys of the
+involved parties.
 
-This is not only hardly feasible but also makes little sense as it'd be
-a lot easier for the adversary to simply participate in the network
-himself and position himself in a certain part of the ID space by
-generating a DHT ID that is close through brute force. While he might
-not be able to intercept a specific connection in this way, he doesn't
-need to, anyway: On the DHT level, peers don't send personal information
-intended for a specific (trusted or known) peer but they merely exchange
-routing information and key requests with arbitrary peers that they
-don't necessarily trust in the first place. The challenge therefore
-consists of not giving away any personal information through key
-requests (e.g. who is asking for which key), especially when there's a
-large number of malicious peers.
+However, on the DHT level, the notion of authenticity is a different one
+than on other levels since the DHT has a purely technical purpose and
+connections between peers on this level don't reflect social relations
+between them. In particular, peers don't know each other's public keys
+beforehand (which could then be used to make sure they're talking to the
+right party). Rather, in a typical DHT operation like a key request,
+Alice will connect to a peer Bob and will expect Bob to have a specific
+DHT ID $x$, e.g. an ID that is closer to the key Alice is requesting.
+Therefore, it is the DHT ID that is known beforehand. Now, to prevent
+man-in-the-middle attacks and authenticate the static public keys, it
+makes sense to bind Bob's DHT ID to his static public key and define it
+to be the public key's hash. Then, by computing the hash of the public
+key Bob announces to her, Alice can make sure this public key indeed
+belongs to the peer with the DHT ID $x$.^[Using static, random DHT IDs
+like these that do not depend on geographical information (e.g. IP
+addresses) has additional advantages: 1. It makes it harder for
+malicious peers to control a significant part of the DHT only by
+positioning themselves in the respective geographical area. 2. At the
+same time, the network becomes more failure-resistant against outages in
+a some part of the world as they won't necessarily result in a loss of
+DHT entries (assuming sufficient replication of DHT entries). 3. Mobile
+clients, who change their IP addresses often, don't change they DHT IDs
+so can still use their previous routing tables after switching cells or
+recovering from a connection loss.] The situation is then very similar
+to a client establishing a TLS connection to a server^[Of course, the
+server's certificate (public key) is not verified by means of a
+previously known hash but by following the chain of certificates back to
+a trusted authority.], which is a solved problem.
 
-In this sense, the only purpose of the encryption and authentication
-scheme for individual connections that was discussed earlier was to make
-it difficult for a global eavesdropper, whether passive or active, to
-observe how key requests are being routed through the network. With
-encryption and authentication in place, he is forced to actively
-participate in the network.
+<!--
+<KEY AGREEMENT PROTOCOL PART 1/2> (Hidden because only Chuck Norris
+rolls his own key agreement protocol)
+
+To summarize: Alice ($A$) will connect to Bob ($B$), receive Bob's
+public key and verify its hash, and then announce his own public key to
+Bob, together with an ephemeral Diffie-Hellman public key<!- - and a
+session token- ->, in a message that is encrypted with Bob's public key.
+Bob can then decrypt the message and will reply with his own ephemeral
+Diffie-Hellman public key<!- - and the session token- -> and encrypt the
+whole message with Alice's public key. As soon as Alice receives the
+message, the authenticated Diffie-Hellman key exchange is complete.
+
+</KEY AGREEMENT PROTOCOL PART 1/2>
+-->
+
+<!--
+<DEPRECATED>
+(The following is deprecated because we don't need a session token
+(Alice's ephemeral DH public key already serves as one, see below.))
+
+The session token serves the following purpose: As $B$ doesn't
+necessarily know $A$'s DHT ID beforehand, $A$ cannot authenticate
+towards $B$ initially. Therefore, an active attacker could exchange
+$A$'s key announcement message on its way to $B$ with his own message
+(and his own public key), without $B$ noticing. Then, the attacker would
+be able to decrypt $B$'s reply and replace the ephemeral DH public key
+inside, before forwarding it to $A$. He therefore would've launched a
+successful MITM attack on the key exchange protocol.
+
+With a session token being sent back and forth, however, $A$ would
+notice the attack as soon as he receives the reply from $B$: As the
+attacker didn't know the session token, the malicious message he sent to
+$B$ must have contained some other, wrong session token and, therefore,
+$B$'s reply to $A$ will also contain the wrong session token. Hence, $A$
+will notice the attack and abort the key exchange immediately.
+Similarly, if the attacker were to intercept only $B$'s reply on its way
+to $A$ (which he cannot decrypt as he doesn't know $A$'s private key),
+he could replace $B$'s message with his own one and replace the
+ephemeral DH public key inside. Again, a session token would give this
+away.
+
+</DEPRECATED>
+-->
+
+
+<!--
+<KEY AGREEMENT PROTOCOL PART 2/2> (Hidden because only Chuck Norris
+rolls his own key agreement protocol)
+
+While an attacker could intercept and exchange these key agreement
+messages sent from $A$ to $B$ and from $B$ to $A$ in an arbitrary
+fashion, he will never be able to know Alice's ephemeral Diffie-Hellman
+public key as $A$ encrypts it first before sending it. Therefore, if
+Alice receives a messages that is encrypted (and MAC'd) with the correct
+shared key (a key that is derived from her ephemeral DH public key), it
+must have necessarily been authored by Bob, who is the only other person
+who she gave her ephemeral DH public key to. If any message is not
+encrypted with the correct key, Alice will reject it, notify Bob and
+close the connection.
+
+To make this more concrete, consider that, as soon as Alice and Bob
+start encrypting their communication with their shared secret, one of
+two things can happen:
+
+- The attacker replaced Alice's initial DH key exchange message to Bob.
+  In lack of Alice's ephemeral DH public key, Bob will therefore arrive
+  at the wrong shared secret which he will encrypt his messages to Alice
+  with and which Alice will notice. (Additionally, the attacker could
+  also exchange Bob's messages to Alice but the messages that reach
+  Alice in the end would still be encrypted with the wrong shared
+  secret.)
+
+- The attacker didn't replace Alice's initial DH key exchange message to
+  Bob. Bob is therefore in possession of Alice's ephemeral DH public key
+  and will encrypt his messages to Alice with the correct shared secret
+  which the attacker will not be able to break. (Replacing Bob's
+  messages to Alice will again lead to encryption with the wrong shared
+  secret which Alice will notice again and notify Bob about.)
+
+Obviously, when it comes to the notification message, the attacker could
+also intercept it so that it doesn't reach Bob. But this doesn't provide
+any benefit to him as any transmission of critical data (e.g., for a key
+request, the key in question) on the DHT level is always initiated by
+Alice: If her key request (encrypted with a shared secret derived from
+her ephemeral DH public key, thus unbreakable for an attacker) gets
+through to Bob, Bob will be able to decrypt it and, in turn, encrypt his
+reply (the key and its associated value) with the same shared secret
+that the attacker is not able to break. If the key request doesn't get
+through, Bob won't reply with any critical data in the first
+place.^[Here, by critical data, we mean data that is critical to Alice.
+As Bob didn't know Alice previously, he doesn't have any interest in
+sending her data that is critical to him, anyway.] In this sense, any
+transmission of critical data is always linked to Alice's ephemeral DH
+public key, which plays the role of a session key that only Alice and
+Bob know about.
+
+</KEY AGREEMENT PROTOCOL PART 2/2>
+-->
+
+
+<!--
+<DETAILED KEY AGREEMENT PROTOCOL> (Hidden because only Chuck Norris
+rolls his own key agreement protocol)
+
+The above scheme can be simplified slightly by using Diffie-Hellman
+public keys as static public keys, see
+https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange#Public_key
+
+The scheme:
+
+Let (g^B, g, p) be B's static public key whose hash A can verify. A in
+turn has the static public key (g^A, g, p). B and A also have ephemeral
+DH public keys (g^a, g, p) and (g^b, g, p) respectively.
+
+A connects to B.
+
+B sends g^B.
+
+A verifies hash(g^B) == DHT ID.
+
+A sends: g^A || ENCRYPT&MAC(KDF(g^AB), message), where message = g^a
+[Alternative: A sends: g^A || ENCRYPT&MAC(KDF(g^AB), msg=g^a || <session
+token>) ]
+
+B replies: ENCRYPT&MAC(KDF(g^AB), message), where message = g^b
+[Alternative: B replies: g^b || ENCRYPT&MAC(KDF(g^ab), msg=<session
+token>) ]
+
+…and the key exchange is complete.
+
+The attacker could intercept / exchange the messages A->B and B->A.
+However, in this way, he could at most know g^b and replace it with g^b'
+and replace (but not know!) g^a. Without g^a, though, he will never be
+able to generate the correct ephemeral secret key g^ab (or g^ab') that A
+will expect to be used when communicating with him.
+
+</DETAILED KEY AGREEMENT PROTOCOL>
+-->
+
 
 
 ### Metadata obfuscation and deniability
 
+<!-- In this sense, the only purpose of the encryption and authentication
+scheme for individual connections that was discussed earlier was to make
+it difficult for a global eavesdropper, whether passive or active, to
+observe how key requests are being routed through the network. With
+encryption and authentication in place, he is forced to actively
+participate in the network. -->
 
+While confidentiality and authenticity of connections on the transport
+level have so far been discussed extensively and prevent eavesdropping
+by an attacker outside of the p2p network, an attacker could also decide
+to actively participate in the network and the DHT mechanism.
+
+More specifically, on the DHT level, peers don't send personal
+information intended for a specific (trusted or known) peer but they
+merely exchange routing information and key requests with arbitrary
+peers that they don't necessarily trust in the first place. The
+challenge therefore consists of not giving away any personal information
+to any peer through key requests (e.g. who is asking for which key),
+especially when there's a large number of malicious peers.
+
+This can only be achieved in the following way: Consider that a key
+request by Alice will, in most cases, not immediately reach Carl who is
+responsible for the respective part of the DHT and is in possession of
+the value associated with the key. This is because Alice only knows a
+limited number of peers and will simply try to find a peer as close to
+the key in question as possible. Therefore, Alice might send her request
+to another peer Bob (whom she knows), first, who then forwards it to
+Carl. Alternatively, Bob might also simply tell Alice about Carl, so
+that she can connect to him directly. However, in this way, she will
+give away to both Bob and Carl that she is looking for the key. It is
+therefore desirable to have Bob forward the request to Carl, so that
+Carl will not know about Alice. In fact, Bob cannot be sure the request
+originated from Alice, either, as she might in turn be relaying the
+request for someone else.^[This of course assumes that her DHT ID is not
+too far away from the key because then it'd be very unlikely for her to
+relay someone else's request for that key. To solve this, Alice could
+choose the first relay in the chain randomly, so that the distance of
+the first relay to the key becomes random, too, and the potentially
+large distance of Alice to the key doesn't give anything away to Bob.]
+
+As it takes $O(log(n))$ steps for Alice to find Carl with most DHT
+algorithms, the ensuing chain of relays should protect Alice's metadata
+(i.e. the fact that she is looking for the key) sufficiently from any
+peers participating in the key-finding process.
+
+This may of course not hold if the attacker has enough resources to run
+a significant number of peers in the network, such that most of the
+peers in the relay chain will belong to him and he will, in general, be
+closer to Alice in the chain. (Such that it is more likely that the
+request indeed originated from her.)
+
+Another open problem concerns the fact that a global eavesdropper might
+be able to follow the chain from Alice to Carl and infer, by connecting
+to Carl and asking him for his DHT ID, approximately which key Alice
+requested. (As mentioned, in most DHT algorithms, the key will be close
+to Carl's DHT ID.) The situation would be even worse if Carl himself
+participated in the the attack, too.
+
+While these are valid issues, it is commonly known that the larger the
+resources of attacker, the more dangerous he will generally be to the
+security of any public distributed algorithm. While we hope to be able
+to provide counter measures for the DHT in the future, it is not the
+current focus of this whitepaper.
 
 
 ### Byzantine failure and malicious peers

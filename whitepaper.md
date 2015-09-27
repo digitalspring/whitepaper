@@ -318,7 +318,8 @@ arbitrary peers to stabilize the network but follow a certain geometry
 as well as employ routing to distribute data efficiently. A distributed
 hash table (DHT) is a key-value store that is distributed among the
 peers of the network. It provides the essential tools to find peers and,
-more generally, allocate and find resources on the network.
+more generally, allocate and find resources on the network in a
+structured manner.
 
 
 Introduction
@@ -331,17 +332,17 @@ the same ID even after some time has passed (and he has potentially
 changed his IP address). While identifiers can – a priori – be of
 arbitrary form, our goal of secure transmission (see above) makes it
 inevitable that all peers be identified by their public keys in this
-network. ^[The underlying reason for this being that the authenticity of
+network.^[The underlying reason for this being that the authenticity of
 a peer is usually verified by public/private key cryptography.] In this
-sense, a public key *is* a peer's identify in the network. ^[This
-already has significant impacts on every possible user interface: Users
+sense, a public key *is* a peer's identify in the network.^[This already
+has significant impacts on every possible user interface: Users
 connecting with each other for the first time must be in possession of
 each other's public key. In addition, "logging in" with an identity
 means restoring the key pair from a backup.] In this way, the software
 must also be able to translate a peer's public key back into the IP
 address (or any other reachable network address – depending on the
 underlying transport). This is done by means of a distributed hash table
-(DHT). ^[For a promising approach in our scenario of secure
+(DHT).^[For a promising approach in our scenario of secure
 communication, see @R5N, for a whole p2p network layer building upon the
 latter see @CADET.] In short, a distributed hash table is a database
 containing key-value pairs which are distributed among all peers such
@@ -362,11 +363,11 @@ upper layers. The DHT identifier's purpose is to establish an overlay
 geometry among the peers and to enable routing in this geometry. It is
 this ID that lies in the same space as DHT keys. In contrast, the IDs on
 upper layers which were discussed in the beginning of this section and
-which we will call *user IDs* represent the user's preferences with
-respect to privacy. As will be discussed in later chapters, the user
-might have several user IDs to take different identities in different
-contexts, whereas he will usually have just one DHT ID, as the latter
-serves a purely technical purpose.
+which will be referred to as *user IDs* in this chapter represent the
+user's preferences with respect to privacy. As will be discussed in
+later chapters, the user might have several user IDs to take different
+identities in different contexts, whereas he will usually have just one
+ID on the DHT level, as the latter serves a purely technical purpose.
 
 
 Bootstrapping
@@ -379,12 +380,12 @@ very first time or after a temporary loss of connection.
 
 To this end, each peer will store the routing table on disk such that
 he's able to connect to his DHT neighbors again after a loss of
-connection. For cases when the routing information has become stale
-(e.g. because the peer was offline for a long time), i.e. the peers in
-the table aren't reachable under the given IP adresses anymore, or the
-peer connects to the p2p network for the first time, he also stores a
-number of directory servers from which he can then request a list of
-peers.
+connection. For cases when the routing information has become
+stale^[I.e. the peers in the table aren't reachable under the given IP
+adresses anymore because, for example, the peer in possession of the
+routing table had been offline for a long time.] or the peer connects to
+the p2p network for the first time, he also stores a number of directory
+servers from which he can then request a list of peers.
 
 
 DHT algorithm
@@ -557,7 +558,7 @@ key request usually consists of connecting to a specific peer with a
 certain DHT ID – usually one that is closer to the key in question – and
 forwarding the request to him. In order for a man in the middle to be
 successful, he would thus need to find a hash collision, i.e. come up
-with a key pair whose hash is the exactly the DHT ID in question.
+with a key pair whose hash is exactly equal to the DHT ID in question.
 
 This is not only hardly feasible but also makes little sense as it'd be
 a lot easier for the adversary to simply participate in the network
@@ -605,8 +606,8 @@ Outline
 The unicast layer is responsible for setting up secure 1-to-1
 connections between peers that can then be used by upper layers. By
 "secure" we mean that the connection fulfills the outlined security
-requirements of the for the data being transferred on the physical
-network level from one peer to the other.
+requirements for the data being transferred on the physical network
+level from one peer to the other.
 
 <!--
 On a more technical level, since payload transmission (e.g. sending of

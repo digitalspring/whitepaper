@@ -2,7 +2,6 @@ Todo
 ====
 
 - Finish chapter on Unicast:
-  - Explain how unicast connections are set up
   - Discuss unicast security
 
 - Explain how we use pub/sub and why this makes sense, illustrate how

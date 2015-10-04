@@ -827,7 +827,7 @@ that the other party authored the message. In this way, deniability is
 accomplished.
 
 
-### Anonymity / metadata obfuscation
+### Anonymity
 
 Direct data transmission between devices on the internet always exposes
 their IP addresses (and, therefore, potentially their identity and

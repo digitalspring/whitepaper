@@ -808,8 +808,26 @@ NAT, this is obviously more delicate and some kind of NAT hole punching
 has to be used.] and is ready to transmit data to him.
 
 
-Metadata obfuscation & anonymization
-------------------------------------
+Security
+--------
+
+### Confidentiality, forward secrecy, authenticity and deniability
+
+Confidentiality on the unicast layer is achieved through end-to-end
+encryption of data before it is transmitted over the physical network.
+To this end and to provide forward secrecy, peers agree on ephemeral
+session key by doing a Diffie-Hellman key exchange that is authenticated
+by their respective public keys. These public keys are assumed to be
+known prior to establishing a connection, so that trust in the session
+keys can be chained back to the trust in each other's public key.
+However, while both parties can be sure about the respective other
+party's authenticity when receiving a message, by virtue of the
+Diffie-Hellman key exchange, no party can actually prove to someone else
+that the other party authored the message. In this way, deniability is
+accomplished.
+
+
+### Anonymity / metadata obfuscation
 
 Direct data transmission between devices on the internet always exposes
 their IP addresses (and, therefore, potentially their identity and

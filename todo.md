@@ -1,9 +1,6 @@
 Todo
 ====
 
-- Finish chapter on Unicast:
-  - Discuss unicast security
-
 - Explain how we use pub/sub and why this makes sense, illustrate how
   many different applications can be solved using this approach (namely,
   news feeds / status posts, device synchronization, file sharing et

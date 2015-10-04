@@ -9,12 +9,12 @@ Todo
   news feeds / status posts, device synchronization, file sharing et
   cetera)
 
-- Add chapter on OfflineUnicast
+- In the introductory chapter: Provide a general introduction to the
+  problem of offline messaging. Distinguish between mailboxes (for a
+  specific recipient) and backup peers (for a specific multicast group /
+  sender) and their security implications.
 
-- Provide a general introduction to the problem of offline messaging.
-  Distinguish between mailboxes (for a specific recipient) and backup
-  peers (for a specific multicast group / sender) and their security
-  implications.
+- Add chapter on OfflineUnicast
 
 - Add chapter on BMulticast
 

@@ -110,11 +110,18 @@ On a higher level, however, transmission typically resorts to a
 WhatsApp and Dropbox, who act as a middleman in the following way: The
 sender will pass his message usually in an unencrypted fashion to this
 middleman who in turn will store the data and make it available to the
-actual recipient. It is here where intelligence agencies then access the
-data – either with or without the provider's consent. Furthermore, the
-middleman might also be interested in the analysis of the user's
-messages himself, e.g. for the purpose of advertising and manipulation
-(see the initial quote).
+actual recipient. While the individual connections between sender and
+middleman and middleman and recipient are usually encrypted to prevent
+tapping of the physical network connections, a message is usually not
+encrypted end-to-end (i.e. so that only the final recipient can read it)
+and is instead handed over to the middleman in plaintext. It is thus at
+the point of the middleman where intelligence agencies gain another
+access point to the data^[An access point which is very convenient,
+considering the individual connections on the physical network are
+encrypted.] – again, either with or without the provider's consent.
+Furthermore, the middleman might also be interested in the analysis of
+the user's messages himself, e.g. for the purpose of advertising and
+manipulation (see the initial quote).
 
 <!-- The middleman then either knowingly or unknowingly falls victim to
 data scooping or -->

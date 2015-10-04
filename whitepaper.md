@@ -207,26 +207,41 @@ message) or whether it was the recipients who selected him, i.e. who
 decided to subscribe to him or the communication channel he is using
 (e.g. a blog, an online forum).
 
-Put differently, in situations where the senders does not *hand-select*
-a *small* number of recipients, he certainly expects confidentiality and
-especially forward secrecy to hold to a much lesser extent while
+More precisely, in situations where the senders does not *hand-select* a
+*small* number of recipients, he certainly expects confidentiality and
+especially forward secrecy to hold to a much lesser extent. Meanwhile,
 deniability and anonymity might remain equally relevant or become even
-more important, especially in the light of whistleblowing. In turn, if a
-recipient is one among millions of others and therefore likely doesn't
-know the sender personally, authenticity of a message might not play as
-much of a role, either, as his life is affected only little in either
-case. In essence, this situation is comparable to the media quoting an
-anonymous source or a person of public interest who might then, however,
-deny what he was quoted with saying. Hence, without further proof,
-people will always take media reports with a grain of salt and are
-certainly used to that, nowadays. On the other hand, today, a status
-message on a popular and verified Twitter account is almost as good as a
-written and signed statement: People will have a hard time believing it
-wasn't the owner of the Twitter account who created the message.^[Unless
-there's good evidence that his account was hacked. He might also claim
-his press spokesman or agent played a prank on him.] Therefore, apart
-from confidentiality requirements decreasing with a growing number of
-recipients, it seems there is a basic trade-off to be made between
+more important, especially in the light of whistleblowing. On the other
+hand, the sender might also opt for authenticity of his messages, e.g.
+if he is a person of public interest such as a politician. This,
+however, is fundamentally at odds with deniability^[Let alone anonymity
+which, by definition, can never be given if authorship of a message can
+be established.], as will be illustrated in the following examples:
+
+Consider the media quoting a person of public interest who then,
+however, denies what he was quoted with saying. Without further proof,
+authenticity of the quote can never be established or disproved with
+certainty. It is thus deniable. To a reader of the media report this is,
+however, not of particular importance. He is used to this back and forth
+between claims of one party and denial of the other party. Moreover,
+being just one among millions of other readers, he doesn't know the
+person that was quoted personally, so his day-to-day life and actions
+will also not critically depend on whether one or the other party is
+telling the truth.^[Contrast this with Alice somehow sending a message
+in Bob's name to his best friend Carl and playing a prank on him.]
+
+Compare this to the situation of authenticated messages: Today, a status
+message on a popular and verified Twitter account, say @BarackObama, is
+almost as good as a written and signed statement or one recorded on
+video: People will usually not doubt it was Barack Obama who authored
+the message. (In turn, they will automatically doubt the authenticity of
+a second Twitter account @Barack_Obama.) While this authenticity towards
+his audience is exactly what Barack Obama wished for, it also prevents
+him from being able to deny any of the messages sent through his
+account.^[Unless there's good evidence that his account was hacked. He
+might also claim his press spokesman played a prank on him.]
+
+Therefore, it seems there is a basic trade-off to be made between
 authenticity and deniability with respect to a large group of
 recipients: Unless there is a signature (or a audio / video tape) to
 convince the audience of the authenticity of a message, the sender will
@@ -235,33 +250,34 @@ will be able to deny it very easily). The crucial reason for this is
 that, as he doesn't meet all recipients personally, the proof of
 authenticity must be something that can be passed along with the message
 from one recipient to the other and cannot be forged. Such a proof,
-however, would then fundamentally be at odds with deniability as the
-latter relies exactly on the fact that the proof could have been forged.
-Only in private communication, e.g. oral conversations or hand-written
+however, would then automatically prevent deniability as the latter
+relies exactly on the fact that the proof could have been forged. Only
+in private communication, e.g. oral conversations or hand-written
 letters, immediate proof of authorship is (more or less automatically)
 provided to all participants and it's only in personal conversations
 where this proof, namely personal presence, is also ephemeral such that
 it stills allows for deniability.^[In this sense, the (authenticated)
 Diffie-Hellman key exchange, which is used to provide authenticity and
-deniability at the same time, is the digital equivalent of a secret
-real-life meet-up.] This insight is central to many of the security
-considerations discussed in this paper.
+deniability at the same time, is the digital equivalent of a real-life
+meet-up where secrets are being exchanged.] This insight is central to
+many of the security considerations discussed in this paper.
 
-Digital Spring is primarily concerned with private communication, thus
-with data transfer among small to middle-sized groups, up to a few
-thousand people. Drawing on the previous examples, this could be
-restated as follows: Digital Spring is a digital medium that tries to
-mimic personal conversations as far as possible. Although its principal
-architecture was designed in a way to scale to very large groups just as
-well – if certain security promises are given up where it makes
-sense^[As demonstrated, it is impossible to fulfill authenticity *and*
-deniability for large audiences at the same time, let alone high
-confidentiality. As for the remaining cases of large audiences with
-*either* authenticity *or* deniability and even some mixed forms (where
-a group of journalists attending a press conference cannot prove the
-authenticity of a quote to their readers although they heard it loud and
-clearly), the technology presented here covers these very naturally.] –,
-the present paper focusses on the primary goal.
+Digital Spring is primarily concerned with private communication and the
+transfer of private data, thus with data exchange among small to
+middle-sized groups, up to a few thousand people. Drawing on the
+previous examples, this could be restated as follows: Digital Spring is
+a digital medium that tries to mimic personal conversations as far as
+possible. Although its principal architecture was designed in a way to
+scale to very large groups just as well – if certain security promises
+are given up where it makes sense^[As demonstrated, it is impossible to
+fulfill authenticity *and* deniability for large audiences at the same
+time, let alone high confidentiality. As for the remaining cases of
+large audiences with *either* authenticity *or* deniability and even
+some mixed forms (where a group of journalists attending a press
+conference cannot prove the authenticity of a quote to their readers
+although they heard it loud and clearly), the technology presented here
+covers these very naturally.] –, the present paper focusses on the
+primary goal outlined above.
 
 <!--
 Current State of Communication Systems

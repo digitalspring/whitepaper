@@ -83,9 +83,8 @@ to happen in the first place. These are:
 It's also possible to look at these points from another, more
 theoretical angle:
 
-Data scooping can either happen at the sender, at the time of
-transmission from one machine to the other or at the point of the
-recipient.
+Data scooping can either happen at the sender, during the transmission
+from one machine to the other or at the point of the recipient.
 
 Scooping at the **point of the sender** or the recipient is mostly done
 through backdoors in hardware and software (and sometimes even direct
@@ -101,7 +100,7 @@ make or will make it possible for anyone to implement them.
 **Transmission of data** in turn makes use of cables, routers and
 networks that are in the hand of a few *network providers*. Intelligence
 agencies exploit this fact by tapping in on the data streams at central
-points of these providers' infrastructure – either with his consent or
+points of these providers' infrastructure – either with their consent or
 without. Physically securing these networks or even putting them in the
 hands of the people (e.g. as a mesh network) can only be achieved on a
 political level, though.

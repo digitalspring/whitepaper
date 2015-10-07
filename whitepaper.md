@@ -271,13 +271,13 @@ possible. Although its principal architecture was designed in a way to
 scale to very large groups just as well – if certain security promises
 are given up where it makes sense^[As demonstrated, it is impossible to
 fulfill authenticity *and* deniability for large audiences at the same
-time, let alone high confidentiality. As for the remaining cases of
-large audiences with *either* authenticity *or* deniability and even
-some mixed forms (where a group of journalists attending a press
-conference cannot prove the authenticity of a quote to their readers
-although they heard it loud and clearly), the technology presented here
-covers these very naturally.] –, the present paper focusses on the
-primary goal outlined above.
+time. However, when it comes to large audiences with *either*
+authenticity *or* deniability and even some mixed forms (where a group
+of journalists attending a press conference cannot prove the
+authenticity of a quote to their readers although they heard it loud and
+clearly), the technology presented here covers these cases very
+naturally.] –, the present paper focusses on the primary goal outlined
+above.
 
 <!--
 Current State of Communication Systems

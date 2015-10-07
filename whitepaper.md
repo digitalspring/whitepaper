@@ -289,8 +289,8 @@ Current State of Communication Systems
 -->
 
 
-Outline
--------
+Architectural overview
+----------------------
 
 The proposed software is made up of several layers which build upon each
 other and which are outlined in the subsequent chapters. It is attempted
@@ -299,7 +299,7 @@ the corresponding questions naturally appear instead of following a more
 formal approach where the results and decisions are presented first and
 are justified later.
 
-The layers are:
+The layers and their corresponding functions are:
 
 - Distributed Hash Table (DHT) layer: Provide a searchable data
   structure (namely a key-value store) which is distributed among all
@@ -307,18 +307,35 @@ The layers are:
 
 - Unicast: Establish 1-to-1 connections between peers that are online
 
-- OfflineUnicast: Send short messages (e.g. notifications) to peers even
-  though they are offline. The messages are stored in the DHT in a queue
-  data structure such that they can be retrieved later by the recipient.
+- OfflineUnicast: Send short messages (e.g. notifications) to peers that
+  are offline. The messages are stored in the DHT in a queue data
+  structure such that they can be retrieved later by the recipient.
 
 - Multicast: Provide efficient and reliable 1-to-$n$ data distribution
-  from a sender to a group of recipients.
+  from a sender to a group of recipients, whether they are online or
+  offline.
 
 - BMulticast: Multicast with backup peers, i.e. add additional peers to
   a multicast group that won't be able to read the transmitted messages
   but will provide additional resources to the group, i.e. they help
   with message distribution and thus stabilize the group in view of node
   failures.
+
+Before describing the layers in detail in the coming chapters, however,
+the remaining sections of this introduction will give a short overview
+of some of the core paradigms that led to this architecture in the first
+place.
+
+
+The publish / subscribe paradigm
+--------------------------------
+
+
+
+
+Offline messaging
+-----------------
+
 
 
 Current status of this paper

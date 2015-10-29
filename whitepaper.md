@@ -331,7 +331,98 @@ place.
 The publish / subscribe paradigm
 --------------------------------
 
+Today, the architecture of most internet platforms is based on a
+client-server architecture: Instead of having clients exchange data
+between each other directly, servers form the central entity clients
+communicate with. More specifically, they might both receive data from
+clients (like emails), but also get requests from them for contents and
+updates (e.g. web pages, new emails, app updates). They are thus the
+base for federated and centralized approaches to client-to-client
+communication and constitute the middleman that was mentioned in the
+first part of this introduction.
 
+Some reasons for the asymmetry that is the client-server architecture
+are:
+
+- Servers use to have larger resources (CPU, storage, bandwidth), so it
+  makes sense to outsource tasks from a client's device to the server.
+- Centralized algorithms are easier to design than distributed
+  algorithms.
+- Clients are not constantly online and change their IP addresses which
+  makes direct client-to-client communication difficult. A server, in
+  contrast, is online 24/7.
+
+Being the predominant architectural model on the internet, the rest of
+this section will introduce terminology with the server-client model in
+mind. In the end, however, the transition to peer-to-peer networks will
+be made.
+
+Intimately connected with the server-client model is the polling
+paradigm. Polling means that a client will request data before he
+receives it, i.e. he will receive data on demand and in the case of
+continuous changes to the data set, he will keep asking for updates.
+Examples are email applications that will ask the mail server for new
+messages in regular time intervals and modern web applications that use
+AJAX to automatically load new content, as the newsfeeds on Twitter and
+Facebook.
+
+The opposite of polling is *pushing*. There, the client receives new
+data automatically, without having to ask for it. In the past years, the
+push approach has seen much support in terms of the Apple Push
+Notification Service and Google Cloud Messaging (GCM). Both services
+provide a unified way for internet platforms to notify their users on
+their mobile (iOS or Android) devices about new content
+automatically.^[Strictly speaking, both services actually combine push
+and poll methods as only a notification gets sent and an app on the
+client's device still has to request the actual data afterwards.]
+Moreover, with the WebSocket standard allowing fully bidirectional
+connections between browsers and web servers, the push approach has now
+also found its way into web applications.
+
+For mobile devices, the advantage of the push mechanism clearly is the
+fact that connections to the server are only established when there is
+actually new data to be sent. In contrast, polling would have the device
+establish a new connection to every platform in regular time intervals,
+which would drain the battery.
+
+<!-- Introduce polling -->
+
+<!-- The server-client architecture has nothing to do with the polling
+approach! -->
+
+Yet, the polling approach is still predominant mostly due to three
+facts:
+
+- Clients are not constantly online and change their IP addresses, so a
+  server wouldn't know where to send updates to.
+- Servers use to have larger resources (CPU, storage, bandwidth).
+  Polling allows to only put load on the clients only when they actually
+  want to consume the data.
+- Adding to the previous point in the case of the world wide web, a
+  client's requests for web pages are mostly unpredictable as he is
+  surfing the web. It would therefore be impossible to push web pages to
+  him before he wants to consume them. (This technique usually known as
+  *preloading*.)
+
+However, polling also has downsides:
+
+- Polling puts load on the client.
+- By sending a request, a client gives away the information that he
+  wants to consume a certain piece of data and thus behavioral patterns.
+- If data is requested and received on demand, latencies due to data
+  transfers might impact user behavior and ultimately spoil the user
+  experience.
+- Without caching, data is never available when the client is offline.
+
+<!--
+Introduce publish / subscribe.
+
+
+Lately, mobile platforms have seen hybrid solutions.
+
+
+Explain how pub/sub can be used to build almost all platforms we have
+today. -->
 
 
 Offline messaging

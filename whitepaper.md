@@ -293,9 +293,9 @@ Architectural overview
 ----------------------
 
 The proposed software is made up of several layers which build upon each
-other and which are outlined in the subsequent chapters. It is attempted
-to present the reasoning behind design decisions in the order in which
-the corresponding questions naturally appear instead of following a more
+other and which are outlined in the coming chapters. It is attempted to
+present the reasoning behind design decisions in the order in which the
+corresponding questions naturally appear instead of following a more
 formal approach where the results and decisions are presented first and
 are justified later.
 
@@ -303,9 +303,10 @@ The layers and their corresponding functions are:
 
 - Distributed Hash Table (DHT) layer: Provide a searchable data
   structure (namely a key-value store) which is distributed among all
-  peers
+  peers. Its primary purpose is ID resolution, i.e. finding the current
+  IP address a peer can be reached under, given his ID.
 
-- Unicast: Establish 1-to-1 connections between peers that are online
+- Unicast: Establish 1-to-1 connections between peers that are online.
 
 - OfflineUnicast: Send short messages (e.g. notifications) to peers that
   are offline. The messages are stored in the DHT in a queue data

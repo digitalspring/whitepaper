@@ -331,6 +331,8 @@ place.
 The publish / subscribe paradigm
 --------------------------------
 
+### The client-server architecture
+
 Today, the architecture of most internet platforms is based on a
 client-server architecture: Instead of having clients exchange data
 between each other directly, servers form the central entity clients
@@ -352,57 +354,108 @@ are:
   makes direct client-to-client communication difficult. A server, in
   contrast, is online 24/7.
 
-Being the predominant architectural model on the internet, the rest of
-this section will introduce terminology with the server-client model in
-mind. In the end, however, the transition to peer-to-peer networks will
-be made.
-
-Intimately connected with the server-client model is the polling
-paradigm. Polling means that a client will request data before he
-receives it, i.e. he will receive data on demand and in the case of
-continuous changes to the data set, he will keep asking for updates.
-Examples are email applications that will ask the mail server for new
-messages in regular time intervals and modern web applications that use
-AJAX to automatically load new content, as the newsfeeds on Twitter and
-Facebook.
-
-The opposite of polling is *pushing*. There, the client receives new
-data automatically, without having to ask for it. In the past years, the
-push approach has seen much support in terms of the Apple Push
-Notification Service and Google Cloud Messaging (GCM). Both services
-provide a unified way for internet platforms to notify their users on
-their mobile (iOS or Android) devices about new content
-automatically.^[Strictly speaking, both services actually combine push
-and poll methods as only a notification gets sent and an app on the
-client's device still has to request the actual data afterwards.]
-Moreover, with the WebSocket standard allowing fully bidirectional
-connections between browsers and web servers, the push approach has now
-also found its way into web applications.
-
-For mobile devices, the advantage of the push mechanism clearly is the
-fact that connections to the server are only established when there is
-actually new data to be sent. In contrast, polling would have the device
-establish a new connection to every platform in regular time intervals,
-which would drain the battery.
-
-<!-- Introduce polling -->
+Being the predominant architectural model on the internet and for the
+simplicity, the rest of this section will introduce terminology with the
+server-client model in mind although most terminology can actually be
+decoupled from this model. Indeed, in the end, the transition from a
+server-client architecture to peer-to-peer networks will be made.
 
 <!-- The server-client architecture has nothing to do with the polling
 approach! -->
 
-Yet, the polling approach is still predominant mostly due to three
-facts:
+
+### The request / response paradigm
+
+Intimately connected with the server-client model is the
+*request/response* paradigm. In this mechanism, a client will first send
+a request for a piece of data to which the server will then respond with
+the piece in question. In particular, this enables client applications
+to request data *on demand*, i.e. upon user interaction. The most famous
+example here is certainly the web, where a click on a link (a user
+interaction) usually initiates a connection to the web server and a
+subsequent request for the web page in question.
+
+
+### Polling
+
+Closely related to the request/response paradigm is *polling*. In this
+case, requests are continuously^[I.e. in regular time intervals.] sent
+by the client to ask for the status of a server application. The status
+might generally comprise any kind of data and might be as simple as a
+single bit value where "0" stands for "no updates" (to a certain
+dataset) and "1" signifies a change. In the latter case, the client
+application might decide to send a separate request to see what these
+updates actually are. This provides the advantage that the data volume
+of the status (which is, after all, sent through the wire regularly) is
+kept as small as possible and the actual (possibly big) dataset is only
+sent upon the client's explicit request. Put differently, polling is
+combined with requests on demand.
+
+Examples for polling are email applications that ask the mail server for
+new messages every few minutes, a mobile app that polls the thermostat
+outside the house for the current temperature, and modern web
+applications that use AJAX to automatically load new content, such as
+the newsfeeds on Twitter and Facebook.
+
+One important feature of polling is its continuity which implies that
+the client doing the polling must already know beforehand that he would
+like to have the data in question (e.g. the temperature as a function of
+time). This is in contrast to spontaneous (e.g. user-initiated)
+requests.
+
+
+### Pushing
+
+The opposite of polling is *pushing*. There, the client receives new
+data automatically when it becomes available, i.e. without having to ask
+for it. Similarly to the poll mechanism, this requires the client to
+make the decision beforehand that he would like to receive the data in
+the first place.
+
+<!-- TODO: APNS and GCM are not good examples for pure pushing, as they
+combine push and request on demand, so rephrase this / give better
+examples. -->
+
+In the past years, the push approach has seen much support in terms of
+the Apple Push Notification Service and Google Cloud Messaging (GCM).
+Both services provide a unified way for internet platforms to notify
+their users on their mobile (iOS or Android) devices about new content
+automatically.^[Strictly speaking, both services actually combine push
+and request on demand methods as only a notification gets sent and an
+app on the client's device still has to request the actual data
+afterwards.] Moreover, with the WebSocket standard allowing an ongoing
+and fully bidirectional connection between the browser and web server,
+the push approach has now also found its way into web applications.
+
+
+### Polling vs. pushing
+
+<!-- TODO: Distinguish between (random) requests for data that are
+initiated by user interaction and continuous polling (waiting) for
+updates -->
+
+For mobile devices, the obvious advantage of the push mechanism is the
+fact that connections to the server are only established when there is
+actually new data to be sent.^[In the case of Apple Push Notification
+Service and Google Cloud Messaging Service, only a single connection is
+maintained.] In contrast, polling would have the device establish a new
+connection to every platform in regular time intervals, which would
+drain the battery.
+
+Yet, the polling approach is still predominant on the internet mostly
+due to three facts:
 
 - Clients are not constantly online and change their IP addresses, so a
   server wouldn't know where to send updates to.
 - Servers use to have larger resources (CPU, storage, bandwidth).
-  Polling allows to only put load on the clients only when they actually
-  want to consume the data.
+  Polling allows to put load on the clients only when they actually want
+  to consume the data, in the sense that they can decide when (and
+  whether) to poll.
 - Adding to the previous point in the case of the world wide web, a
   client's requests for web pages are mostly unpredictable as he is
   surfing the web. It would therefore be impossible to push web pages to
-  him before he wants to consume them. (This technique usually known as
-  *preloading*.)
+  him before he wants to consume them. (This technique is usually known
+  as *preloading*.)
 
 However, polling also has downsides:
 

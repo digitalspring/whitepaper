@@ -414,20 +414,24 @@ for it. Similarly to the polling mechanism, this requires the client to
 make the decision beforehand that he would like to receive the data in
 the first place.
 
-<!-- TODO: APNS and GCM are not good examples for pure pushing, as they
-combine push and request on demand, so rephrase this / give better
-examples. -->
+Examples for the push paradigm include IRC, Jabber/XMPP and the
+Blackberry Push Service that allows Blackberry users to receive emails
+without having to poll for them. In all cases, a steady connection from
+the client to a server is maintained through which the server will send
+incoming/new data as soon as it arrives. Moreover, with the WebSocket
+standard allowing an ongoing and fully bidirectional connection between
+a browser and a web server, pushing data has now also found its way into
+web applications.
 
-In the past years, the push approach has seen much support in terms of
-the Apple Push Notification Service and Google Cloud Messaging (GCM).
+In the past years, the push approach has also seen much support in terms
+of the Apple Push Notification Service and Google Cloud Messaging (GCM).
 Both services provide a unified way for internet platforms to notify
 their users on their mobile (iOS or Android) devices about new content
-automatically.^[Strictly speaking, both services actually combine push
-and request on demand methods as only a notification gets sent and an
+automatically. Strictly speaking, though, both services actually combine
+pushing with requests on demand as only a notification gets sent and an
 app on the client's device still has to request the actual data
-afterwards.] Moreover, with the WebSocket standard allowing an ongoing
-and fully bidirectional connection between the browser and web server,
-the push approach has now also found its way into web applications.
+after being notified.
+
 
 
 ### Polling vs. pushing

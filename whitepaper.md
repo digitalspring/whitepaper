@@ -337,11 +337,11 @@ Today, the architecture of most internet platforms is based on a
 client-server architecture: Instead of having clients exchange data
 between each other directly, servers form the central entity clients
 communicate with. More specifically, they might both receive data from
-clients (like emails), but also get requests from them for contents and
-updates (e.g. web pages, new emails, app updates). They are thus the
-base for federated and centralized approaches to client-to-client
-communication and constitute the middleman that was mentioned in the
-first part of this introduction.
+clients (like an email to send to another recipient), but also get
+requests from them for contents and updates (e.g. web pages, new emails,
+app updates). They are thus the base for federated and centralized
+approaches to client-to-client communication and constitute the
+middleman that was mentioned in the first part of this introduction.
 
 Some reasons for the asymmetry that is the client-server architecture
 are:
@@ -355,10 +355,11 @@ are:
   contrast, is online 24/7.
 
 Being the predominant architectural model on the internet and for the
-simplicity, the rest of this section will introduce terminology with the
-server-client model in mind although most terminology can actually be
-decoupled from this model. Indeed, in the end, the transition from a
-server-client architecture to peer-to-peer networks will be made.
+sake of simplicity, the rest of this section will introduce terminology
+with the server-client model in mind although most terminology can
+actually be decoupled from this model. Indeed, in the end, the
+transition from a server-client architecture to peer-to-peer networks
+will be made.
 
 <!-- The server-client architecture has nothing to do with the polling
 approach! -->
@@ -380,16 +381,17 @@ subsequent request for the web page in question.
 
 Closely related to the request/response paradigm is *polling*. In this
 case, requests are continuously^[I.e. in regular time intervals.] sent
-by the client to ask for the status of a server application. The status
-might generally comprise any kind of data and might be as simple as a
-single bit value where "0" stands for "no updates" (to a certain
-dataset) and "1" signifies a change. In the latter case, the client
-application might decide to send a separate request to see what these
-updates actually are. This provides the advantage that the data volume
-of the status (which is, after all, sent through the wire regularly) is
-kept as small as possible and the actual (possibly big) dataset is only
-sent upon the client's explicit request. Put differently, polling is
-combined with requests on demand.
+by the client to ask for the status of a server application. The
+subsequent status response by the server might generally comprise any
+kind of data and might be as simple as a single bit value where "0"
+stands for "no updates" (to a certain dataset) and "1" signifies a
+change. In the latter case, the client application might decide to send
+a separate request to see what these updates actually are. This provides
+the advantage that the data volume of the status (which is, after all,
+sent through the wire in regular intervals) is kept as small as possible
+and the actual (possibly big) dataset is only sent upon the client's
+explicit request. Put differently, polling is combined with requests on
+demand.
 
 Examples for polling are email applications that ask the mail server for
 new messages every few minutes, a mobile app that polls the thermostat
@@ -401,14 +403,14 @@ One important feature of polling is its continuity which implies that
 the client doing the polling must already know beforehand that he would
 like to have the data in question (e.g. the temperature as a function of
 time). This is in contrast to spontaneous (e.g. user-initiated)
-requests.
+requests that ask for data on demand.
 
 
 ### Pushing
 
 The opposite of polling is *pushing*. There, the client receives new
 data automatically when it becomes available, i.e. without having to ask
-for it. Similarly to the poll mechanism, this requires the client to
+for it. Similarly to the polling mechanism, this requires the client to
 make the decision beforehand that he would like to receive the data in
 the first place.
 

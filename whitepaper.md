@@ -376,6 +376,13 @@ example here is certainly the web, where a click on a link (a user
 interaction) usually initiates a connection to the web server and a
 subsequent request for the web page in question.
 
+<!--
+TODO:
+- Introduce the publish / subscribe paradigm in contrast to requests on
+  demand
+- Introduce polling / pushing as the two common approaches to implement
+  pubsub
+-->
 
 ### Polling
 
@@ -474,7 +481,6 @@ However, polling also has downsides:
 - Without caching, data is never available when the client is offline.
 
 <!--
-Introduce publish / subscribe.
 
 
 Lately, mobile platforms have seen hybrid solutions.

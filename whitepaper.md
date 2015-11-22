@@ -323,11 +323,13 @@ The layers and their corresponding functions are:
   with message distribution and thus stabilize the group in view of node
   failures.
 
-Before describing the layers in detail in the coming chapters, however,
-the remaining sections of this introduction will give a short overview
-of some of the core paradigms that led to this architecture in the first
-place.
+Before describing the layers in detail, however, the next chapter will
+give a short overview of some of the core paradigms that led to this
+architecture in the first place.
 
+
+Preliminaries
+=============
 
 The publish / subscribe paradigm
 --------------------------------

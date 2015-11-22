@@ -531,34 +531,21 @@ messaging in a privacy-preserving manner. While this presents a
 challenge in so far as p2p networks lack a natural place to store
 messages temporarily, two options come to mind quite generally:
 
-<!-- TODO What about a Bitcoin / GNUtella-like approach where messages
-are shared among all peers and only the correct recipients can decrypt
-it? => Discuss directed vs. non-directed messaging here? But this rather
-concerns privacy not offline messaging… -->
-
-1. A peer could designate another peer to be his mailbox and announce
+1. A peer could designate another peer to be his *mailbox* and announce
    this fact to all peers he communicates with (even directly or through
-   an entry in the DHT). He would then poll this peer for new messages
-   after a having been offline for a while. However, as this peer would
-   certainly be offline at times, too, this would just only improve the
-   offline availability statistically. To increase it even further, one
-   could consider using several peers for a mailbox at once. Those peers
-   will be called *mailboxes* in the remainder of this section.
-
-<!--   In the end, however, this solution has one big drawback that renders
-  it useless for the purposes of secure digital communication: Using
-  friends as mailboxes and announcing them to others would give away the
-  peer's social graph which Digital Spring actually set out to protect.
-
-  Clearly, this wouldn't present a problem if the peers were selected
-  randomly. Then, however, the question arises why peers should store
-  (potentially large) messages for others in the first place.
- -->
+   an entry in the DHT). He would then always poll his mailbox for new
+   messages after a having been offline for a while. However, as the
+   peer providing the mailbox would certainly be offline at times, too,
+   this would just only improve the offline availability statistically.
+   To increase it even further, one could consider using several peers
+   for a mailbox at the same time.
 
 2. The sender could designate a peer who he forwards the (encrypted)
    message to and who he asks to deliver it to the recipient as soon as
-   he comes back online. For the purposes of this section, this peer
-   will be called a *mailman*.
+   he comes back online. For the remainder of this section, this peer
+   will be called a *mailman*. Clearly, the mailman might be offline at
+   times, too, so once again, it'd make sense to have several peers
+   share this responsibility.
 
 In both cases, the question comes up how to choose the respective peers
 and why they in turn should be willing to provide mailbox / mailman
@@ -577,39 +564,73 @@ options:
   the peer's social graph:
 
   In case of using friends as mailboxes, the peer would need to tell
-  everyone, who he is in contact with, about these friends. (His
-  friends, however, wouldn't necessarily know who authored incoming
-  (encrypted) messages as messages could probably be deposited
-  anonymously.)
+  everyone, who he is in contact with, about these friends. His friends,
+  in turn, will know who authored incoming (encrypted) messages, hence
+  who the peer is (likely) communicating with.^[In all these cases, what
+  is meant by "knowing a peer" is meant "knowing the identifier or IP
+  address of the peer". This may or may not be a datum that is of actual
+  value to the peer possessing it.]
 
-  In the second case, where a peer's friends act as mailmen, delivering
-  the peer's messages means these messages would be routed through them.
-  Since the mailmen would need to know who to deliver the message to,
-  they end up knowing know who the peer is in touch with. While this
-  might not pose a problem for some people, Digital Spring does not want
-  to enforce a certain privacy policy for everyone.
+  In the second case, where a peer's friend acts as mailman, delivering
+  the peer's messages means these messages would be routed through him.
+  Since the mailman would need to know who to deliver the message to,
+  he'd again end up knowing know who the peer is in touch with.
+
+  Finally, making the social graph an ingredient of the network topology
+  might also mean that a passive (global) eavesdropper gets to observe
+  this exact social graph as a peer frequently connects to his (closest)
+  friends after an offline period.
+
+  In all cases, these problems might be tackled by means of onion
+  routing / obfuscating the identity of all peers (i.e. senders and
+  recipients of messages and friends / mailboxes / mailmen).
 
 - The peers providing mailbox / mailman capabilities could offer their
-  service in exchange for a fee. Similarly to the previous option,
-  mailman functionality would require them to know who the peer wants to
-  send the message to. Providing mailbox capabilities, though, would not
-  require this. It would merely enable them to track online / offline
-  behavior.
+  service in exchange for a fee. Similarly to the previous option, this
+  would result in them knowing who the peer is communicating with
+  (unless further obfuscation is employed). This data could then also be
+  connected with payment data.
 
 - The peers could be selected randomly. Privacy implications are roughly
-  the same as for the previous option. It is questionable, though, why
-  peers would want to do this (i.e. provide storage and traffic
-  resources) in the first place.
+  the same as for the previous option with the exception that no payment
+  data is available this time. The question remains, though, why peers
+  would want to provide storage and traffic resources to other peers in
+  the first place.
 
-Clearly, the last option is the best in terms of privacy protection and
-costs but, at the same time, it lacks the necessary incentives.
+Clearly, the last option is the best in terms of costs and privacy
+implications (provided that onion routing is used) but at the same time,
+it lacks the necessary incentives.
+
+<!-- TODO: Move this to one of the previous sections (or create a new
+one) to make the distinction between non-directed (broadcast) and
+directed messaging (unicast/multicast). (Actually, the section on
+anonymity in the unicast chapter already discusses exactly this. It
+might make sense to move it up.)
+
+For the purposes of completeness, another option that hasn't been
+mentioned so far will briefly be discussed: Consider again the
+introductory example of Alice who wants to send a message to Bob. It was
+assumed so far that Alice's message would have to take a more or less
+direct path to Bob. (Even onion routing would merely add a detour to
+this path.) There is, however, the option of simply broadcasting the
+encrypted message to all peers in the network and hoping that it will
+reach Bob.
+-->
+
+Now, it turns out that the privacy implications *due to offline
+messaging*, i.e. the fact that mailbox / mailman providers get to
+observe a peer's social graph, can be reduced to a minimum without a
+*separate* layer of onion routing.^[Note that preventing a global
+eavesdropper from learning about a peer's social graph by observing who
+he connects to on a TCP/IP level will probably still require onion
+routing. See the section on [anonymity][unicast-anonymity] of
+[unicast][Unicast layer].] Moreover, multicast groups provide incentives
+for peers to share storage and traffic resources with each other.
+
+<!-- TODO Rewrite the following -->
 
 It turns out, though, that further options exist that arise from Digital
 Spring's specific architecture.
-<!-- TODO It's actually not that genuinely different options exist but
-rather that the above options can be slightly improved and combined in
-order to mitigate their respective drawbacks. -->
-
 
 To assess those options carefully, it seems in order to first give a
 short introduction to how Digital Spring delivers a message, which will
@@ -1176,7 +1197,7 @@ that the other party authored the message. In this way, deniability is
 accomplished.
 
 
-### Anonymity
+### Anonymity {#unicast-anonymity}
 
 Direct data transmission between devices on the internet always exposes
 their IP addresses (and, therefore, potentially their identity and

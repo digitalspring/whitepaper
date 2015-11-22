@@ -312,9 +312,9 @@ The layers and their corresponding functions are:
   are offline. The messages are stored in the DHT in a queue data
   structure such that they can be retrieved later by the recipient.
 
-- Multicast: Provide efficient and reliable 1-to-$n$ data distribution
-  from a sender to a group of recipients, whether they are online or
-  offline.
+- Multicast: Provide efficient and (almost) reliable 1-to-$n$ data
+  distribution from a sender to a group of recipients, whether they are
+  online or offline.
 
 - BMulticast: Multicast with backup peers, i.e. add additional peers to
   a multicast group that won't be able to read the transmitted messages

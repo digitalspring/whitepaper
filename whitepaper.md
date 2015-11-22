@@ -129,13 +129,13 @@ data scooping or -->
 Even if the message is encrypted beforehand (as in the case of
 PGP-encrypted emails), the middleman (and, thus, intelligence agencies)
 will still observe who is communicating with whom and, therefore, the
-social network. This information is usually called *metadata*,
-suggesting that it is not as valuable as "actual" data, although
-intelligence agencies mostly rely on exactly this data to analyze social
-behavior and to assess the potential risk an individual poses. Indeed,
-studies have shown that knowledge of a person's social network is
-already enough to draw various conclusions about him, such as his sexual
-orientation. [@gaydar]
+social graph. This information is usually called *metadata*, suggesting
+that it is not as valuable as "actual" data, although intelligence
+agencies mostly rely on exactly this data to analyze social behavior and
+to assess the potential risk an individual poses. Indeed, studies have
+shown that knowledge of a person's social network is already enough to
+draw various conclusions about him, such as his sexual orientation.
+[@gaydar]
 
 The point, and our idea, is therefore to eliminate the middleman
 completely and have the sender pass his message on to the recipient

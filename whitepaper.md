@@ -266,7 +266,8 @@ Digital Spring is primarily concerned with private communication and the
 transfer of private data, thus with data exchange among small to
 middle-sized groups, up to a few thousand people. Drawing on the
 previous examples, this could be restated as follows: Digital Spring is
-a digital medium that tries to mimic personal conversations as far as
+a medium that allows for digital communication that is as close to
+in-person conversations in terms of privacy implications as that is
 possible. Although its principal architecture was designed in a way to
 scale to very large groups just as well – if certain security promises
 are given up where it makes sense^[As demonstrated, it is impossible to

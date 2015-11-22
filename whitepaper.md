@@ -487,11 +487,137 @@ Lately, mobile platforms have seen hybrid solutions.
 
 
 Explain how pub/sub can be used to build almost all platforms we have
-today. -->
+today.
+
+Introduce multicasting as a way to make pushing more efficient. Mention
+that recipients organize in multicast groups – a persistent structure on
+top of the p2p network that enables more efficient transmission of
+multiple messages sent to the same recipients. -->
 
 
 Offline messaging
 -----------------
+
+As discussed in the previous chapters, Digital Spring breaks with the
+traditional server-client approach and lets peers communicate with each
+other directly. Naturally, the question comes up how the peers are
+supposed to do that if one of them is offline. As an extreme example,
+consider Alice who would like to send a message to Bob but Bob is
+offline whenever Alice is online and vice versa. Obviously, by the very
+definition of "offline", there is no way for Alice to deliver the
+message to Bob directly. To arrive at a solution, an analogy can be
+drawn to physical mail delivery: If the mailman cannot deliver a package
+because the recipient is not at home (or sleeping), he will either a)
+put it into the mailbox (assuming it's sufficiently small), b) give it
+to a neighbor or c) – if it is a large package – bring it back to the
+post office and put a notification into the recipient's mailbox. In all
+cases, there is a place that is accessible round the clock where the
+package is temporarily stored until the recipient comes to pick it up.
+
+This suggests implementing such a place in digital messaging, too. As
+was mentioned earlier, it is the very advantage of server-client
+architectures that servers are reachable 24/7 and thus can easily
+provide such storage capabilities themselves. For a peer-to-peer
+architecture, though, offline availability presents a challenge as there
+is no natural place to store a message temporarily and, quite generally,
+two options come to mind:
+
+<!-- TODO What about a Bitcoin / GNUtella-like approach where messages
+are shared among all peers and only the correct recipients can decrypt
+it? => Discuss directed vs. non-directed messaging here? But this rather
+concerns privacy not offline messaging… -->
+
+1. A peer could designate another peer to be his mailbox and announce
+   this fact to all peers he communicates with (even directly or through
+   an entry in the DHT). He would then poll this peer for new messages
+   after a having been offline for a while. However, as this peer would
+   certainly be offline at times, too, this would just only improve the
+   offline availability statistically. To increase it even further, one
+   could consider using several peers for a mailbox at once. Those peers
+   will be called *mailboxes* in the remainder of this section.
+
+<!--   In the end, however, this solution has one big drawback that renders
+  it useless for the purposes of secure digital communication: Using
+  friends as mailboxes and announcing them to others would give away the
+  peer's social graph which Digital Spring actually set out to protect.
+
+  Clearly, this wouldn't present a problem if the peers were selected
+  randomly. Then, however, the question arises why peers should store
+  (potentially large) messages for others in the first place.
+ -->
+
+2. The sender could designate a peer who he forwards the (encrypted)
+   message to and who he asks to deliver it to the recipient as soon as
+   he comes back online. For the purposes of this section, this peer
+   will be called a *mailman*.
+
+In both cases, the question comes up how to choose the respective peers
+and why they in turn should be willing to provide mailbox / mailman
+functionality to other peers in the first place, considering that this
+requires both traffic and storage resources. Again, there're multiple
+options:
+
+- The peers hosting a mailbox or acting as a mailman could be selected
+  from the list of the peer's friends. This would have the advantage
+  that friends are naturally inclined to help each other, so it should
+  be comparatively easy to convince a user to share resources (traffic,
+  storage) with his friends – as long as he is not put at a disadvantage
+  and his friends do the same for him.
+
+  Unfortunately, though, this approach also entails giving away part of
+  the peer's social graph:
+
+  In case of using friends as mailboxes, the peer would need to tell
+  everyone, who he is in contact with, about these friends. (His
+  friends, however, wouldn't necessarily know who authored incoming
+  (encrypted) messages as messages could probably be deposited
+  anonymously.)
+
+  In the second case, where a peer's friends act as mailmen, delivering
+  the peer's messages means these messages would be routed through them.
+  Since the mailmen would need to know who to deliver the message to,
+  they end up knowing know who the peer is in touch with. While this
+  might not pose a problem for some people, Digital Spring does not want
+  to enforce a certain privacy policy for everyone.
+
+- The peers providing mailbox / mailman capabilities could offer their
+  service in exchange for a fee. Similarly to the previous option,
+  mailman functionality would require them to know who the peer wants to
+  send the message to. Providing mailbox capabilities, though, would not
+  require this. It would merely enable them to track online / offline
+  behavior.
+
+- The peers could be selected randomly. Privacy implications are roughly
+  the same as for the previous option. It is questionable, though, why
+  peers would want to do this (i.e. provide storage and traffic
+  resources) in the first place.
+
+Clearly, the last option is the best in terms of privacy protection and
+costs but, at the same time, it lacks the necessary incentives.
+
+It turns out, though, that further options exist that arise from Digital
+Spring's specific architecture.
+<!-- TODO It's actually not that genuinely different options exist but
+rather that the above options can be slightly improved and combined in
+order to mitigate their respective drawbacks. -->
+
+
+To assess those options carefully, it seems in order to first give a
+short introduction to how Digital Spring delivers a message, which will
+be elaborated on in later chapters. As mentioned earlier, Digital Spring
+follows the pushing paradigm where a sender tries to transmit the
+message to the recipients immediately.^[This is not only the natural
+approach in a p2p network – in contrast to, e.g., having a peer poll
+other peers continuously for whether they have any new messages for him
+– but is also the most effective in the sense that data reaches a peer
+as soon as it becomes available, not when he asks for it. Indeed, this
+makes it possible for the peer to read a message later when he is
+offline – provided, of course, he was online at the time the message was
+sent.] Furthermore, recipients organize themselves in persistent
+*multicast groups* which facilitate continued data transmission to the
+same group of people. More specifically, members of a multicast group
+help each other -->
+
 
 
 

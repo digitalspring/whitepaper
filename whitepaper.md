@@ -563,48 +563,49 @@ requires both traffic and storage resources. Again, there're multiple
 options:
 
 - The peers hosting a mailbox or acting as a mailman could be selected
-  from the list of the peer's friends. This would have the advantage
-  that friends are naturally inclined to help each other, so it should
-  be comparatively easy to convince a user to share resources (traffic,
-  storage) with his friends – as long as he is not put at a disadvantage
-  and his friends do the same for him.
+    from the list of the peer's friends. This would have the advantage
+    that friends are naturally inclined to help each other, so it should
+    be comparatively easy to convince a user to share resources (traffic,
+    storage) with his friends – as long as he is not put at a disadvantage
+    and his friends do the same for him.
 
-  Unfortunately, though, this approach also entails giving away part of
-  the peer's social graph:
+    Unfortunately, though, this approach also entails giving away part
+    of the peer's social graph:
 
-  In case of using friends as mailboxes, the peer would need to tell
-  everyone, who he is in contact with, about these friends. His friends,
-  in turn, will know who authored incoming (encrypted) messages, hence
-  who the peer is (likely) communicating with.^[In all these cases, what
-  is meant by "knowing a peer" is meant "knowing the identifier or IP
-  address of the peer". This may or may not be a datum that is of actual
-  value to the peer possessing it.]
+    In case of using friends as mailboxes, the peer would need to tell
+    everyone, who he is in contact with, about these friends. His
+    friends, in turn, will know who authored incoming (encrypted)
+    messages, hence who the peer is (likely) communicating with.^[In all
+    these cases, what is meant by "knowing a peer" is meant "knowing the
+    identifier or IP address of the peer". This may or may not be a
+    datum that is of actual value to the peer possessing it.]
 
-  In the second case, where a peer's friend acts as mailman, delivering
-  the peer's messages means these messages would be routed through him.
-  Since the mailman would need to know who to deliver the message to,
-  he'd again end up knowing know who the peer is in touch with.
+    In the second case, where a peer's friend acts as mailman,
+    delivering the peer's messages means these messages would be routed
+    through him. Since the mailman would need to know who to deliver the
+    message to, he'd again end up knowing know who the peer is in touch
+    with.
 
-  Finally, making the social graph an ingredient of the network topology
-  might also mean that a passive (global) eavesdropper gets to observe
-  this exact social graph as a peer frequently connects to his (closest)
-  friends after an offline period.
+    Finally, making the social graph an ingredient of the network
+    topology might also mean that a passive (global) eavesdropper gets
+    to observe this exact social graph as a peer frequently connects to
+    his (closest) friends after an offline period.
 
-  In all cases, these problems might be tackled by means of onion
-  routing / obfuscating the identity of all peers (i.e. senders and
-  recipients of messages and friends / mailboxes / mailmen).
+    In all cases, these problems might be tackled by means of onion
+    routing / obfuscating the identity of all peers (i.e. senders and
+    recipients of messages and friends / mailboxes / mailmen).
 
 - The peers providing mailbox / mailman capabilities could offer their
-  service in exchange for a fee. Similarly to the previous option, this
-  would result in them knowing who the peer is communicating with
-  (unless further obfuscation is employed). This data could then also be
-  connected with payment data.
+    service in exchange for a fee. Similarly to the previous option,
+    this would result in them knowing who the peer is communicating with
+    (unless further obfuscation is employed). This data could then also
+    be connected with payment data.
 
 - The peers could be selected randomly. Privacy implications are roughly
-  the same as for the previous option with the exception that no payment
-  data is available this time. The question remains, though, why peers
-  would want to provide storage and traffic resources to other peers in
-  the first place.
+    the same as for the previous option with the exception that no
+    payment data is available this time. The question remains, though,
+    why peers would want to provide storage and traffic resources to
+    other peers in the first place.
 
 Clearly, the last option is the best in terms of costs and privacy
 implications (provided that onion routing is used) but at the same time,

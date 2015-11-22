@@ -618,6 +618,23 @@ sent.] Furthermore, recipients organize themselves in persistent
 same group of people. More specifically, members of a multicast group
 help each other -->
 
+<!--
+
+- Explain how we multicast group largely solve the problem of incentives
+  and resource sharing without any implications for privacy; possibility
+  to extend this by adding backup peers to the multicast group (it might
+  be difficult, though, to protect metadata then – especially if
+  metadata is connected with payment data; *if* it's possible then such
+  dead drops could be run by everyone similar to Tor nodes)
+- 2 problems then:
+  - How to notify Bob that a new message was sent to a group while he
+    was offline? -> Polling not an option, considering he might be a
+    member of thousands of groups.
+  - What about the 1-to-1 case.
+- Solution: Ability to store small messages in the DHT. (Use this for
+  notification and (small) 1-to-1 messages)
+
+-->
 
 
 

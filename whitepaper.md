@@ -270,19 +270,18 @@ Digital Spring is primarily concerned with private communication and the
 transfer of private data, thus with data exchange among small to
 middle-sized groups, up to a few thousand people. Drawing on the
 previous examples, this could be restated as follows: Digital Spring is
-a medium that allows for digital communication that is as close to
-in-person conversations in terms of privacy implications as that is
-possible. Although its principal architecture was designed in a way to
-scale to very large groups just as well – if certain security promises
-are given up where it makes sense^[As demonstrated, it is impossible to
-fulfill authenticity *and* deniability for large audiences at the same
-time. However, when it comes to large audiences with *either*
-authenticity *or* deniability and even some mixed forms (where a group
-of journalists attending a press conference cannot prove the
-authenticity of a quote to their readers although they heard it loud and
-clearly), the technology presented here covers these cases very
-naturally.] –, the present paper focusses on the primary goal outlined
-above.
+a medium for digital communication that, in terms of privacy
+implications, is as close to in-person conversations as possible.
+Although its principal architecture was designed in a way to scale to
+very large groups just as well – if certain security promises are given
+up where it makes sense^[As demonstrated, it is impossible to fulfill
+authenticity *and* deniability for large audiences at the same time.
+However, when it comes to large audiences with *either* authenticity
+*or* deniability and even some mixed forms (where a group of journalists
+attending a press conference cannot prove the authenticity of a quote to
+their readers although they heard it loud and clearly), the technology
+presented here covers these cases very naturally.] –, the present paper
+focusses on the primary goal outlined above.
 
 <!--
 Current State of Communication Systems

@@ -508,20 +508,28 @@ offline whenever Alice is online and vice versa. Obviously, by the very
 definition of "offline", there is no way for Alice to deliver the
 message to Bob directly. To arrive at a solution, an analogy can be
 drawn to physical mail delivery: If the mailman cannot deliver a package
-because the recipient is not at home (or sleeping), he will either a)
-put it into the mailbox (assuming it's sufficiently small), b) give it
-to a neighbor or c) – if it is a large package – bring it back to the
-post office and put a notification into the recipient's mailbox. In all
-cases, there is a place that is accessible round the clock where the
-package is temporarily stored until the recipient comes to pick it up.
+because the recipient is not at home (or not answering the bell), he
+will either
 
-This suggests implementing such a place in digital messaging, too. As
-was mentioned earlier, it is the very advantage of server-client
-architectures that servers are reachable 24/7 and thus can easily
-provide such storage capabilities themselves. For a peer-to-peer
-architecture, though, offline availability presents a challenge as there
-is no natural place to store a message temporarily and, quite generally,
-two options come to mind:
+a) put it into the mailbox (assuming it's sufficiently small),
+b) give it to a neighbor or
+c) bring it back to the post office and either try it again the next day
+   or put a note into the recipient's mailbox to notify him that the
+   package is waiting for him there.
+
+In all cases, there is a place that is accessible round the clock where
+the package is temporarily stored until the recipient comes to pick it
+up or the package is successfully delivered. This suggests implementing
+such a storage place in digital messaging, too. Indeed, this is one of
+the roles servers have always been playing in server-based approaches to
+communication – think, for instance, of mail servers, Facebook et
+cetera. Now, this is not to mean that a provider of such storage
+capabilities must necessarily take on the role of the intrusive
+middleman that Digital Spring set out to eliminate. In fact, it is the
+very goal of this project to implement the crucial feature of offline
+messaging in a privacy-preserving manner. While this presents a
+challenge in so far as p2p networks lack a natural place to store
+messages temporarily, two options come to mind quite generally:
 
 <!-- TODO What about a Bitcoin / GNUtella-like approach where messages
 are shared among all peers and only the correct recipients can decrypt

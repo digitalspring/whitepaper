@@ -508,7 +508,7 @@ multiple messages sent to the same recipients. -->
 Offline messaging
 -----------------
 
-As discussed in the previous chapters, Digital Spring breaks with the
+As discussed in the previous chapter, Digital Spring breaks with the
 traditional server-client approach and lets peers communicate with each
 other directly. Naturally, the question comes up how the peers are
 supposed to do that if one of them is offline. As an extreme example,

@@ -231,15 +231,15 @@ telling the truth.^[Contrast this with Alice somehow sending a message
 in Bob's name to his best friend Carl and playing a prank on him.]
 
 Compare this to the situation of authenticated messages: Today, a status
-message on a popular and verified Twitter account, say @BarackObama, is
+message on a popular and verified Twitter account, say \@BarackObama, is
 almost as good as a written and signed statement or one recorded on
 video: People will usually not doubt it was Barack Obama who authored
 the message. (In turn, they will automatically doubt the authenticity of
-a second Twitter account @Barack_Obama.) While this authenticity towards
-his audience is exactly what Barack Obama wished for, it also prevents
-him from being able to deny any of the messages sent through his
-account.^[Unless there's good evidence that his account was hacked. He
-might also claim his press spokesman played a prank on him.]
+a second Twitter account \@Barack_Obama.) While this authenticity
+towards his audience is exactly what Barack Obama wished for, it also
+prevents him from being able to deny any of the messages sent through
+his account.^[Unless there's good evidence that his account was hacked.
+He might also claim his press spokesman played a prank on him.]
 
 Therefore, it seems there is a basic trade-off to be made between
 authenticity and deniability with respect to a large group of

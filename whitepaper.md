@@ -324,12 +324,19 @@ The layers and their corresponding functions are:
   failures.
 
 Before describing the layers in detail, however, the next chapter will
-give a short overview of some of the core paradigms that led to this
-architecture in the first place.
+give a short overview of some of the core paradigms and considerations
+that led to this architecture in the first place.
 
 
 Preliminaries
 =============
+
+TODO Anonymity implications of directed vs. undirected messaging
+----------------------------------------------------------------
+
+<!-- TODO Move the text from the unicast/anonymity section here and
+explain why undirected messaging will not be used. -->
+
 
 The publish / subscribe paradigm
 --------------------------------

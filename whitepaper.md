@@ -559,7 +559,7 @@ messages temporarily, two options come to mind quite generally:
    times, too, so once again, it'd make sense to have several peers
    share this responsibility.
 
-In both cases, the question comes up how to choose the respective peers
+In both cases, the question arises how to choose the respective peers
 and why they in turn should be willing to provide mailbox / mailman
 functionality to other peers in the first place, considering that this
 requires both traffic and storage resources. Again, there're multiple
@@ -641,26 +641,54 @@ routing. See chapter [Unicast layer](#unicast-layer), section
 incentives for peers to share storage and traffic resources with each
 other.
 
-<!-- TODO Rewrite the following -->
+In order to explain this step by step, a short dive into how multicast
+groups work is necessary (which will be elaborated on in later
+chapters):
 
-It turns out, though, that further options exist that arise from Digital
-Spring's specific architecture.
+As was already mentioned, Digital Spring follows the publish/subscribe
+paradigm where peers who are interested in some (future) content
+subscribe to the channel through which this content is delivered. In
+Digital Spring's case, this channel is called a *multicast group*. Two
+features are important here: First of all, all members of a multicast
+group receive the same content and as soon as it becomes available (i.e.
+the sender pushes the data to the recipients). Second, a multicast group
+is of persistent nature: Once a peer joins a multicast group he will
+stay a member of that group throughout potential offline periods until
+he explicitly leaves.^[Technically, it is actually the owner of the
+group who adds and removes members but this is not important here.]
+
+Consequently, if a member is offline during the transmission of a
+message to the group, he won't receive it but other members of the group
+will. He can therefore request the message from these members when he
+comes back online. Clearly, this assumes that members retain a message
+for a while after receiving it. This can (and will) be enforced by the
+multicast layer but it also makes sense from a user perspective: In a
+publish/subscribe system, the time of reading or consuming a message
+will usually not coincide with the time the message was received at (as
+would be the case in an on-demand approach), so the message will need to
+be stored for a while anway.
+
+
+<!--
+Digital Spring follows the pushing paradigm where a sender tries to
+transmit the message to the recipients immediately.^[This is not only
+the natural approach in a p2p network – in contrast to, e.g., having a
+peer poll other peers continuously for whether they have any new
+messages for him – but is also the most effective in the sense that data
+reaches a peer as soon as it becomes available, not when he asks for it.
+Indeed, this makes it possible for the peer to read a message later when
+he is offline – provided, of course, he was online at the time the
+message was sent.] Furthermore, recipients organize themselves in
+persistent *multicast groups* which facilitate continued data
+transmission to the same group of people. More specifically, members of
+a multicast group help each other
+
 
 To assess those options carefully, it seems in order to first give a
 short introduction to how Digital Spring delivers a message, which will
-be elaborated on in later chapters. As mentioned earlier, Digital Spring
-follows the pushing paradigm where a sender tries to transmit the
-message to the recipients immediately.^[This is not only the natural
-approach in a p2p network – in contrast to, e.g., having a peer poll
-other peers continuously for whether they have any new messages for him
-– but is also the most effective in the sense that data reaches a peer
-as soon as it becomes available, not when he asks for it. Indeed, this
-makes it possible for the peer to read a message later when he is
-offline – provided, of course, he was online at the time the message was
-sent.] Furthermore, recipients organize themselves in persistent
-*multicast groups* which facilitate continued data transmission to the
-same group of people. More specifically, members of a multicast group
-help each other -->
+be elaborated on in later chapters.
+-->
+
 
 <!--
 

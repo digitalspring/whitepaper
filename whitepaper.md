@@ -511,6 +511,8 @@ multiple messages sent to the same recipients. -->
 Offline messaging
 -----------------
 
+### Introduction
+
 As discussed in the previous chapter, Digital Spring breaks with the
 traditional server-client approach and lets peers communicate with each
 other directly. Naturally, the question comes up how the peers are
@@ -645,17 +647,25 @@ In order to explain this step by step, a short dive into how multicast
 groups work is necessary (which will be elaborated on in later
 chapters):
 
+
+### The benefits of multicasting
+
 As was already mentioned, Digital Spring follows the publish/subscribe
 paradigm where peers who are interested in some (future) content
 subscribe to the channel through which this content is delivered. In
-Digital Spring's case, this channel is called a *multicast group*. Two
+Digital Spring's case, this channel is called a *multicast group*. Three
 features are important here: First of all, all members of a multicast
 group receive the same content and as soon as it becomes available (i.e.
-the sender pushes the data to the recipients). Second, a multicast group
-is of persistent nature: Once a peer joins a multicast group he will
-stay a member of that group throughout potential offline periods until
-he explicitly leaves.^[Technically, it is actually the owner of the
-group who adds and removes members but this is not important here.]
+the sender pushes the data to the recipients). Second, the sender does
+not send a message to all members but only a few who, in turn, will
+forward the message to a handful of other members and so on, such that a
+cascade emerges. This is necessary to take the reduce the traffic for
+the sender and instead distribute it among all members. Third, a
+multicast group is of persistent nature: Once a peer joins a multicast
+group he will stay a member of that group throughout potential offline
+periods until he explicitly leaves.^[Technically, it is actually the
+owner of the group who adds and removes members but this is not
+important here.]
 
 Consequently, if a member is offline during the transmission of a
 message to the group, he won't receive it but other members of the group
@@ -666,8 +676,75 @@ multicast layer but it also makes sense from a user perspective: In a
 publish/subscribe system, the time of reading or consuming a message
 will usually not coincide with the time the message was received at (as
 would be the case in an on-demand approach), so the message will need to
-be stored for a while anway.
+be stored for a while anyway. Finally, while a member of a group is
+*supposed* to help other members by forwarding messages to them and he
+can expect others to do the same for him, it might make sense to provide
+further, more direct incentives: For instance, members could keep track
+of how well another member supports the group and adjust their own
+behavior towards this member accordingly. For details on how these
+mechanisms could work exactly, see the chapter on
+[multicast](#multicast).
 
+To sum up, as members of a multicast group are interested in the same
+messages, they can help each other receive these messages after offline
+periods without any further implications for privacy.
+
+This is of course not a one-size-fits-all solution. In particular, there
+are two things that haven't been considered so far:
+
+
+### The need for backup peers
+
+Namely, it could happen that the multicast group consists of only a few
+recipients^[Or even just a single recipient, consider e.g. 1-to-1
+conversations.] such that it might very well happen that all of them are
+offline at the same. Then, there'd be no peer the message could be
+requested from later (apart from the sender himself who, however, is
+considered to be offline). In order to prevent this, the sender could
+add additional *backup peers* to the group who cannot decrypt the
+messages but still store and forward them to the other members. By
+increasing the availability of messages and helping with their transfer
+(thus increasing the overall speed with which a message gets to a peer),
+backup peers would thereby support and stabilize a multicast group and
+make overall message transmission more reliable. In the terminology of
+the introduction, a backup peer would be mailbox and mailman at the same
+time to some degree. The chapter on [BMulticast](#bmulticast), i.e.
+backed-up multicast, discusses further details, such as the exact
+implementation, as well as security considerations.
+
+It is already clear, though, that in order to fulfill their job, backup
+peers need to know who to make the messages available to, so this
+metadata would again be exposed unless further measures are taken. In
+addition, lacking any other incentives, the sender would probably have
+to pay backup peers for their service.
+
+As a way out, consider a sender possessing multiple devices that are
+regularly connected to the internet, such as a phone, a laptop, a
+router, a tablet. In that case, he might use those devices to act as
+backup peers for the multicast groups he sets up and thereby increase
+the groups' reliability himself, without further implications for
+privacy. (In fact, he might actually want all his devices to be
+synchronized with each other so it would make sense for him to add the
+devices as regular members of his groups, anyway.)
+
+
+### How a peer gets notified
+
+Usually, a peer will be a member in thousands of multicast groups.^[This
+is because multicast groups serve to finetune a user's privacy settings:
+If he wishes to share some data with a selected group of people, he sets
+up a multicast group consisting of the desired recipients and sends the
+data to this group. Being in touch with potentially hundreds of people
+therefore means being a member of the dozens of multicast groups each of
+them sets up. See the chapter on [multicast](#multicast) for further
+details.] It is therefore undesirable to have him poll all his multicast
+groups for new messages whenever he comes back online.
+
+<!--
+TODO Reuse section on notifications from multicast chapter further below?
+-->
+
+### Summary
 
 <!--
 Digital Spring follows the pushing paradigm where a sender tries to
@@ -1296,8 +1373,8 @@ advantage of the p2p network to replace this federated approach to onion
 routing.
 
 
-Multicast layer
-===============
+Multicast layer {#multicast}
+============================
 
 Introduction
 ------------

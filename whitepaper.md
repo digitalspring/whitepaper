@@ -630,12 +630,13 @@ encrypted message to all peers in the network and hoping that it will
 reach Bob.
 -->
 
-It turns out that the privacy implications *due to offline messaging*,
-i.e. the fact that mailbox / mailman providers get to observe a peer's
-social graph, can be reduced to a minimum without a *separate* layer of
-onion routing.^[Note that preventing a global eavesdropper from learning
-about a peer's social graph by observing who he connects to on a TCP/IP
-level will probably still require onion routing. See chapter [Unicast
+It turns out that in some cases, the privacy implications *due to
+offline messaging*, i.e. the fact that mailbox / mailman providers get
+to observe a peer's social graph, can be reduced or even completely
+eliminated without a *separate* layer of onion routing.^[Note that
+preventing a global eavesdropper from learning about a peer's social
+graph by observing who he connects to on a TCP/IP level will probably
+still require onion routing. See chapter [Unicast
 layer](#unicast-layer), section [Anonymity](#unicast-anonymity).]
 Moreover, multicast groups provide incentives for peers to share storage
 and traffic resources with each other.

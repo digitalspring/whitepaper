@@ -516,10 +516,15 @@ Offline messaging
 As discussed in the previous chapter, Digital Spring breaks with the
 traditional server-client approach and lets peers communicate with each
 other directly. Naturally, the question comes up how the peers are
-supposed to do that if one of them is offline. As an extreme example,
-consider Alice who would like to send a message to Bob but Bob is
-offline whenever Alice is online and vice versa. Obviously, by the very
-definition of "offline", there is no way for Alice to deliver the
+supposed to do that if one of them is offline.^[Clearly, this wouldn't
+be needed at all for live communication, i.e. if participants of a
+conversation are expected to be online at the same time by definition,
+but let's assume an *asynchronous* communication channel for the time
+being, e.g. Alice and Bob exchange text messages over a longer period of
+time and do not respond immediately to each other.] As an extreme
+example, consider Alice who would like to send a message to Bob but Bob
+is offline whenever Alice is online and vice versa. Obviously, by the
+very definition of "offline", there is no way for Alice to deliver the
 message to Bob directly. To arrive at a solution, an analogy can be
 drawn to physical mail delivery: If the mailman cannot deliver a package
 because the recipient is not at home (or not answering the bell), he

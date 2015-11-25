@@ -705,38 +705,51 @@ Namely, it could happen that the multicast group consists of only a few
 recipients^[Or even just a single recipient, consider e.g. 1-to-1
 conversations.] such that it might very well happen that all of them are
 offline at the same. Then, there'd be no peer the message could be
-requested from later (apart from the sender himself who, however, is
-considered to be offline). In order to prevent this, the sender could
-add additional *backup peers* to the group who cannot decrypt the
-messages but still store and forward them to the other members. By
-increasing the availability of messages and helping with their transfer
-(thus increasing the overall speed with which a message gets to a peer),
-backup peers would thereby support and stabilize a multicast group and
-make overall message transmission more reliable. In the terminology of
-the introduction, a backup peer would be mailbox and mailman at the same
-time to some degree. The chapter on [BMulticast](#bmulticast), i.e.
-backed-up multicast, discusses further details, such as the exact
-implementation, as well as security considerations.
+requested from later (apart from the sender himself who, however, might
+be offline as well).
 
-It is already clear, though, that in order to fulfill their job, backup
-peers need to know who to make the messages available to, so this
-metadata would again be exposed unless further measures are taken. In
-addition, lacking any other incentives, the sender would probably have
-to pay backup peers for their service.
+Clearly, yet another "mailbox" is needed: The sender could send his
+(encrypted) messages to additional *backup peers* whose availability is
+guaranteed and from which members of the group can retrieve the message,
+even when all others are offline. Since a backup peer would be just
+another recipient of a message (with the exception that the backup peer
+cannot decrypt it), it'd make sense to actually add him to the group
+itself such that he indeed behaves just like any other member of the
+group and, in particular, stores and forwards messages. A backup peer
+would therefore not only increase the availability of a message but also
+help with its transfer and thus make transmission generally faster and
+more reliable, i.e. "stabilize" the group. (This is obviously in the
+best interest of the sender, who wants his messages to reach the
+recipients.) In the terminology of the introduction, a backup peer would
+be mailbox and mailman at the same time to some degree. The chapter on
+[BMulticast](#bmulticast) discusses further details, such as the exact
+implementation, as well as security considerations of this so-called
+backed-up multicasting.
 
-As a way out, consider a sender possessing multiple devices that are
-regularly connected to the internet, such as a phone, a laptop, a
-router, a tablet. In that case, he might use those devices to act as
-backup peers for the multicast groups he sets up and thereby increase
-the groups' reliability himself, without further implications for
-privacy. (In fact, he might actually want all his devices to be
-synchronized with each other so it would make sense for him to add the
-devices as regular members of his groups, anyway.)
+It should be clear, though, that in order to fulfill their job, backup
+peers would need to know who to make the messages available to, so this
+metadata would again be exposed unless further measures are
+taken.^[Apart from onion routing, an interesting approach to this would
+be to add so many backup peers to the group that none of the backup
+peers can tell anymore who is a legitimate member of the group, i.e. an
+actual recipient, and who is just another backup peer.] In addition,
+lacking any other incentives, the sender would probably have to pay
+backup peers for their service or, as suggested before, use their
+friends as backup peers. As a third option, consider a sender possessing
+multiple devices that are regularly connected to the internet, such as a
+phone, a laptop, a router, a tablet. In that case, he might use those
+devices to act as backup peers for the multicast groups he sets up and
+thereby increase the groups' reliability himself, without further
+implications for privacy. (In fact, he might actually want all his
+devices to be synchronized with each other, anyway, so it would make
+sense for him to add the devices as regular members of his groups.)
 
 In the end, it does remain unsatisfactory, though, that the simple case
 of 1-to-1 communication is actually the hardest one when it comes to
-offline messaging and would require significant effort by the user to
-solve. In the following section, an additional option
+offline messaging and that it would always require some effort by the
+user to solve (as he definitely has to have backup peers). For short
+messages, though, this issue might be tackled by another mechanism for
+guaranteeing delivery, which is the subject of the following section.
 
 
 ### How a peer gets notified

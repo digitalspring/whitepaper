@@ -602,8 +602,9 @@ options:
     his (closest) friends after an offline period.
 
     In all cases, these problems might be tackled by means of onion
-    routing / obfuscating the identity of all peers (i.e. senders and
-    recipients of messages and friends / mailboxes / mailmen).
+    routing / obfuscating the identity of all peers (i.e. those of
+    senders and recipients of messages and of friends / mailboxes /
+    mailmen).
 
 - The peers providing mailbox / mailman capabilities could offer their
     service in exchange for a fee. Similarly to the previous option,
@@ -637,13 +638,13 @@ encrypted message to all peers in the network and hoping that it will
 reach Bob.
 -->
 
-It turns out that in some cases, the privacy implications *due to
-offline messaging*, i.e. the fact that mailbox / mailman providers get
-to observe a peer's social graph, can be reduced or even completely
-eliminated without a *separate* layer of onion routing.^[Note that
-preventing a global eavesdropper from learning about a peer's social
-graph by observing who he connects to on a TCP/IP level will probably
-still require onion routing. See chapter [Unicast
+It turns out that in a multicasting environment, the privacy
+implications *due to offline messaging*, i.e. the fact that mailbox /
+mailman providers get to observe a peer's social graph, can sometimes be
+reduced or even completely eliminated without a *separate* layer of
+onion routing.^[Note that preventing a global eavesdropper from learning
+about a peer's social graph by observing who he connects to on a TCP/IP
+level will probably still require onion routing. See chapter [Unicast
 layer](#unicast-layer), section [Anonymity](#unicast-anonymity).]
 Moreover, multicast groups provide incentives for peers to share storage
 and traffic resources with each other.
@@ -653,7 +654,7 @@ groups work is necessary (which will be elaborated on in later
 chapters):
 
 
-### The benefits of multicasting
+### Offline messaging in a multicasting environment
 
 As was already mentioned, Digital Spring follows the publish/subscribe
 paradigm where peers who are interested in some (future) content

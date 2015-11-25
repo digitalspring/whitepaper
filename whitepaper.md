@@ -732,6 +732,11 @@ privacy. (In fact, he might actually want all his devices to be
 synchronized with each other so it would make sense for him to add the
 devices as regular members of his groups, anyway.)
 
+In the end, it does remain unsatisfactory, though, that the simple case
+of 1-to-1 communication is actually the hardest one when it comes to
+offline messaging and would require significant effort by the user to
+solve. In the following section, an additional option
+
 
 ### How a peer gets notified
 

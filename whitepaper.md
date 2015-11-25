@@ -746,6 +746,18 @@ TODO Reuse section on notifications from multicast chapter further below?
 
 ### Summary
 
+The ability to send messages even when the recipient is offline,
+presents a challenge for any p2p communication system, especially if
+privacy ought to be protected. In the preceding sections, a general
+overview of the problem was given and possible approaches to solve it,
+to varying degrees, were presented. From this, it should have become
+clear that there is certainly no generic solution. Instead, any solution
+has to consider the specific use case, i.e. what kind of data is being
+transmitted, when, to whom and with what requirements for privacy.
+Digital Spring provides generic tools that can be adapted to each of
+these specific use cases, the prime example of 1-to-1 communication via
+text messages being one of them.
+
 <!--
 Digital Spring follows the pushing paradigm where a sender tries to
 transmit the message to the recipients immediately.^[This is not only

@@ -762,7 +762,53 @@ data to this group. Being in touch with potentially hundreds of people
 therefore means being a member of the dozens of multicast groups each of
 them sets up. See the chapter on [multicast](#multicast) for further
 details.] It is therefore undesirable to have him poll all his multicast
-groups for new messages whenever he comes back online.
+groups for new messages whenever he comes back online. Namely, this
+would put severe load on the network, considering that connection losses
+occur increasingly often with today's mobile devices. But how else would
+a peer know that there is a new message waiting for him? How does he get
+notified?
+
+The simplest approach would certainly be to adapt the polling interval
+to the frequency with which messages are sent to the group, i.e. with
+which the group is *active*. However, peers who are online infrequently
+are not in a good position to judge the activity of a group they're a
+member of. In addition, even if a peer is able to measure a group's
+activity accurately, it is still hard to come up with a generic
+algorithm that yields a suitable polling interval in every case.
+Consider, for instance, a long-standing conversation between two old
+friends Bob and Carl that only get in touch with each other every other
+year. But one day, Carl passes by Bob's city by coincidence and thinks
+of asking Bob whether he spontaneously wants to meet up for lunch. Now,
+if Bob is in an area without phone reception at this time and if the
+polling interval had been set to a few weeks or even just a day or two,
+he would not receive Carl's message in time.
+
+This demonstrates that it is no a good idea to let a peer have multiple
+places to poll for new messages, no matter the polling interval. It
+leaves the two options already presented in the beginning:
+
+1) Having members of a multicast group act as mailmen and try to deliver
+   a message (or at least deliver a notification that there's a new
+   message) to the peer until successful. But this is again
+   failure-prone unless backup peers are part of the group, so can be
+   ruled out. (It should not be required to set up / pay for backup
+   peers as this is an essential feature and should work regardless.)
+
+2) Letting a peer have a single mailbox which notifications about new
+   messages are sent to. Again, the question arises where a mailbox
+   should be located: At a friend, a commercial provider, a random peer.
+   The first two cases require the user to make a conscious decision,
+   though, and/or have him pay for an essential feature, so can be ruled
+   out as well.
+
+This leaves the final option: Having a random peer provide a mailbox
+where notifications get stored. Notice that this time, the barrier for
+incentives is much lower as notifications about messages are typically
+much smaller than the messages themselves. Therefore, they don't require
+nearly as much bandwidth or storage.
+
+To see how a random peer can be chosen,
+
 
 <!--
 TODO Reuse section on notifications from multicast chapter further below?

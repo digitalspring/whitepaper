@@ -11,6 +11,9 @@ Todo
   specific recipient) and backup peers (for a specific multicast group /
   sender) and their security implications.
 
+- In the section on offline messaging: Replace "traffic [resources]"
+  with "bandwidth [resources]"
+
 - Explain directed vs. undirected messaging
 
 - Add chapter on OfflineUnicast

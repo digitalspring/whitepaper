@@ -869,7 +869,7 @@ TODO Reuse section on notifications from multicast chapter further below?
 
 ### Summary
 
-The ability to send messages even when the recipient is offline,
+The ability to send messages even when the recipient is offline
 presents a challenge for any p2p communication system, especially if
 privacy ought to be protected. In the preceding sections, a general
 overview of the problem was given and possible approaches to solve it,

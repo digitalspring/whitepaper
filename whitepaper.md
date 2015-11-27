@@ -696,17 +696,19 @@ messages, they can help each other receive these messages after offline
 periods without any further implications for privacy.
 
 This is of course not a one-size-fits-all solution. In particular, there
-are two things that haven't been considered so far:
+are two things that haven't been considered so far and that will be
+discussed in the remainder of this chapter.
 
 
 ### The need for backup peers
 
-Namely, it could happen that the multicast group consists of only a few
+It could be that the multicast group consists of only a few
 recipients^[Or even just a single recipient, consider e.g. 1-to-1
-conversations.] such that it might very well happen that all of them are
-offline at the same. Then, there'd be no peer the message could be
-requested from later (apart from the sender himself who, however, might
-be offline as well).
+conversations.] such that it might happen that all of them are offline
+when the sender tries to send them a message. Not only would this fail
+but there'd also be no peer the message could be requested from later
+(apart from the sender himself who, however, might be offline then as
+well).
 
 Clearly, yet another "mailbox" is needed: The sender could send his
 (encrypted) messages to additional *backup peers* whose availability is

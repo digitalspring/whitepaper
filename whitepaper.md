@@ -807,7 +807,60 @@ incentivizing this peer is much lower. This is because notifications
 about messages are typically much smaller than the messages themselves
 and, therefore, don't require nearly as much bandwidth or storage.
 
-To see how a random peer can be chosen,
+To see how a random peer can be chosen, it is again necessary to discuss
+a rather technical aspect, the distributed hash table (DHT), before its
+formal introduction in the next chapter. In short, the DHT stores
+key-value pairs (or hash-value pairs) that should be accessible to
+everyone in the network. The emerging table is distributed among all
+peers of the network such that every peer stores a small (and more or
+less random) part of the table. This is done in a redundant way such
+that failure of a single peer does not cause a loss of data and the data
+can still be retrieved from other peers in this case. Also, entries in
+the table are not stored indefinitely but have a *time to live (TTL)*
+after which they will have to be renewed or will otherwise be deleted.
+Finally, a value is accessible to everyone in possession of the
+corresponding key, though encryption can be employed to restrict who can
+actually make sense of a value.
+
+The prime use case for the DHT (and the reason why Digital Spring needs
+one in the first place) is to store the current IP address of the peer
+associated with some peer ID (a public key). In this way, public keys
+become "good" identifiers to address a peer, no where he is in
+the world and how often he changes his IP address.
+
+Being able to build upon such a global key-value store, the question is
+then how to implement a mailbox for notifications (or other small
+messages). In the simplest case, this is simply a queue to which
+everyone can add (*push*) new messages^[Maybe after a so-called proof of
+work was done to prevent spam.] but from which only the owner can
+retrieve and remove (*pop*) entries. Provided that such a queue
+structure on top of the DHT is indeed possible^[See the chapter on the
+[DHT](#DHT) for details.], a peer could then advertize his personal
+mailbox / notification queue (i.e. the key under which it can be found
+in the DHT) to other peers that need to be able to reach him when he is
+offline.^[Actually, it probably makes sense to use a static key, such as
+(the hash of) the concatenation of the peer's ID and a string like
+"mailbox", such that the peer doesn't need to advertize the queue but
+everyone knows where to find his mailbox right from the start.] The DHT
+would redundantly store any notifications for him until he retrieves
+them (or the TTL expires^[Since entries in the DHT have a maximum
+lifetime, notifications could get lost if the peer doesn't retrieve them
+in time. A peer Carl trying to reach Bob while the latter is offline
+would therefore need to renew the notification in Bob's mailbox every
+once in a while. Alternatively, if Bob is offline for a longer period of
+time (e.g. several days), Bob might indeed have to poll the multicast
+groups he's a member of for new messages when he comes back online.]).
+Finally, the question of whether metadata is exposed in any way, e.g.
+whether peers participating in the DHT get to see who accesses or pushes
+messages to the queue (i.e. who is in touch with whom), boils down to
+whether the DHT exposes metadata (i.e. who creates and who accesses
+key-value pairs in the table). Assuming that this data is indeed
+obfuscated, a mailbox implemented in this way would provide a temporary
+and secure storage for (small) offline messages and notifications that
+is free and doesn't require any manual setup on the part of the user.
+Moreover, as long as all peers in the network participate in the DHT
+mechanism (which is necessary for the p2p network to function, anyway),
+no further incentivization is needed.
 
 
 <!--

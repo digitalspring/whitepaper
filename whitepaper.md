@@ -752,7 +752,7 @@ messages, though, this issue might be tackled by another mechanism for
 guaranteeing delivery, which is the subject of the following section.
 
 
-### How a peer gets notified
+### How a peer gets notified through the DHT
 
 Usually, a peer will be a member in thousands of multicast groups.^[This
 is because multicast groups serve to finetune a user's privacy settings:

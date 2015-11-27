@@ -802,10 +802,10 @@ leaves the two options already presented in the beginning:
    out as well.
 
 This leaves the final option: Having a random peer provide a mailbox
-where notifications get stored. Notice that this time, the barrier for
-incentives is much lower as notifications about messages are typically
-much smaller than the messages themselves. Therefore, they don't require
-nearly as much bandwidth or storage.
+where notifications get stored. Notice that, this time, the barrier for
+incentivizing this peer is much lower. This is because notifications
+about messages are typically much smaller than the messages themselves
+and, therefore, don't require nearly as much bandwidth or storage.
 
 To see how a random peer can be chosen,
 

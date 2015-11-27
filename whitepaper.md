@@ -726,31 +726,33 @@ recipients.) In the terminology of the introduction, a backup peer would
 be mailbox and mailman at the same time to some degree. The chapter on
 [BMulticast](#bmulticast) discusses further details, such as the exact
 implementation, as well as security considerations of this so-called
-backed-up multicasting.
+*backed-up multicasting*.
 
 It should be clear, though, that in order to fulfill their job, backup
 peers would need to know who to make the messages available to, so this
 metadata would again be exposed unless further measures are
-taken.^[Apart from onion routing, an interesting approach to this would
-be to add so many backup peers to the group that none of the backup
-peers can tell anymore who is a legitimate member of the group, i.e. an
-actual recipient, and who is just another backup peer.] In addition,
-lacking any other incentives, the sender would probably have to pay
-backup peers for their service or, as suggested before, use their
-friends as backup peers. As a third option, consider a sender possessing
-multiple devices that are regularly connected to the internet, such as a
-phone, a laptop, a router, a tablet. In that case, he might use those
-devices to act as backup peers for the multicast groups he sets up and
-thereby increase the groups' reliability himself, without further
-implications for privacy. (In fact, he might actually want all his
-devices to be synchronized with each other, anyway, so it would make
-sense for him to add the devices as regular members of his groups.)
+taken.^[Apart from onion routing, an interesting approach to solve this
+would be to add so many backup peers to the group that none of the
+backup peers can tell anymore who is a legitimate member of the group,
+i.e. an actual recipient, and who is just another backup peer. This is
+reminiscent of undirected messaging that was discussed in the first
+section of this chapter.] In addition, lacking any other incentives, the
+sender would probably have to pay backup peers for their service or, as
+suggested before, use their friends as backup peers. As a third option,
+consider a sender possessing multiple devices that are regularly
+connected to the internet, such as a phone, a laptop, a router, a
+tablet. In that case, he might use those devices to act as backup peers
+for the multicast groups he sets up and thereby increase the groups'
+reliability himself, without further implications for privacy. (In fact,
+he might actually want all his devices to be synchronized with each
+other, anyway, so it would make sense for him to add the devices as
+regular members of his groups.)
 
 In the end, it does remain unsatisfactory, though, that the simple case
 of 1-to-1 communication is actually the hardest one when it comes to
 offline messaging and that it would always require some effort by the
-user to solve (as he definitely has to have backup peers). For short
-messages, though, this issue might be tackled by another mechanism for
+user to solve (as he has to have backup peers). For short messages,
+though, this issue might be tackled by another mechanism for
 guaranteeing delivery, which is the subject of the following section.
 
 
@@ -778,12 +780,12 @@ member of. In addition, even if a peer is able to measure a group's
 activity accurately, it is still hard to come up with a generic
 algorithm that yields a suitable polling interval in every case.
 Consider, for instance, a long-standing conversation between two old
-friends Bob and Carl that only get in touch with each other every other
-year. But one day, Carl passes by Bob's city by coincidence and thinks
-of asking Bob whether he spontaneously wants to meet up for lunch. Now,
-if Bob is in an area without phone reception at this time and if the
-polling interval had been set to a few weeks or even just a day or two,
-he would not receive Carl's message in time.
+friends Bob and Carl that only talk to each other every other year. But
+one day, Carl passes by Bob's city by coincidence and thinks of asking
+Bob whether he spontaneously wants to meet up for lunch. Now, if Bob is
+in an area without phone reception at this time and if the polling
+interval had been set to a few weeks or even just a day or two, he would
+not receive Carl's message in time.
 
 This demonstrates that it is no a good idea to let a peer have multiple
 places to poll for new messages, no matter the polling interval. It
@@ -794,7 +796,8 @@ leaves the two options already presented in the beginning:
    message) to the peer until successful. But this is again
    failure-prone unless backup peers are part of the group, so can be
    ruled out. (It should not be required to set up / pay for backup
-   peers as this is an essential feature and should work regardless.)
+   peers as getting notified of a new message is an essential feature
+   and should work regardless.)
 
 2) Letting a peer have a single mailbox which notifications about new
    messages are sent to. Again, the question arises where a mailbox
@@ -819,16 +822,17 @@ less random) part of the table. This is done in a redundant way such
 that failure of a single peer does not cause a loss of data and the data
 can still be retrieved from other peers in this case. Also, entries in
 the table are not stored indefinitely but have a *time to live (TTL)*
-after which they will have to be renewed or will otherwise be deleted.
-Finally, a value is accessible to everyone in possession of the
-corresponding key, though encryption can be employed to restrict who can
-actually make sense of a value.
+after which they will have to be renewed or will otherwise be
+deleted.^[This is necessary for the DHT to not become too large and take
+up too many resources.] Finally, a value is accessible to everyone in
+possession of the corresponding key, though encryption can be employed
+to restrict who can actually make sense of a value.
 
-The prime use case for the DHT (and the reason why Digital Spring needs
-one in the first place) is to store the current IP address of the peer
-associated with some peer ID (a public key). In this way, public keys
-become "good" identifiers to address a peer, no where he is in
-the world and how often he changes his IP address.
+The primary use case for the DHT (and the reason why Digital Spring
+needs one in the first place) is to store the current IP address of the
+peer associated with some peer ID (a public key). In this way, public
+keys become "good" identifiers to address a peer, no matter where he is
+in the world and how often he changes his IP address.
 
 Being able to build upon such a global key-value store, the question is
 then how to implement a mailbox for notifications (or other small
@@ -845,7 +849,7 @@ offline.^[Actually, it probably makes sense to use a static key, such as
 "mailbox", such that the peer doesn't need to advertize the queue but
 everyone knows where to find his mailbox right from the start.] The DHT
 would redundantly store any notifications for him until he retrieves
-them (or the TTL expires^[Since entries in the DHT have a maximum
+them (or their TTL expires^[Since entries in the DHT have a maximum
 lifetime, notifications could get lost if the peer doesn't retrieve them
 in time. A peer Carl trying to reach Bob while the latter is offline
 would therefore need to renew the notification in Bob's mailbox every
@@ -855,14 +859,14 @@ groups he's a member of for new messages when he comes back online.]).
 Finally, the question of whether metadata is exposed in any way, e.g.
 whether peers participating in the DHT get to see who accesses or pushes
 messages to the queue (i.e. who is in touch with whom), boils down to
-whether the DHT exposes metadata (i.e. who creates and who accesses
-key-value pairs in the table). Assuming that this data is indeed
-obfuscated, a mailbox implemented in this way would provide a temporary
-and secure storage for (small) offline messages and notifications that
-is free and doesn't require any manual setup on the part of the user.
-Moreover, as long as all peers in the network participate in the DHT
-mechanism (which is necessary for the p2p network to function, anyway),
-no further incentivization is needed.
+whether the DHT exposes metadata (i.e. the information who creates and
+who accesses key-value pairs in the table). Assuming that this data is
+indeed obfuscated, a mailbox implemented in this way would provide a
+temporary and privacy-preserving storage for (small) offline messages
+and notifications that is free and doesn't require any manual setup on
+the part of the user. Moreover, as long as all peers in the network
+participate in the DHT mechanism (which is necessary for the p2p network
+to function, anyway), no further incentivization is needed.
 
 
 <!--

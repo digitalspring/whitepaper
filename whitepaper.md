@@ -569,15 +569,14 @@ messages temporarily, two options come to mind quite generally:
 In both cases, the question arises how to choose the respective peers
 and why they in turn should be willing to provide mailbox / mailman
 functionality to other peers in the first place, considering that this
-requires both traffic and storage resources. Again, there're multiple
-options:
+requires both bandwidth and storage. Again, there're multiple options:
 
 - The peers hosting a mailbox or acting as a mailman could be selected
     from the list of the peer's friends. This would have the advantage
     that friends are naturally inclined to help each other, so it should
-    be comparatively easy to convince a user to share resources (traffic,
-    storage) with his friends – as long as he is not put at a disadvantage
-    and his friends do the same for him.
+    be comparatively easy to convince a user to share resources
+    (bandwidth, storage) with his friends – as long as he is not put at
+    a disadvantage and his friends do the same for him.
 
     Unfortunately, though, this approach also entails giving away part
     of the peer's social graph:
@@ -615,8 +614,8 @@ options:
 - The peers could be selected randomly. Privacy implications are roughly
     the same as for the previous option with the exception that no
     payment data is available this time. The question remains, though,
-    why peers would want to provide storage and traffic resources to
-    other peers in the first place.
+    why peers would want to provide storage and bandwidth to other peers
+    in the first place.
 
 Clearly, the last option is the best in terms of costs and privacy
 implications (provided that onion routing is used) but at the same time,
@@ -647,7 +646,7 @@ about a peer's social graph by observing who he connects to on a TCP/IP
 level will probably still require onion routing. See chapter [Unicast
 layer](#unicast-layer), section [Anonymity](#unicast-anonymity).]
 Moreover, multicast groups provide incentives for peers to share storage
-and traffic resources with each other.
+and bandwidth with each other.
 
 In order to explain this step by step, a short dive into how multicast
 groups work is necessary (which will be elaborated on in later

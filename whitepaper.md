@@ -1791,17 +1791,17 @@ will be teared down.
 <!-- TODO: Specify exactly how graph maintenance works. -->
 
 For the exact distribution graph a simple and quite flexible model is
-chosen where member Bob tries to stay connected with $D$ other members
-throughout the transmission phase. As mentioned above, the starting
-point for those $D$ members are the $N$ neighbors he stored and tried to
-activate (or was activated by). Upon receiving a chunk of data (a
-*fragment* of the message) from one such member, Bob will notify all his
-other $D-1$ connected peers and, afterwards, send the fragment to all
-those peers that request it (i.e. those that haven't received the
-fragment from another peer yet). This ensures that no peer receives a
-fragment more than once. (Obviously, the fragment's size must be chosen
-sufficiently large such that it's much cheaper to send a notification
-than send the fragment right away.)
+chosen where a member (Bob) tries to stay connected with $D$ other
+members throughout the transmission phase. As mentioned above, the
+starting point for those $D$ members are the $N$ neighbors he stored and
+tried to activate (or was activated by). Upon receiving a chunk of data
+(a *fragment* of the message) from one such member, Bob will notify the
+remaining $D-1$ members he is connected to and, afterwards, send the
+fragment to all those peers that request it (i.e. those that haven't
+received the fragment from another peer yet). This ensures that no peer
+receives a fragment more than once. (Obviously, the fragment's size must
+be chosen sufficiently large such that it's much cheaper to send a
+notification than send the fragment right away.)
 
 As his transmission capabilities are likely limited, Bob will prioritize
 these transmissions depending on network latencies and his available
@@ -1810,8 +1810,9 @@ priorities continuously but set them once in the beginning by looking at
 the times the activation signals come in.] More specifically, he will
 strongly suppress any additional transmissions if the total number of
 transmissions exceeds a certain threshold. That is, while each of the
-$D-1$ peers would eventually receive the fragment from him after waiting
-long enough, Bob will single out a number of peers he will supply with
+$D-1$ peers he notified would eventually receive the fragment from him
+after waiting long enough^[Assuming they all requested the fragment from
+him.], Bob will single out a number of peers he will supply with
 incoming fragments preferably. He will also announce to each of the $D$
 peers their respective priority such that they can optimize their
 position in the distribution graph accordingly. Hence, while $D$ might
@@ -1873,12 +1874,12 @@ contact Carl herself.)
 
 Clearly, whether Bob is able to acquire any proofs of transmission
 doesn't only depend on his willingness to forward fragments but also on
-whether other members request the fragment from him in the first place.
-If Bob's internet link is slower than his neighbors' links, his
-neighbors might get the fragment before Bob is even able to offer it to
-them. In this case, his priority with Alice will rightly decrease and
-reflect his bad connection such that members who can provide better
-resources in turn get the chance to rise in the hierarchy.
+whether other members request the fragment from him to begin with. If
+Bob's internet link is slower than his neighbors' links, his neighbors
+might get the fragment before Bob is even able to offer it to them. In
+this case, his priority with Alice will rightly decrease and reflect his
+bad connection such that members who can provide better resources in
+turn get the chance to rise in the hierarchy.
 
 
 Offline messaging {#offline}

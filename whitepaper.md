@@ -1658,7 +1658,7 @@ structuring reduces the chances of connectedness and the entropy for the
 neighborship graph, given $N$, is at a maximum.
 
 
-### Adjusting the member list, rekeying
+### Adjusting the member list, rekeying {#adjusting_memberlist}
 
 If a new recipient is to be **added** to the group, the sender will
 provide the new recipient via unicast with the shared secret as well as
@@ -1918,6 +1918,18 @@ of the group. This is done in roughly the same way as during the
 transmission phase. (Recall that there, the group's members are notified
 about a new message and subsequently request it from members that
 already received it.)
+
+Finally, there's also the possibility that Bob is offline at the time
+the multicast group is created (or, more generally, at the time the
+sender adds him to the group). Then, when Bob comes back online, he
+wouldn't even know he is a member of the group, wouldn't have gotten the
+secret and also wouldn't have any neighbors. To prevent this, the sender
+puts a notification into Bob's queue in the DHT. Similarly to what the
+sender would send if Bob were online^[See the section [Adjusting the
+member list](#adjusting_memberlist).], this notification contains the
+group secret together with a list of other members such that Bob can
+establish a neighbor relationship with them as soon as he is back
+online.
 
 
 Security

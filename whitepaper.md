@@ -664,13 +664,12 @@ group receive the same content and as soon as it becomes available (i.e.
 the sender pushes the data to the recipients). Second, the sender does
 not send a message to all members but only a few who, in turn, will
 forward the message to a handful of other members and so on, such that a
-cascade emerges. This is necessary to take the reduce the traffic for
-the sender and instead distribute it among all members. Third, a
-multicast group is of persistent nature: Once a peer joins a multicast
-group he will stay a member of that group throughout potential offline
-periods until he explicitly leaves.^[Technically, it is actually the
-owner of the group who adds and removes members but this is not
-important here.]
+cascade emerges. This is necessary to reduce the traffic for the sender
+and instead distribute it among all members. Third, a multicast group is
+of persistent nature: Once a peer joins a multicast group, he will stay
+a member of that group throughout potential offline periods until he
+explicitly leaves.^[Technically, it is actually the owner of the group
+who adds and removes members but this is not important here.]
 
 Consequently, if a member is offline during the transmission of a
 message to the group, he won't receive it but other members of the group

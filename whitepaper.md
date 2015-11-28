@@ -2080,7 +2080,7 @@ sent to each group per time interval.
 Looking more closely, the issue underlying the mentioned attack vector
 is that the credentials used to authorize as a member are not
 personalized to each member but can be passed on to anyone, including an
-attacker. While this also has great potential when it comes to large
+attacker. While this can also be beneficial when it comes to large
 groups (members can invite other peers to the group by giving the group
 secret to them), small groups are likely better off with more extensive
 security guarantees.
@@ -2101,21 +2101,21 @@ to all members every time the group secret (i.e. the member list)
 changes which scales as $O(M)$, $M$ being the number of members.
 
 In a combined approach that is going to be incorporated into this
-proposal in the future, the group secret, which is announced with every
-message, will consist of a public key whose private counterpart will be
-used to sign the proofs of membership. This way, the sender is free to
-decide whether to share this private key with the group and thus enable
-its members to invite new members and self-sign their proofs – at the
-cost of giving up forward and future secrecy as outlined above – or to
-keep the key to himself such that he needs to sign off on every new
+whitepaper in the future, the group secret, which is announced with
+every message, will consist of a public key whose private counterpart
+will be used to sign the proofs of membership. This way, the sender is
+free to decide whether to share this private key with the group and thus
+enable its members to invite new members and self-sign their proofs – at
+the cost of giving up forward and future secrecy as outlined above – or
+to keep the key to himself such that he needs to sign off on every new
 member himself.
 
 Clearly, allowing anyone in possession of the necessary credentials to
 join the group, including an attacker, and approving every new member
 personally are mutually exclusive options and there is a tradeoff to be
 made. Instead of fixing the decision in the protocol, the combined
-approach outlined above allows the sender to choose appropriately and
-depending on the use case.
+approach outlined above allows the sender to choose depending on the use
+case.
 
 
 <!-- #### Device compromise -->

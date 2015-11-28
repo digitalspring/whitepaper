@@ -1622,7 +1622,7 @@ a different approach is used: The sender defines a shared secret and
 distributes it to all members upon creation of the group.^[The question
 of how designated members will ever know that they are members in the
 first place if they are offline at the time of creation is discussed
-[further below](#notifications).] Members of the group are then able to
+[further below](#offline).] Members of the group are then able to
 verify each other's membership – without revealing the secret to each
 other – by using the [socialist millionaire
 protocol](https://en.wikipedia.org/wiki/Socialist_millionaire). Put

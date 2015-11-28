@@ -1892,6 +1892,33 @@ turn get the chance to rise in the hierarchy.
 Offline messaging {#offline}
 ----------------------------
 
+The issue of delivering a message to a peer that is offline was already
+discussed extensively in the chapter [Preliminaries]. In the following,
+the results that concern the multicasting layer will briefly be
+summarized:
+
+If a member (Bob) is offline at the time of activation, he won't be part
+of the distribution graph. However, when his neighbors fail to reach him
+during activation, they will store a notification message in the
+DHT^[See chapter [OfflineUnicast](#offlineunicast).] which Bob can
+retrieve later.^[It seems to be difficult to avoid duplicates here, i.e.
+to prevent multiple neighbors from storing the same notification message
+in Bob's queue in the DHT. One way might be to not store the (encrypted)
+notification in Bob's queue directly but instead store an (unencrypted)
+reference to a separate DHT entry that contains the notification and is
+encrypted in a way that only members of the group can read it. For
+instance, this DHT entry could have been set up by the sender such that
+a reference to it could be sent to the queues of all members that cannot
+be reached. Then, to avoid duplicates in a particular member's queue,
+the peers responsible for the part of the DHT where the queue is stored
+could easily check for duplicates by comparing subsequent (unencrypted)
+entries in the queue.] Then, as soon as Bob is back online and sees the
+notification, he can request the message(s) he missed from other members
+of the group. This is done in roughly the same way as during the
+transmission phase. (Recall that there, the group's members are notified
+about a new message and subsequently request it from members that
+already received it.)
+
 
 Security
 --------

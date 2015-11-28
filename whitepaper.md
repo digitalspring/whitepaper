@@ -859,7 +859,7 @@ groups he's a member of for new messages when he comes back online.]).
 Finally, the question of whether metadata is exposed in any way, e.g.
 whether peers participating in the DHT get to see who accesses or pushes
 messages to the queue (i.e. who is in touch with whom), boils down to
-whether the DHT exposes metadata (i.e. the information who creates and
+whether the DHT leaks metadata (i.e. the information who creates and
 who accesses key-value pairs in the table). Assuming that this data is
 indeed obfuscated, a mailbox implemented in this way would provide a
 temporary and privacy-preserving storage for (small) offline messages
